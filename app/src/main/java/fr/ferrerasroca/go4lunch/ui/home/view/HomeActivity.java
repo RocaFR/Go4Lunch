@@ -1,16 +1,16 @@
-package fr.ferrerasroca.go4lunch;
+package fr.ferrerasroca.go4lunch.ui.home.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-import fr.ferrerasroca.go4lunch.ui.base.BaseActivity;
+import fr.ferrerasroca.go4lunch.R;
 
-public class MainActivity extends BaseActivity {
+public class HomeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_home);
     }
 }
