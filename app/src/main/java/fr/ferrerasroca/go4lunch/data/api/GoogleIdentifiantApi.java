@@ -1,10 +1,10 @@
 package fr.ferrerasroca.go4lunch.data.api;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
@@ -13,27 +13,20 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.firestore.DocumentSnapshot;
-
-import org.jetbrains.annotations.NotNull;
 
 import fr.ferrerasroca.go4lunch.R;
 import fr.ferrerasroca.go4lunch.data.model.User;
-import fr.ferrerasroca.go4lunch.ui.main.view.MainActivity;
+import fr.ferrerasroca.go4lunch.data.repositories.UserRepository;
 
 public class GoogleIdentifiantApi implements ApiErrorsMessages {
 
     private final Fragment context;
-    private static final int RC_SIGN_IN = 2901;
-
     public GoogleIdentifiantApi(Fragment context) {
         this.context = context;
     }
@@ -46,17 +39,14 @@ public class GoogleIdentifiantApi implements ApiErrorsMessages {
 
         GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(context.getActivity(), googleSignInOptions);
         Intent signInIntent = googleSignInClient.getSignInIntent();
-        context.startActivityForResult(signInIntent, RC_SIGN_IN);
+        context.startActivityForResult(signInIntent, UserRepository.RC_GOOGLE_SIGN_IN);
     }
 
-    public void createUserIfSuccess(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
-        if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> signedInAccountFromIntent = GoogleSignIn.getSignedInAccountFromIntent(data).addOnCompleteListener(new OnCompleteListener<GoogleSignInAccount>() {
-                @Override
-                public void onComplete(@NonNull @NotNull Task<GoogleSignInAccount> task) {
-                    subscribeUserIntoFirebaseAuthentication(task);
-                }
-            });
+    public void createUserIfSuccess(int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            GoogleSignIn.getSignedInAccountFromIntent(data).addOnCompleteListener(this::subscribeUserIntoFirebaseAuthentication);
+        } else {
+            Toast.makeText(context.getContext(), context.getString(R.string.google_connexion_canceled), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -66,13 +56,10 @@ public class GoogleIdentifiantApi implements ApiErrorsMessages {
             AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
             FirebaseAuth.getInstance().signInWithCredential(credential)
                     .addOnFailureListener(this::onFailureListener)
-                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull @NotNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                createUserIntoFirestore(task);
-                                Toast.makeText(context.getContext(), context.getString(R.string.welcome_signin), Toast.LENGTH_LONG).show();
-                            }
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            createUserIntoFirestore(task);
+                            Toast.makeText(context.getContext(), context.getString(R.string.welcome_signin), Toast.LENGTH_LONG).show();
                         }
                     });
         } catch (ApiException e) {
@@ -85,12 +72,9 @@ public class GoogleIdentifiantApi implements ApiErrorsMessages {
         User user = new User(firebaseUser.getUid(), firebaseUser.getDisplayName(), firebaseUser.getEmail(), firebaseUser.getPhotoUrl().toString());
 
         UserHelper.getUser(user.getUid())
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull @NotNull Task<DocumentSnapshot> task) {
-                        if (!task.getResult().exists()) {
-                            UserHelper.createUser(user);
-                        }
+                .addOnCompleteListener(task -> {
+                    if (!task.getResult().exists()) {
+                        UserHelper.createUser(user);
                     }
                 });
     }
@@ -98,6 +82,6 @@ public class GoogleIdentifiantApi implements ApiErrorsMessages {
     @Override
     public void onFailureListener(Exception e) {
         Log.e(this.getClass().getCanonicalName(), "onFailureListener: " + e.getMessage());
-        Toast.makeText(context.getContext(), context.getString(R.string.signin_error), Toast.LENGTH_LONG).show();
+        Toast.makeText(context.getContext(), context.getString(R.string.google_signin_error), Toast.LENGTH_LONG).show();
     }
 }
