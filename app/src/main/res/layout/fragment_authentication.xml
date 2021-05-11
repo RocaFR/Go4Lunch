@@ -5,8 +5,14 @@
     android:layout_height="match_parent"
     android:id="@+id/fragment_authentication"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.auth.AuthenticationFragment"
-    android:background="@mipmap/login_background">
+    tools:context=".ui.auth.AuthenticationFragment">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/imageView_background"
+        android:src="@mipmap/login_background"
+        android:scaleType="centerCrop" />
 
     <com.google.android.material.imageview.ShapeableImageView
         android:layout_width="wrap_content"
@@ -37,7 +43,7 @@
         app:layout_constraintStart_toStartOf="@id/imageView_logo"
         app:layout_constraintEnd_toEndOf="@id/imageView_logo"
         app:layout_constraintTop_toBottomOf="@id/textView_appName"
-        android:textColor="@color/white"
+        android:textColor="@color/primarytextColor"
         android:textStyle="italic"
         android:text="@string/app_description" />
 
@@ -109,8 +115,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:background="@android:color/transparent"
             android:text="@string/button_login_google" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

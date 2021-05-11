@@ -10,7 +10,7 @@
     <fragment
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/fragment_container_authentication"
+        android:id="@+id/fragment_host"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:name="fr.ferrerasroca.go4lunch.ui.auth.AuthenticationFragment" />

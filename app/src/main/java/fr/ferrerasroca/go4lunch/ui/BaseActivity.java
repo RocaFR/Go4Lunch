@@ -1,4 +1,4 @@
-package fr.ferrerasroca.go4lunch.ui.base;
+package fr.ferrerasroca.go4lunch.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
