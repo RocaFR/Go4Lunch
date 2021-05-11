@@ -6,16 +6,18 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 
-import fr.ferrerasroca.go4lunch.data.model.User;
 import fr.ferrerasroca.go4lunch.data.repositories.UserRepository;
 
 public class UserViewModel extends ViewModel {
 
-    private UserRepository userRepository;
-    private User currentUser;
+    private final UserRepository userRepository;
 
     public UserViewModel(Fragment context) {
         this.userRepository = new UserRepository(context);
+    }
+
+    public void launchFacebookSignInActivity() {
+        userRepository.launchFacebookSignInActivity();
     }
 
     public void launchGoogleSignInActivity() {
@@ -23,6 +25,6 @@ public class UserViewModel extends ViewModel {
     }
 
     public void createUserIfSuccess(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
-        userRepository.createGoogleUserIfSuccess(requestCode, resultCode, data);
+        userRepository.createUserIfSuccess(requestCode, resultCode, data);
     }
 }

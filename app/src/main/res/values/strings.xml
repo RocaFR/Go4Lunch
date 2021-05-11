@@ -14,6 +14,12 @@
     <string name="button_login_facebook">Sign in with Facebook</string>
     <string name="button_login_google">Sign in with Google</string>
     <string name="google_web_client_id">1003255926076-f73f5lum45ej8jtv3708ngs666g80tjm.apps.googleusercontent.com</string>
-    <string name="signin_error">Connexion error</string>
+    <string name="google_signin_error">Google sign in error</string>
     <string name="welcome_signin">"Welcome "</string>
+    <string name="google_connexion_canceled">Google sign in canceled.</string>
+    <string name="facebook_app_id">321850112783246</string>
+    <string name="facebook_application_id">321850112783246</string>
+    <string name="fb_login_protocol_scheme">fb321850112783246</string>
+    <string name="facebook_sign_in_canceled">Facebook sign in canceled.</string>
+    <string name="facebook_sign_in_error">Facebook sign in error.</string>
 </resources>

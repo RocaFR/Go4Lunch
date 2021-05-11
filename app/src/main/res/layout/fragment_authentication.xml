@@ -47,7 +47,7 @@
         android:textStyle="italic"
         android:text="@string/app_description" />
 
-    <!-- Facebook button container -->
+    <!-- Facebook button container
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="300dp"
         android:layout_height="wrap_content"
@@ -81,7 +81,17 @@
             android:text="@string/button_login_facebook"/>
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout> -->
+
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/button_signIn_facebook"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        style="@style/LoginButton"
+        app:layout_constraintBottom_toTopOf="@id/container_button_google"
+        app:layout_constraintEnd_toEndOf="@id/container_button_google"
+        app:layout_constraintStart_toStartOf="@id/container_button_google" />
 
     <!-- Google button container -->
     <androidx.constraintlayout.widget.ConstraintLayout
