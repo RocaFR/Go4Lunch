@@ -10,9 +10,12 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import org.jetbrains.annotations.NotNull;
 
+import fr.ferrerasroca.go4lunch.data.injections.Injection;
+import fr.ferrerasroca.go4lunch.data.injections.ViewModelFactory;
 import fr.ferrerasroca.go4lunch.databinding.FragmentAuthenticationBinding;
 import fr.ferrerasroca.go4lunch.ui.home.viewmodel.UserViewModel;
 
@@ -37,7 +40,8 @@ public class AuthenticationFragment extends Fragment {
     }
 
     private void configureViewModel() {
-        userViewModel = new UserViewModel(this);
+        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
+        this.userViewModel = viewModelFactory.create(UserViewModel.class);
     }
 
     @Override

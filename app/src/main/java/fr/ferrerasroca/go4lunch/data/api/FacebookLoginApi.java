@@ -1,5 +1,6 @@
 package fr.ferrerasroca.go4lunch.data.api;
 
+import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
@@ -83,5 +84,9 @@ public class FacebookLoginApi {
                         UserHelper.createUser(user);
                     }
                 });
+    }
+
+    public Fragment getContext() {
+        return context;
     }
 }

@@ -34,4 +34,8 @@ public class UserRepository {
             facebookLoginApi.createUserIfSuccess(requestCode, resultCode, data);
         }
     }
+
+    public Fragment getContext() {
+        return facebookLoginApi.getContext();
+    }
 }
