@@ -15,22 +15,22 @@ public class UserRepository {
     private final GoogleIdentifiantApi googleIdentifiantApi;
     public static final int RC_GOOGLE_SIGN_IN = 2901;
 
-    public UserRepository(Fragment fragment) {
-        this.googleIdentifiantApi = new GoogleIdentifiantApi(fragment);
-        this.facebookLoginApi = new FacebookLoginApi(fragment);
+    public UserRepository() {
+        this.googleIdentifiantApi = new GoogleIdentifiantApi();
+        this.facebookLoginApi = new FacebookLoginApi();
     }
 
-    public void launchFacebookSignInActivity() {
-        facebookLoginApi.configureAndLaunchFacebookSignInActivity();
+    public void launchFacebookSignInActivity(Fragment fragment  ) {
+        facebookLoginApi.configureAndLaunchFacebookSignInActivity(fragment);
     }
 
-    public void launchGoogleSignInActivity() {
-        googleIdentifiantApi.configureAndLaunchGoogleSignInActivity();
+    public void launchGoogleSignInActivity(Fragment fragment) {
+        googleIdentifiantApi.configureAndLaunchGoogleSignInActivity(fragment);
     }
 
-    public void createUserIfSuccess(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+    public void createUserIfSuccess(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data, Fragment fragment) {
         if (requestCode == RC_GOOGLE_SIGN_IN) {
-            googleIdentifiantApi.createUserIfSuccess(resultCode, data);
+            googleIdentifiantApi.createUserIfSuccess(resultCode, data, fragment);
         } else {
             facebookLoginApi.createUserIfSuccess(requestCode, resultCode, data);
         }
@@ -38,9 +38,5 @@ public class UserRepository {
 
     public Boolean isCurrentUserLogged() {
         return UserHelper.isCurrentUserLogged();
-    }
-
-    public Fragment getContext() {
-        return facebookLoginApi.getFragment();
     }
 }

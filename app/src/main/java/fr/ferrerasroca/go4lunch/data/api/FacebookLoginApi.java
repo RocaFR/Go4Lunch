@@ -25,17 +25,12 @@ import fr.ferrerasroca.go4lunch.data.model.User;
 
 public class FacebookLoginApi {
 
-        private final Fragment fragment;
         CallbackManager callbackManager;
         LoginButton loginButton;
 
-    public FacebookLoginApi(Fragment fragment) {
-        this.fragment = fragment;
+    public FacebookLoginApi() { callbackManager = CallbackManager.Factory.create(); }
 
-        callbackManager = CallbackManager.Factory.create();
-    }
-
-    public void configureAndLaunchFacebookSignInActivity() {
+    public void configureAndLaunchFacebookSignInActivity(Fragment fragment) {
         loginButton = fragment.getView().findViewById(R.id.button_signIn_facebook);
         loginButton.setReadPermissions("email", "public_profile");
         loginButton.setFragment(fragment);
@@ -44,7 +39,7 @@ public class FacebookLoginApi {
                 .registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                subscribeUserIntoFirebaseAuthentication(loginResult.getAccessToken());
+                subscribeUserIntoFirebaseAuthentication(loginResult.getAccessToken(), fragment);
             }
             @Override
             public void onCancel() {
@@ -62,7 +57,7 @@ public class FacebookLoginApi {
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void subscribeUserIntoFirebaseAuthentication(AccessToken accessToken) {
+    private void subscribeUserIntoFirebaseAuthentication(AccessToken accessToken, Fragment fragment) {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         AuthCredential credential = FacebookAuthProvider.getCredential(accessToken.getToken());
 
@@ -83,9 +78,5 @@ public class FacebookLoginApi {
                         UserHelper.createUser(user);
                     }
                 });
-    }
-
-    public Fragment getFragment() {
-        return fragment;
     }
 }

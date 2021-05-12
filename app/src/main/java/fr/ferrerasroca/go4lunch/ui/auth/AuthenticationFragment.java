@@ -40,7 +40,7 @@ public class AuthenticationFragment extends Fragment {
     }
 
     private void configureViewModel() {
-        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
+        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
         this.userViewModel = viewModelFactory.create(UserViewModel.class);
     }
 
@@ -59,15 +59,15 @@ public class AuthenticationFragment extends Fragment {
     }
 
     private void configureListeners() {
-        viewBinding.buttonSignInGoogle.setOnClickListener(view -> userViewModel.launchGoogleSignInActivity());
-        viewBinding.buttonSignInFacebook.setOnClickListener(view -> userViewModel.launchFacebookSignInActivity());
+        viewBinding.buttonSignInGoogle.setOnClickListener(view -> userViewModel.launchGoogleSignInActivity(this));
+        viewBinding.buttonSignInFacebook.setOnClickListener(view -> userViewModel.launchFacebookSignInActivity(this));
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        userViewModel.createUserIfSuccess(requestCode, resultCode, data);
+        userViewModel.createUserIfSuccess(requestCode, resultCode, data, this);
     }
 
     @Override

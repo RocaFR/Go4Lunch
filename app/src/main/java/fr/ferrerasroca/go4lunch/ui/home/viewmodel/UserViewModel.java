@@ -12,20 +12,20 @@ public class UserViewModel extends ViewModel {
 
     private final UserRepository userRepository;
 
-    public UserViewModel(Fragment fragment) {
-        this.userRepository = new UserRepository(fragment);
+    public UserViewModel() {
+        this.userRepository = new UserRepository();
     }
 
-    public void launchFacebookSignInActivity() {
-        userRepository.launchFacebookSignInActivity();
+    public void launchFacebookSignInActivity(Fragment fragment) {
+        userRepository.launchFacebookSignInActivity(fragment);
     }
 
-    public void launchGoogleSignInActivity() {
-        userRepository.launchGoogleSignInActivity();
+    public void launchGoogleSignInActivity(Fragment fragment) {
+        userRepository.launchGoogleSignInActivity(fragment);
     }
 
-    public void createUserIfSuccess(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
-        userRepository.createUserIfSuccess(requestCode, resultCode, data);
+    public void createUserIfSuccess(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data, Fragment fragment) {
+        userRepository.createUserIfSuccess(requestCode, resultCode, data, fragment);
     }
 
     public Boolean isCurrentUserLogged() {

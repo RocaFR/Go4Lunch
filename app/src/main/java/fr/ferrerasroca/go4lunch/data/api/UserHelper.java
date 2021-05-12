@@ -26,6 +26,10 @@ public class UserHelper {
     }
 
     public static Boolean isCurrentUserLogged() {
-        return firebaseAuth.getCurrentUser() != null;
+        if (firebaseAuth.getCurrentUser() != null) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

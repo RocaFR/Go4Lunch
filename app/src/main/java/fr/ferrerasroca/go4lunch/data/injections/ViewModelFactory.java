@@ -22,7 +22,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     @Override
     public <T extends ViewModel> T create(@NonNull @NotNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(UserViewModel.class)) {
-            return (T) new UserViewModel(userRepository.getContext());
+            return (T) new UserViewModel();
         }
         throw new IllegalArgumentException("Unknow Viewmodel class");
     }

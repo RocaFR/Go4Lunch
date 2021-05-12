@@ -26,13 +26,9 @@ import fr.ferrerasroca.go4lunch.data.repositories.UserRepository;
 
 public class GoogleIdentifiantApi implements ApiErrorsMessages {
 
-    private final Fragment fragment;
-    
-    public GoogleIdentifiantApi(Fragment fragment) {
-        this.fragment = fragment;
-    }
+    public GoogleIdentifiantApi() { }
 
-    public void configureAndLaunchGoogleSignInActivity() {
+    public void configureAndLaunchGoogleSignInActivity(Fragment fragment) {
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(fragment.getString(R.string.google_web_client_id))
                 .requestEmail()
@@ -43,15 +39,15 @@ public class GoogleIdentifiantApi implements ApiErrorsMessages {
         fragment.startActivityForResult(signInIntent, UserRepository.RC_GOOGLE_SIGN_IN);
     }
 
-    public void createUserIfSuccess(int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+    public void createUserIfSuccess(int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data, Fragment fragment) {
         if (resultCode == Activity.RESULT_OK) {
-            GoogleSignIn.getSignedInAccountFromIntent(data).addOnCompleteListener(this::subscribeUserIntoFirebaseAuthentication);
+            GoogleSignIn.getSignedInAccountFromIntent(data).addOnCompleteListener(task -> subscribeUserIntoFirebaseAuthentication(task, fragment));
         } else {
             Toast.makeText(fragment.getContext(), fragment.getString(R.string.google_connexion_canceled), Toast.LENGTH_LONG).show();
         }
     }
 
-    private void subscribeUserIntoFirebaseAuthentication(Task<GoogleSignInAccount> googleSignInAccountTask) {
+    private void subscribeUserIntoFirebaseAuthentication(Task<GoogleSignInAccount> googleSignInAccountTask, Fragment fragment) {
         try {
             GoogleSignInAccount account = googleSignInAccountTask.getResult(ApiException.class);
             AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
@@ -83,6 +79,5 @@ public class GoogleIdentifiantApi implements ApiErrorsMessages {
     @Override
     public void onFailureListener(Exception e) {
         Log.e(this.getClass().getCanonicalName(), "onFailureListener: " + e.getMessage());
-        Toast.makeText(fragment.getContext(), fragment.getString(R.string.google_signin_error), Toast.LENGTH_LONG).show();
     }
 }

@@ -8,12 +8,12 @@ import fr.ferrerasroca.go4lunch.data.repositories.UserRepository;
 
 public class Injection {
 
-    public static UserRepository provideUserRepository(Fragment context) {
-        return new UserRepository(context);
+    public static UserRepository provideUserRepository() {
+        return new UserRepository();
     }
 
-    public static ViewModelFactory provideViewModelFactory(Fragment context) {
-        UserRepository userRepository = provideUserRepository(context);
+    public static ViewModelFactory provideViewModelFactory() {
+        UserRepository userRepository = provideUserRepository();
         return new ViewModelFactory(userRepository);
     }
 }
