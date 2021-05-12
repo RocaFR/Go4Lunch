@@ -1,6 +1,5 @@
 package fr.ferrerasroca.go4lunch.data.api;
 
-import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
@@ -26,20 +25,20 @@ import fr.ferrerasroca.go4lunch.data.model.User;
 
 public class FacebookLoginApi {
 
-        private final Fragment context;
+        private final Fragment fragment;
         CallbackManager callbackManager;
         LoginButton loginButton;
 
-    public FacebookLoginApi(Fragment context) {
-        this.context = context;
+    public FacebookLoginApi(Fragment fragment) {
+        this.fragment = fragment;
 
         callbackManager = CallbackManager.Factory.create();
     }
 
     public void configureAndLaunchFacebookSignInActivity() {
-        loginButton = context.getView().findViewById(R.id.button_signIn_facebook);
+        loginButton = fragment.getView().findViewById(R.id.button_signIn_facebook);
         loginButton.setReadPermissions("email", "public_profile");
-        loginButton.setFragment(context);
+        loginButton.setFragment(fragment);
 
         LoginManager.getInstance()
                 .registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -49,12 +48,12 @@ public class FacebookLoginApi {
             }
             @Override
             public void onCancel() {
-                Toast.makeText(context.getContext(), context.getString(R.string.facebook_sign_in_canceled), Toast.LENGTH_LONG).show();
+                Toast.makeText(fragment.getContext(), fragment.getString(R.string.facebook_sign_in_canceled), Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onError(FacebookException error) {
-                Toast.makeText(context.getContext(), context.getString(R.string.facebook_sign_in_error), Toast.LENGTH_LONG).show();
+                Toast.makeText(fragment.getContext(), fragment.getString(R.string.facebook_sign_in_error), Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -70,7 +69,7 @@ public class FacebookLoginApi {
         firebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(task -> {
                     createUserIntoFirestore(task);
-                    Toast.makeText(context.getContext(), context.getString(R.string.welcome_signin), Toast.LENGTH_LONG).show();
+                    Toast.makeText(fragment.getContext(), fragment.getString(R.string.welcome_signin), Toast.LENGTH_LONG).show();
                 });
     }
 
@@ -86,7 +85,7 @@ public class FacebookLoginApi {
                 });
     }
 
-    public Fragment getContext() {
-        return context;
+    public Fragment getFragment() {
+        return fragment;
     }
 }

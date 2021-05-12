@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment;
 
 import fr.ferrerasroca.go4lunch.data.api.FacebookLoginApi;
 import fr.ferrerasroca.go4lunch.data.api.GoogleIdentifiantApi;
+import fr.ferrerasroca.go4lunch.data.api.UserHelper;
 
 public class UserRepository {
 
@@ -14,9 +15,9 @@ public class UserRepository {
     private final GoogleIdentifiantApi googleIdentifiantApi;
     public static final int RC_GOOGLE_SIGN_IN = 2901;
 
-    public UserRepository(Fragment context) {
-        this.googleIdentifiantApi = new GoogleIdentifiantApi(context);
-        this.facebookLoginApi = new FacebookLoginApi(context);
+    public UserRepository(Fragment fragment) {
+        this.googleIdentifiantApi = new GoogleIdentifiantApi(fragment);
+        this.facebookLoginApi = new FacebookLoginApi(fragment);
     }
 
     public void launchFacebookSignInActivity() {
@@ -35,7 +36,11 @@ public class UserRepository {
         }
     }
 
+    public Boolean isCurrentUserLogged() {
+        return UserHelper.isCurrentUserLogged();
+    }
+
     public Fragment getContext() {
-        return facebookLoginApi.getContext();
+        return facebookLoginApi.getFragment();
     }
 }
