@@ -5,9 +5,11 @@ import android.os.Bundle;
 import androidx.fragment.app.FragmentManager;
 
 import fr.ferrerasroca.go4lunch.R;
+import fr.ferrerasroca.go4lunch.data.injections.Injection;
 import fr.ferrerasroca.go4lunch.databinding.ActivityMainBinding;
 import fr.ferrerasroca.go4lunch.ui.BaseActivity;
 import fr.ferrerasroca.go4lunch.ui.auth.AuthenticationFragment;
+import fr.ferrerasroca.go4lunch.ui.home.viewmodel.UserViewModel;
 
 public class MainActivity extends BaseActivity {
 
@@ -17,13 +19,13 @@ public class MainActivity extends BaseActivity {
         ActivityMainBinding viewBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(viewBinding.getRoot());
 
-        this.startAuthenticationOrHomeFragment();
+        this.startAuthenticationFragmentOrHomeFragment();
     }
 
-    private void startAuthenticationOrHomeFragment() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .add(R.id.fragment_host, new AuthenticationFragment())
+    private void startAuthenticationFragmentOrHomeFragment() {
+        FragmentManager supportFragmentManager = getSupportFragmentManager();
+        supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_host, new AuthenticationFragment())
                 .commit();
     }
 }

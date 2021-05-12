@@ -1,6 +1,7 @@
 package fr.ferrerasroca.go4lunch.data.api;
 
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -9,6 +10,7 @@ import fr.ferrerasroca.go4lunch.data.model.User;
 
 public class UserHelper {
 
+    private static final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private static final String COLLECTION_NAME = "users";
 
     private static CollectionReference getUserCollection() {
@@ -21,5 +23,9 @@ public class UserHelper {
 
     protected static Task<DocumentSnapshot> getUser(String userUid) {
         return getUserCollection().document(userUid).get();
+    }
+
+    public static Boolean isCurrentUserLogged() {
+        return firebaseAuth.getCurrentUser() != null;
     }
 }
