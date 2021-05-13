@@ -22,4 +22,7 @@
     <string name="fb_login_protocol_scheme">fb321850112783246</string>
     <string name="facebook_sign_in_canceled">Facebook sign in canceled.</string>
     <string name="facebook_sign_in_error">Facebook sign in error.</string>
+    <string name="menu_fragment_home_search">Search</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>

@@ -6,7 +6,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import fr.ferrerasroca.go4lunch.data.model.User;
+import fr.ferrerasroca.go4lunch.data.models.User;
 
 public class UserHelper {
 

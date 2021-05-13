@@ -20,7 +20,7 @@ public class UserRepository {
         this.facebookLoginApi = new FacebookLoginApi();
     }
 
-    public void launchFacebookSignInActivity(Fragment fragment  ) {
+    public void launchFacebookSignInActivity(Fragment fragment) {
         facebookLoginApi.configureAndLaunchFacebookSignInActivity(fragment);
     }
 

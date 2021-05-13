@@ -21,7 +21,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import fr.ferrerasroca.go4lunch.R;
-import fr.ferrerasroca.go4lunch.data.model.User;
+import fr.ferrerasroca.go4lunch.data.models.User;
+import fr.ferrerasroca.go4lunch.ui.MainActivity;
 
 public class FacebookLoginApi {
 
@@ -31,7 +32,7 @@ public class FacebookLoginApi {
     public FacebookLoginApi() { callbackManager = CallbackManager.Factory.create(); }
 
     public void configureAndLaunchFacebookSignInActivity(Fragment fragment) {
-        loginButton = fragment.getView().findViewById(R.id.button_signIn_facebook);
+        loginButton = fragment.getView().findViewById(R.id.button_login_facebook);
         loginButton.setReadPermissions("email", "public_profile");
         loginButton.setFragment(fragment);
 
@@ -51,6 +52,8 @@ public class FacebookLoginApi {
                 Toast.makeText(fragment.getContext(), fragment.getString(R.string.facebook_sign_in_error), Toast.LENGTH_LONG).show();
             }
         });
+        // Simulate a click on a button
+        loginButton.performClick();
     }
 
     public void createUserIfSuccess(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
@@ -78,5 +81,7 @@ public class FacebookLoginApi {
                         UserHelper.createUser(user);
                     }
                 });
+
+        MainActivity.cleanAuthenticationFlowAndLaunchHomeActivity();
     }
 }

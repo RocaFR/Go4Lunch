@@ -21,8 +21,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import fr.ferrerasroca.go4lunch.R;
-import fr.ferrerasroca.go4lunch.data.model.User;
+import fr.ferrerasroca.go4lunch.data.models.User;
 import fr.ferrerasroca.go4lunch.data.repositories.UserRepository;
+import fr.ferrerasroca.go4lunch.ui.MainActivity;
 
 public class GoogleIdentifiantApi implements ApiErrorsMessages {
 
@@ -74,6 +75,7 @@ public class GoogleIdentifiantApi implements ApiErrorsMessages {
                         UserHelper.createUser(user);
                     }
                 });
+        MainActivity.cleanAuthenticationFlowAndLaunchHomeActivity();
     }
 
     @Override

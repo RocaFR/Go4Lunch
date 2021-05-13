@@ -1,4 +1,4 @@
-package fr.ferrerasroca.go4lunch.data.model;
+package fr.ferrerasroca.go4lunch.data.models;
 
 import androidx.annotation.Nullable;
 

@@ -12,8 +12,8 @@ public class UserViewModel extends ViewModel {
 
     private final UserRepository userRepository;
 
-    public UserViewModel() {
-        this.userRepository = new UserRepository();
+    public UserViewModel(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     public void launchFacebookSignInActivity(Fragment fragment) {

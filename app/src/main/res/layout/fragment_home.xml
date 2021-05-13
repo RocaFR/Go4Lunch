@@ -6,20 +6,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/fragment_host_drawerLayout"
     android:fitsSystemWindows="true"
+    android:layout_gravity="start"
     tools:openDrawer="left"
-    tools:context="fr.ferrerasroca.go4lunch.ui.main.view.MainActivity">
+    tools:context="fr.ferrerasroca.go4lunch.ui.MainActivity">
 
     <!-- RootView -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
             android:id="@+id/toolbar"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             android:background="@color/primaryColor"/>
 
         <!-- <fragment
@@ -32,12 +35,11 @@
         <com.google.android.material.navigation.NavigationView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:id="@+id/navView"
+            android:id="@+id/navigationView"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:fitsSystemWindows="true"
             app:headerLayout="@layout/navigation_header"
-            app:menu="@menu/navdrawer_menu"
+            app:menu="@menu/menu_home_navdrawer"
             app:itemTextColor="@color/primarytextColor"
             app:itemIconTint="@color/white"
             android:background="@color/primaryColorLight"/>
@@ -45,12 +47,7 @@
         <com.google.android.material.imageview.ShapeableImageView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintWidth_percent=".4"
-            app:layout_constraintHeight_percent=".4"
             android:id="@+id/imageView_logo"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@id/navView"
-            app:layout_constraintEnd_toEndOf="@id/navView"
             android:elevation="17dp"
             android:outlineSpotShadowColor="@android:color/transparent"
             android:outlineAmbientShadowColor="@android:color/transparent"

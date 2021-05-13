@@ -1,8 +1,8 @@
 package fr.ferrerasroca.go4lunch.ui.auth;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +10,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import org.jetbrains.annotations.NotNull;
+
 
 import fr.ferrerasroca.go4lunch.data.injections.Injection;
 import fr.ferrerasroca.go4lunch.data.injections.ViewModelFactory;
@@ -21,7 +21,6 @@ import fr.ferrerasroca.go4lunch.ui.home.viewmodel.UserViewModel;
 
 public class AuthenticationFragment extends Fragment {
 
-    // UI
     private FragmentAuthenticationBinding viewBinding;
     private UserViewModel userViewModel;
 
@@ -45,7 +44,7 @@ public class AuthenticationFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         viewBinding = FragmentAuthenticationBinding.inflate(inflater, container, false);
         return viewBinding.getRoot();
@@ -67,7 +66,14 @@ public class AuthenticationFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        this.configureProgressbar(resultCode);
         userViewModel.createUserIfSuccess(requestCode, resultCode, data, this);
+    }
+
+    private void configureProgressbar(int resultCode) {
+        if (resultCode == Activity.RESULT_OK) {
+            viewBinding.circularProgressbar.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
