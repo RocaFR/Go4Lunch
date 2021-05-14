@@ -12,15 +12,15 @@ import fr.ferrerasroca.go4lunch.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link WorkmatesFragment#newInstance} factory method to
+ * Use the {@link ListViewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class WorkmatesFragment extends Fragment {
+public class ListViewFragment extends Fragment {
 
-    public WorkmatesFragment() { }
+    public ListViewFragment() { }
 
-    public static WorkmatesFragment newInstance() {
-        return new WorkmatesFragment();
+    public static ListViewFragment newInstance() {
+        return new ListViewFragment();
     }
 
     @Override
@@ -32,6 +32,6 @@ public class WorkmatesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_workmates, container, false);
+        return inflater.inflate(R.layout.fragment_list_view, container, false);
     }
 }

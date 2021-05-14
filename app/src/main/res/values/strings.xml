@@ -25,4 +25,10 @@
     <string name="menu_fragment_home_search">Search</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navdrawer_menu_your_lunch">YOUR LUNCH</string>
+    <string name="navdrawer_menu_settings">SETTINGS</string>
+    <string name="navdrawer_menu_logout">LOGOUT</string>
+    <string name="menu_bottomNavigationView_mapView">Map View</string>
+    <string name="menu_bottomNavigationView_listView">List View</string>
+    <string name="menu_bottomNavigationView_workmates">Workmates</string>
 </resources>

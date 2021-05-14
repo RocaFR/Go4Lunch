@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private void launchAuthenticationActivityOrHomeActivity() {
         if (userViewModel.isCurrentUserLogged()) {
              startActivity(new Intent(this, HomeActivity.class));
+             finish();
         } else  {
             startActivity(new Intent(this, AuthenticationActivity.class));
         }
