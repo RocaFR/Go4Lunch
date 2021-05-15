@@ -1,16 +1,14 @@
 package fr.ferrerasroca.go4lunch.ui.home.view;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.maps.CameraUpdate;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -22,20 +20,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.jetbrains.annotations.NotNull;
 
 import fr.ferrerasroca.go4lunch.R;
+import fr.ferrerasroca.go4lunch.data.injections.Injection;
+import fr.ferrerasroca.go4lunch.ui.home.viewmodel.MapViewModel;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link MapViewFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class MapViewFragment extends Fragment implements OnMapReadyCallback {
+public class MapViewFragment extends Fragment {
 
-    private MapView mapView;
+    private MapViewModel mapViewModel;
 
     public MapViewFragment() { }
-    public static MapViewFragment newInstance() {
-        return new MapViewFragment();
-    }
+    public static MapViewFragment newInstance() { return new MapViewFragment(); }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,68 +38,59 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_map_view, container, false);
 
-        mapView = view.findViewById(R.id.mapView);
-        mapView.onCreate(savedInstanceState);
-        mapView.getMapAsync(this);
+        View view = inflater.inflate(R.layout.fragment_map_view, container, false);
+        mapViewModel = Injection.provideMapViewModel(Injection.provideMapViewModelFactory());
+
+        this.configureMap(view, savedInstanceState);
 
         return view;
+    }
+
+    private void configureMap(View view, Bundle savedInstanceState) {
+        mapViewModel.configureMap(view);
+        mapViewModel.getMapView().onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        mapViewModel.getMapView().onSaveInstanceState(savedInstanceState);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        mapView.onStart();
-    }
-
-    @Override
-    public void onMapReady(@NonNull @NotNull GoogleMap map) {
-        this.configureGoogleMap(map);
-    }
-
-    private void configureGoogleMap(GoogleMap map) {
-        LatLng position = new LatLng(44.62717819213867, -1.1435431241989136);
-        map.addMarker(new MarkerOptions()
-                .title("Home")
-                .position(position));
-        map.getUiSettings().setTiltGesturesEnabled(true);
-
-        CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(position)      // Sets the center of the map to Mountain View
-                .zoom(15)                   // Sets the zoom
-                .tilt(90)                   // Sets the tilt of the camera to 30 degrees
-                .build();                   // Creates a CameraPosition from the builder
-        map.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        mapView.onStop();
+        mapViewModel.getMapView().onStart();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mapView.onResume();
+        mapViewModel.getMapView().onResume();
     }
 
     @Override
     public void onPause() {
-        mapView.onPause();
+        mapViewModel.getMapView().onPause();
         super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mapViewModel.getMapView().onStop();
     }
 
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-        mapView.onLowMemory();
+        mapViewModel.getMapView().onLowMemory();
     }
 
     @Override
     public void onDestroy() {
-        mapView.onDestroy();
+        mapViewModel.getMapView().onDestroy();
         super.onDestroy();
     }
 }

@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         activity = new WeakReference<>(this);
-        userViewModel = Injection.provideUserViewModel(Injection.provideViewModelFactory());
+        userViewModel = Injection.provideUserViewModel(Injection.provideUserViewModelFactory());
         this.launchAuthenticationActivityOrHomeActivity();
     }
 

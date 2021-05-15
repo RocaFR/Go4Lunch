@@ -39,7 +39,7 @@ public class AuthenticationFragment extends Fragment {
     }
 
     private void configureViewModel() {
-        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory();
+        ViewModelFactory viewModelFactory = Injection.provideUserViewModelFactory();
         this.userViewModel = viewModelFactory.create(UserViewModel.class);
     }
 

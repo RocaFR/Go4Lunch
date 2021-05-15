@@ -21,18 +21,18 @@ public class UserRepository {
     }
 
     public void launchFacebookSignInActivity(Fragment fragment) {
-        facebookLoginApi.configureAndLaunchFacebookSignInActivity(fragment);
+        this.facebookLoginApi.configureAndLaunchFacebookSignInActivity(fragment);
     }
 
     public void launchGoogleSignInActivity(Fragment fragment) {
-        googleIdentifiantApi.configureAndLaunchGoogleSignInActivity(fragment);
+        this.googleIdentifiantApi.configureAndLaunchGoogleSignInActivity(fragment);
     }
 
     public void createUserIfSuccess(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data, Fragment fragment) {
         if (requestCode == RC_GOOGLE_SIGN_IN) {
-            googleIdentifiantApi.createUserIfSuccess(resultCode, data, fragment);
+            this.googleIdentifiantApi.createUserIfSuccess(resultCode, data, fragment);
         } else {
-            facebookLoginApi.createUserIfSuccess(requestCode, resultCode, data);
+            this.facebookLoginApi.createUserIfSuccess(requestCode, resultCode, data);
         }
     }
 
