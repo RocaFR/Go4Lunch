@@ -1,10 +1,5 @@
 package fr.ferrerasroca.go4lunch.data.injections;
 
-import android.content.Context;
-import android.view.View;
-
-import androidx.fragment.app.Fragment;
-
 import fr.ferrerasroca.go4lunch.data.repositories.MapRepository;
 import fr.ferrerasroca.go4lunch.data.repositories.UserRepository;
 import fr.ferrerasroca.go4lunch.ui.home.viewmodel.MapViewModel;
@@ -16,7 +11,9 @@ public class Injection {
         return new UserRepository();
     }
 
-    public static MapRepository provideMapRepository() { return new MapRepository(); }
+    public static MapRepository provideMapRepository() {
+        return new MapRepository();
+    }
 
     public static UserViewModel provideUserViewModel(ViewModelFactory viewModelFactory) {
         return viewModelFactory.create(UserViewModel.class);
