@@ -1,10 +1,8 @@
 package fr.ferrerasroca.go4lunch.ui.home.view;
 
 import android.Manifest;
-import android.location.Location;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,17 +10,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResponse;
-import com.google.android.gms.location.SettingsClient;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.Task;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -35,32 +22,35 @@ import pub.devrel.easypermissions.EasyPermissions;
 public class MapViewFragment extends Fragment {
 
     private MapViewModel mapViewModel;
+    private GoogleMapsComponent googleMapsComponent;
     private static final int RC_LOCATION_PERM = 2903;
 
     public MapViewFragment() { }
     public static MapViewFragment newInstance() { return new MapViewFragment(); }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        mapViewModel = Injection.provideMapViewModel(Injection.provideMapViewModelFactory());
-
-        this.requestLocationPermission();
-    }
-
+    @SuppressLint("MissingPermission")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_map_view, container, false);
 
-        this.configureMap(view, savedInstanceState);
-
-        return view;
+        return inflater.inflate(R.layout.fragment_map_view, container, false);
     }
 
-    private void configureMap(View view, Bundle savedInstanceState) {
-        mapViewModel.configureMap(view);
+    @Override
+    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        mapViewModel = Injection.provideMapViewModel(Injection.provideMapViewModelFactory(getContext(), view));
+        googleMapsComponent = new GoogleMapsComponent(view);
+        this.requestLocationPermission();
+        this.configureMapWithPlaces(savedInstanceState);
+    }
+
+    private void configureMapWithPlaces(Bundle savedInstanceState) {
+        mapViewModel.placeLikelihoodLiveData.observe(getViewLifecycleOwner(), placeLikelihoods -> {
+            //todo add maker
+        });
+        mapViewModel.getPlaces();
         mapViewModel.getMapView().onCreate(savedInstanceState);
     }
 

@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import org.jetbrains.annotations.NotNull;
 
-import fr.ferrerasroca.go4lunch.data.repositories.MapRepository;
+import fr.ferrerasroca.go4lunch.data.repositories.PlacesRepository;
 import fr.ferrerasroca.go4lunch.data.repositories.UserRepository;
 import fr.ferrerasroca.go4lunch.ui.home.viewmodel.MapViewModel;
 import fr.ferrerasroca.go4lunch.ui.home.viewmodel.UserViewModel;
@@ -14,14 +14,14 @@ import fr.ferrerasroca.go4lunch.ui.home.viewmodel.UserViewModel;
 public class ViewModelFactory implements ViewModelProvider.Factory {
 
     private UserRepository userRepository;
-    private MapRepository mapRepository;
+    private PlacesRepository placesRepository;
 
     public ViewModelFactory(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    public ViewModelFactory(MapRepository mapRepository) {
-        this.mapRepository = mapRepository;
+    public ViewModelFactory(PlacesRepository placesRepository) {
+        this.placesRepository = placesRepository;
     }
 
     @NonNull
@@ -31,7 +31,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         if (modelClass.isAssignableFrom(UserViewModel.class)) {
             return (T) new UserViewModel(userRepository);
         } else if (modelClass.isAssignableFrom(MapViewModel.class)) {
-            return (T) new MapViewModel(mapRepository);
+            return (T) new MapViewModel(placesRepository);
         }
         throw new IllegalArgumentException("Unknow Viewmodel class");
     }

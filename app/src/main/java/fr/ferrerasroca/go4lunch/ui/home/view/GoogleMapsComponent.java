@@ -1,4 +1,4 @@
-package fr.ferrerasroca.go4lunch.data.api;
+package fr.ferrerasroca.go4lunch.ui.home.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -21,22 +22,23 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.net.PlacesClient;
 
 import org.jetbrains.annotations.NotNull;
 
 import fr.ferrerasroca.go4lunch.R;
 
-public class GoogleMapsApi implements OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener {
+public class GoogleMapsComponent implements OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener {
 
     private MapView mapView;
     private LocationRequest locationRequest;
     private Location lastLocation;
     private static GoogleMap currentGoogleMap;
+
     public static final long LOCATION_INTERVAL = 300000;
 
-    public GoogleMapsApi() { }
-
-    public void configureGoogleMaps(View view) {
+    public GoogleMapsComponent(View view) {
         this.mapView = view.findViewById(R.id.mapView);
         this.mapView.getMapAsync(this);
     }

@@ -1,40 +1,56 @@
 package fr.ferrerasroca.go4lunch.ui.home.viewmodel;
 
 import android.content.Context;
-import android.view.View;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.libraries.places.api.model.PlaceLikelihood;
 
-import fr.ferrerasroca.go4lunch.data.repositories.MapRepository;
+import java.util.List;
+
+import fr.ferrerasroca.go4lunch.data.repositories.PlacesRepository;
 
 public class MapViewModel extends ViewModel {
 
-    private final MapRepository mapRepository;
+    private final PlacesRepository placesRepository;
+    private MutableLiveData<List<PlaceLikelihood>> _listMutableLiveData = new MutableLiveData<>();
+    public LiveData<List<PlaceLikelihood>> placeLikelihoodLiveData = _listMutableLiveData;
 
-    public MapViewModel(MapRepository mapRepository) {
-        this.mapRepository = mapRepository;
+    public MapViewModel(PlacesRepository placesRepository) {
+        this.placesRepository = placesRepository;
     }
 
-    public void configureMap(View view) {
-        this.mapRepository.configureMap(view);
-    }
+    // ###########
+    // GOOGLE MAPS
+    // ###########
 
     public MapView getMapView() {
-        return mapRepository.getMapView();
+        return placesRepository.getMapView();
     }
 
     public void addGoogleMapMarker(String title, LatLng latLng) {
-        mapRepository.addGoogleMapMarker(title, latLng);
+        placesRepository.addGoogleMapMarker(title, latLng);
     }
 
     public void moveGoogleMapCamera(LatLng latLng) {
-        mapRepository.moveGoogleMapCamera(latLng);
+        placesRepository.moveGoogleMapCamera(latLng);
     }
 
     public void getLastLocation(Context context) {
-        mapRepository.getLastLocation(context);
+        placesRepository.getLastLocation(context);
+    }
+
+    // #############
+    // GOOGLE PLACES
+    // #############
+
+    public void getPlaces() {
+        placesRepository.getPlaces(placeLikelihoods -> {
+            _listMutableLiveData.postValue(placeLikelihoods);
+        });
     }
 }
