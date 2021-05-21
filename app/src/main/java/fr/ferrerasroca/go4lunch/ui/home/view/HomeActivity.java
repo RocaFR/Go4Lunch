@@ -2,6 +2,9 @@ package fr.ferrerasroca.go4lunch.ui.home.view;
 
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -9,29 +12,58 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
+
 import fr.ferrerasroca.go4lunch.R;
+import fr.ferrerasroca.go4lunch.data.injections.Injection;
+import fr.ferrerasroca.go4lunch.data.models.User;
 import fr.ferrerasroca.go4lunch.databinding.ActivityHomeBinding;
+import fr.ferrerasroca.go4lunch.ui.home.viewmodel.UserViewModel;
 
 public class HomeActivity extends AppCompatActivity {
 
-    private ActivityHomeBinding viewBinding;
+    private ActivityHomeBinding activityBinding;
+    private UserViewModel userViewModel;
+    private TextView textViewUsername;
+    private TextView textViewUserEmail;
+    private ImageView imageViewUserProfilePicture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        viewBinding = ActivityHomeBinding.inflate(getLayoutInflater());
-        setContentView(viewBinding.getRoot());
+        activityBinding = ActivityHomeBinding.inflate(getLayoutInflater());
+        setContentView(activityBinding.getRoot());
 
+        userViewModel = Injection.provideUserViewModel(Injection.provideUserViewModelFactory());
+        this.configureNavigationHeaderViews();
         this.configureToolbar();
         this.configureDrawerLayout();
         this.configureListeners();
     }
 
+    private void configureNavigationHeaderViews() {
+        View headerView = activityBinding.navigationView.getHeaderView(0);
+        this.textViewUsername = headerView.findViewById(R.id.textView_username);
+        this.textViewUserEmail = headerView.findViewById(R.id.textView_email);
+        this.imageViewUserProfilePicture = headerView.findViewById(R.id.imageView_profilePicture);
+
+    }
+
+    private void displayUserDetails(User user) {
+        this.textViewUsername.setText(user.getUsername());
+        this.textViewUserEmail.setText(user.getEmail());
+        Glide.with(this)
+                .load(user.getProfilePictureUrl())
+                .centerCrop()
+                .into(this.imageViewUserProfilePicture);
+
+    }
+
     private void configureToolbar() {
-        viewBinding.toolbar.setTitle(getString(R.string.app_name));
-        viewBinding.toolbar.inflateMenu(R.menu.menu_toolbar);
-        setSupportActionBar(viewBinding.toolbar);
-        viewBinding.toolbar.setOnMenuItemClickListener(item -> {
+        activityBinding.toolbar.setTitle(getString(R.string.app_name));
+        activityBinding.toolbar.inflateMenu(R.menu.menu_toolbar);
+        setSupportActionBar(activityBinding.toolbar);
+        activityBinding.toolbar.setOnMenuItemClickListener(item -> {
             Toast.makeText(this, "Click on search", Toast.LENGTH_LONG).show();
             return true;
         });
@@ -44,16 +76,16 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void configureDrawerLayout() {
-        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, viewBinding.drawerLayout, viewBinding.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        viewBinding.drawerLayout.addDrawerListener(drawerToggle);
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this, activityBinding.drawerLayout, activityBinding.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        activityBinding.drawerLayout.addDrawerListener(drawerToggle);
 
         drawerToggle.syncState();
     }
 
     @Override
     public void onBackPressed() {
-        if (viewBinding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            viewBinding.drawerLayout.closeDrawer(GravityCompat.START);
+        if (activityBinding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            activityBinding.drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
@@ -62,10 +94,12 @@ public class HomeActivity extends AppCompatActivity {
     private void configureListeners() {
         this.configureNavigationViewListeners();
         this.configureBottomNavigationViewListener();
+        userViewModel.userLiveData.observe(this, this::displayUserDetails);
+        userViewModel.getUser();
     }
 
     private void configureNavigationViewListeners() {
-        viewBinding.navigationView.setNavigationItemSelectedListener(item -> {
+        activityBinding.navigationView.setNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.menu_nav_drawer_your_lunch:
                     Toast.makeText(this, "Your lunch", Toast.LENGTH_LONG).show();
@@ -77,13 +111,13 @@ public class HomeActivity extends AppCompatActivity {
                     Toast.makeText(this, "Logout", Toast.LENGTH_LONG).show();
                     break;
             }
-            viewBinding.drawerLayout.closeDrawer(GravityCompat.START);
+            activityBinding.drawerLayout.closeDrawer(GravityCompat.START);
             return true;
         });
     }
 
     private void configureBottomNavigationViewListener() {
-        viewBinding.bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+        activityBinding.bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.menu_fragment_mapView:
                     this.loadFragment(MapViewFragment.newInstance());

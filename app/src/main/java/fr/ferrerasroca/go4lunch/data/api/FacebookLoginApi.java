@@ -75,7 +75,7 @@ public class FacebookLoginApi {
         FirebaseUser firebaseUser = task.getResult().getUser();
         User user = new User(firebaseUser.getUid(), firebaseUser.getDisplayName(), firebaseUser.getEmail(), firebaseUser.getPhotoUrl().toString());
 
-        UserHelper.getUser(user.getUid())
+        UserHelper.getUser(user.getUid(), null)
                 .addOnCompleteListener(task1 -> {
                     if (!task1.getResult().exists()) {
                         UserHelper.createUser(user);

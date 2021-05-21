@@ -69,7 +69,7 @@ public class GoogleIdentifiantApi  {
         FirebaseUser firebaseUser = authResultTask.getResult().getUser();
         User user = new User(firebaseUser.getUid(), firebaseUser.getDisplayName(), firebaseUser.getEmail(), firebaseUser.getPhotoUrl().toString());
 
-        UserHelper.getUser(user.getUid())
+        UserHelper.getUser(user.getUid(), null)
                 .addOnCompleteListener(task -> {
                     if (!task.getResult().exists()) {
                         UserHelper.createUser(user);
