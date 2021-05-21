@@ -19,12 +19,8 @@ public class Injection {
         return new UserRepository();
     }
 
-    public static PlacesRepository provideMapRepository(PlacesApi placesApi, GoogleMapsComponent googleMapsComponent) {
-        return new PlacesRepository(googleMapsComponent, placesApi);
-    }
-
-    public static GoogleMapsComponent provideGoogleMapsApi(View view) {
-        return new GoogleMapsComponent(view);
+    public static PlacesRepository providePlacesRepository(PlacesApi placesApi) {
+        return new PlacesRepository(placesApi);
     }
 
     public static PlacesApi provideGooglePlacesApi(Context context) {
@@ -45,8 +41,8 @@ public class Injection {
         return new ViewModelFactory(userRepository);
     }
 
-    public static ViewModelFactory provideMapViewModelFactory(Context context, View view) {
-        PlacesRepository placesRepository = provideMapRepository(provideGooglePlacesApi(context), provideGoogleMapsApi(view));
+    public static ViewModelFactory provideMapViewModelFactory(Context context) {
+        PlacesRepository placesRepository = providePlacesRepository(provideGooglePlacesApi(context));
         return new ViewModelFactory(placesRepository);
     }
 }

@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.libraries.places.api.model.PlaceLikelihood;
+
 import org.jetbrains.annotations.NotNull;
 
 import fr.ferrerasroca.go4lunch.R;
@@ -21,8 +23,8 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 public class MapViewFragment extends Fragment {
 
-    private MapViewModel mapViewModel;
     private GoogleMapsComponent googleMapsComponent;
+    private MapViewModel mapViewModel;
     private static final int RC_LOCATION_PERM = 2903;
 
     public MapViewFragment() { }
@@ -40,18 +42,21 @@ public class MapViewFragment extends Fragment {
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mapViewModel = Injection.provideMapViewModel(Injection.provideMapViewModelFactory(getContext(), view));
+        mapViewModel = Injection.provideMapViewModel(Injection.provideMapViewModelFactory(getContext()));
         googleMapsComponent = new GoogleMapsComponent(view);
+        googleMapsComponent.getMapView().onCreate(savedInstanceState);
+
         this.requestLocationPermission();
-        this.configureMapWithPlaces(savedInstanceState);
+        this.getPlaces();
     }
 
-    private void configureMapWithPlaces(Bundle savedInstanceState) {
+    private void getPlaces() {
         mapViewModel.placeLikelihoodLiveData.observe(getViewLifecycleOwner(), placeLikelihoods -> {
-            //todo add maker
+            for (PlaceLikelihood place : placeLikelihoods) {
+                googleMapsComponent.addMarker(place.getPlace().getLatLng(), place.getPlace().getName(), place.getPlace().getTypes().toString(), false);
+            }
         });
         mapViewModel.getPlaces();
-        mapViewModel.getMapView().onCreate(savedInstanceState);
     }
 
     @AfterPermissionGranted(RC_LOCATION_PERM)
@@ -59,7 +64,7 @@ public class MapViewFragment extends Fragment {
         if (!EasyPermissions.hasPermissions(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)) {
             EasyPermissions.requestPermissions(this, getString(R.string.app_name) + getString(R.string.permission_location_request), RC_LOCATION_PERM, Manifest.permission.ACCESS_FINE_LOCATION);
         } else {
-            mapViewModel.getLastLocation(getContext());
+            googleMapsComponent.getLastLocation(getContext());
         }
     }
 
@@ -72,44 +77,44 @@ public class MapViewFragment extends Fragment {
     @Override
     public void onViewStateRestored(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
-        mapViewModel.getMapView().onSaveInstanceState(savedInstanceState);
+        if (savedInstanceState != null) {
+            googleMapsComponent.getMapView().onSaveInstanceState(savedInstanceState);
+        }
     }
-
-
 
     @Override
     public void onStart() {
         super.onStart();
-        mapViewModel.getMapView().onStart();
+        googleMapsComponent.getMapView().onStart();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        mapViewModel.getMapView().onResume();
+        googleMapsComponent.getMapView().onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mapViewModel.getMapView().onPause();
+        googleMapsComponent.getMapView().onPause();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        mapViewModel.getMapView().onStop();
+        googleMapsComponent.getMapView().onStop();
     }
 
     @Override
     public void onLowMemory() {
         super.onLowMemory();
-        mapViewModel.getMapView().onLowMemory();
+        googleMapsComponent.getMapView().onLowMemory();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mapViewModel.getMapView().onDestroy();
+        googleMapsComponent.getMapView().onDestroy();
     }
 }

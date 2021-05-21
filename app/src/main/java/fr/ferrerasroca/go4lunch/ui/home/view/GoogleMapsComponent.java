@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -22,8 +21,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.net.PlacesClient;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -31,7 +28,7 @@ import fr.ferrerasroca.go4lunch.R;
 
 public class GoogleMapsComponent implements OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener {
 
-    private MapView mapView;
+    private final MapView mapView;
     private LocationRequest locationRequest;
     private Location lastLocation;
     private static GoogleMap currentGoogleMap;
@@ -58,7 +55,6 @@ public class GoogleMapsComponent implements OnMapReadyCallback, GoogleMap.OnMyLo
         if (this.lastLocation != null) {
             LatLng latLng = new LatLng(this.lastLocation.getLatitude(), this.lastLocation.getLongitude());
             this.moveGoogleMapCamera(latLng);
-            this.cleanAndAddMarker(latLng, "Title", "Snipper", true);
         }
     }
 
@@ -75,13 +71,6 @@ public class GoogleMapsComponent implements OnMapReadyCallback, GoogleMap.OnMyLo
 
     public MapView getMapView() {
         return this.mapView;
-    }
-
-    public void addGoogleMapMarker(String title, LatLng latLng) {
-        MarkerOptions markerToAdd = new MarkerOptions()
-                .title(title)
-                .position(latLng);
-        currentGoogleMap.addMarker(markerToAdd);
     }
 
     public void moveGoogleMapCamera(LatLng latLng) {
@@ -105,11 +94,6 @@ public class GoogleMapsComponent implements OnMapReadyCallback, GoogleMap.OnMyLo
         this.locationRequest = LocationRequest.create()
                 .setInterval(LOCATION_INTERVAL)
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-
-        /* todo souleymane : vérifier si nécessaire -> LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
-                .addLocationRequest(locationRequest);
-                SettingsClient client = LocationServices.getSettingsClient(context);
-        Task<LocationSettingsResponse> responseTask = client.checkLocationSettings(builder.build());*/
     }
 
     LocationCallback locationCallback = new LocationCallback() {
@@ -119,12 +103,10 @@ public class GoogleMapsComponent implements OnMapReadyCallback, GoogleMap.OnMyLo
             LatLng latLng = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
 
             moveGoogleMapCamera(latLng);
-            cleanAndAddMarker(latLng, "Home", "Snippet", true);
         }
     };
 
-    private void cleanAndAddMarker(LatLng latLng ,String title, String snippet, Boolean isDraggable) {
-        currentGoogleMap.clear();
+    public void addMarker(LatLng latLng , String title, String snippet, Boolean isDraggable) {
         currentGoogleMap.addMarker(new MarkerOptions()
                 .title(title)
                 .position(latLng)
