@@ -25,7 +25,7 @@ import fr.ferrerasroca.go4lunch.data.models.User;
 import fr.ferrerasroca.go4lunch.data.repositories.UserRepository;
 import fr.ferrerasroca.go4lunch.ui.MainActivity;
 
-public class GoogleIdentifiantApi implements ApiErrorsMessages {
+public class GoogleIdentifiantApi  {
 
     public GoogleIdentifiantApi() { }
 
@@ -78,7 +78,6 @@ public class GoogleIdentifiantApi implements ApiErrorsMessages {
         MainActivity.cleanAuthenticationFlowAndLaunchHomeActivity();
     }
 
-    @Override
     public void onFailureListener(Exception e) {
         Log.e(this.getClass().getCanonicalName(), "onFailureListener: " + e.getMessage());
     }
