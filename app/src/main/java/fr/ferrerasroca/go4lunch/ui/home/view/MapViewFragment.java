@@ -47,7 +47,6 @@ public class MapViewFragment extends Fragment {
         googleMapsComponent.getMapView().onCreate(savedInstanceState);
 
         this.requestLocationPermission();
-        this.getPlaces();
     }
 
     private void getPlaces() {
@@ -65,6 +64,7 @@ public class MapViewFragment extends Fragment {
             EasyPermissions.requestPermissions(this, getString(R.string.app_name) + getString(R.string.permission_location_request), RC_LOCATION_PERM, Manifest.permission.ACCESS_FINE_LOCATION);
         } else {
             googleMapsComponent.getLastLocation(getContext());
+            this.getPlaces();
         }
     }
 

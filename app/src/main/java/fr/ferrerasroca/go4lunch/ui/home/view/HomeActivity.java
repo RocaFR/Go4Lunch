@@ -1,5 +1,6 @@
 package fr.ferrerasroca.go4lunch.ui.home.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -18,6 +19,7 @@ import fr.ferrerasroca.go4lunch.R;
 import fr.ferrerasroca.go4lunch.data.injections.Injection;
 import fr.ferrerasroca.go4lunch.data.models.User;
 import fr.ferrerasroca.go4lunch.databinding.ActivityHomeBinding;
+import fr.ferrerasroca.go4lunch.ui.MainActivity;
 import fr.ferrerasroca.go4lunch.ui.home.viewmodel.UserViewModel;
 
 public class HomeActivity extends AppCompatActivity {
@@ -108,7 +110,10 @@ public class HomeActivity extends AppCompatActivity {
                     Toast.makeText(this, "Settings", Toast.LENGTH_LONG).show();
                     break;
                 case R.id.menu_nav_drawer_logout:
-                    Toast.makeText(this, "Logout", Toast.LENGTH_LONG).show();
+                    userViewModel.signOutUser();
+                    Intent intent = new Intent(this, MainActivity.class);
+                    startActivity(intent);
+                    finish();
                     break;
             }
             activityBinding.drawerLayout.closeDrawer(GravityCompat.START);

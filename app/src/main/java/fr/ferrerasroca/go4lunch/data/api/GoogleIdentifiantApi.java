@@ -23,7 +23,6 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import fr.ferrerasroca.go4lunch.R;
 import fr.ferrerasroca.go4lunch.data.models.User;
 import fr.ferrerasroca.go4lunch.data.repositories.UserRepository;
-import fr.ferrerasroca.go4lunch.ui.MainActivity;
 
 public class GoogleIdentifiantApi  {
 
@@ -75,7 +74,6 @@ public class GoogleIdentifiantApi  {
                         UserHelper.createUser(user);
                     }
                 });
-        MainActivity.cleanAuthenticationFlowAndLaunchHomeActivity();
     }
 
     public void onFailureListener(Exception e) {

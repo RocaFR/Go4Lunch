@@ -8,11 +8,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
 
-import fr.ferrerasroca.go4lunch.data.api.UserHelper;
 import fr.ferrerasroca.go4lunch.data.models.User;
 import fr.ferrerasroca.go4lunch.data.repositories.UserRepository;
 
@@ -21,9 +18,11 @@ public class UserViewModel extends ViewModel {
     private final UserRepository userRepository;
     private MutableLiveData<User> _userMutableLiveData = new MutableLiveData<>();
     public LiveData<User> userLiveData = _userMutableLiveData;
+    private final FirebaseAuth firebaseAuth;
 
     public UserViewModel(UserRepository userRepository) {
         this.userRepository = userRepository;
+        firebaseAuth = FirebaseAuth.getInstance();
     }
 
     public void launchFacebookSignInActivity(Fragment fragment) {
@@ -43,14 +42,14 @@ public class UserViewModel extends ViewModel {
     }
 
     public void getUser() {
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        if (firebaseAuth.getCurrentUser() != null) {
-            userRepository.getUser(firebaseAuth.getCurrentUser().getUid(), new UserHelper.OnUserRetrievedListener() {
-                @Override
-                public void onUserRetrieved(User user) {
-                    _userMutableLiveData.postValue(user);
-                }
-            });
+        if (this.firebaseAuth.getCurrentUser() != null) {
+            userRepository.getUser(this.firebaseAuth.getCurrentUser().getUid(), user -> _userMutableLiveData.postValue(user));
+        }
+    }
+
+    public void signOutUser() {
+        if (this.firebaseAuth.getCurrentUser() != null) {
+            this.firebaseAuth.signOut();
         }
     }
 }

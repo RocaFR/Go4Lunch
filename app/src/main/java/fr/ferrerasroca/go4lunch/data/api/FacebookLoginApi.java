@@ -22,7 +22,6 @@ import com.google.firebase.auth.FirebaseUser;
 
 import fr.ferrerasroca.go4lunch.R;
 import fr.ferrerasroca.go4lunch.data.models.User;
-import fr.ferrerasroca.go4lunch.ui.MainActivity;
 
 public class FacebookLoginApi {
 
@@ -81,7 +80,5 @@ public class FacebookLoginApi {
                         UserHelper.createUser(user);
                     }
                 });
-
-        MainActivity.cleanAuthenticationFlowAndLaunchHomeActivity();
     }
 }

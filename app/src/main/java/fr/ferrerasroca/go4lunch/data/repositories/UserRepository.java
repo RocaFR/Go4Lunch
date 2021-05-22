@@ -2,15 +2,8 @@ package fr.ferrerasroca.go4lunch.data.repositories;
 
 import android.content.Intent;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentSnapshot;
-
-import org.jetbrains.annotations.NotNull;
 
 import fr.ferrerasroca.go4lunch.data.api.FacebookLoginApi;
 import fr.ferrerasroca.go4lunch.data.api.GoogleIdentifiantApi;
@@ -22,7 +15,6 @@ public class UserRepository {
     private final FacebookLoginApi facebookLoginApi;
     private final GoogleIdentifiantApi googleIdentifiantApi;
     public static final int RC_GOOGLE_SIGN_IN = 2901;
-    private User user;
 
     public UserRepository() {
         this.googleIdentifiantApi = new GoogleIdentifiantApi();
