@@ -22,6 +22,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import fr.ferrerasroca.go4lunch.R;
 import fr.ferrerasroca.go4lunch.data.models.User;
+import fr.ferrerasroca.go4lunch.ui.home.view.HomeActivity;
 
 public class FacebookLoginApi {
 
@@ -65,12 +66,12 @@ public class FacebookLoginApi {
 
         firebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(task -> {
-                    createUserIntoFirestore(task);
+                    createUserIntoFirestore(task, fragment);
                     Toast.makeText(fragment.getContext(), fragment.getString(R.string.welcome_signin), Toast.LENGTH_LONG).show();
                 });
     }
 
-    private void createUserIntoFirestore(Task<AuthResult> task) {
+    private void createUserIntoFirestore(Task<AuthResult> task, Fragment fragment) {
         FirebaseUser firebaseUser = task.getResult().getUser();
         User user = new User(firebaseUser.getUid(), firebaseUser.getDisplayName(), firebaseUser.getEmail(), firebaseUser.getPhotoUrl().toString());
 
@@ -80,5 +81,7 @@ public class FacebookLoginApi {
                         UserHelper.createUser(user);
                     }
                 });
+        Intent intent = new Intent(fragment.getContext(), HomeActivity.class);
+        fragment.startActivity(intent);
     }
 }

@@ -30,6 +30,10 @@ public class UserHelper {
         return getUserCollection().document(userToCreate.getUid()).set(userToCreate);
     }
 
+    public static Task<DocumentSnapshot> getUser(String userUid) {
+        return getUserCollection().document(userUid).get();
+    }
+
     public static Task<DocumentSnapshot> getUser(String userUid, OnUserRetrievedListener onUserRetrievedListener) {
         return getUserCollection().document(userUid).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

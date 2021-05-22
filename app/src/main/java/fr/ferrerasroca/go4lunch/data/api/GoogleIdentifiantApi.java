@@ -23,6 +23,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import fr.ferrerasroca.go4lunch.R;
 import fr.ferrerasroca.go4lunch.data.models.User;
 import fr.ferrerasroca.go4lunch.data.repositories.UserRepository;
+import fr.ferrerasroca.go4lunch.ui.home.view.HomeActivity;
 
 public class GoogleIdentifiantApi  {
 
@@ -41,6 +42,7 @@ public class GoogleIdentifiantApi  {
 
     public void createUserIfSuccess(int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data, Fragment fragment) {
         if (resultCode == Activity.RESULT_OK) {
+            Log.e("TAG", "createUserIfSuccess: OK");
             GoogleSignIn.getSignedInAccountFromIntent(data).addOnCompleteListener(task -> subscribeUserIntoFirebaseAuthentication(task, fragment));
         } else {
             Toast.makeText(fragment.getContext(), fragment.getString(R.string.google_connexion_canceled), Toast.LENGTH_LONG).show();
@@ -55,7 +57,7 @@ public class GoogleIdentifiantApi  {
                     .addOnFailureListener(this::onFailureListener)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            createUserIntoFirestore(task);
+                            createUserIntoFirestore(task, fragment);
                             Toast.makeText(fragment.getContext(), fragment.getString(R.string.welcome_signin), Toast.LENGTH_LONG).show();
                         }
                     });
@@ -64,16 +66,18 @@ public class GoogleIdentifiantApi  {
         }
     }
 
-    private void createUserIntoFirestore(Task<AuthResult> authResultTask) {
+    private void createUserIntoFirestore(Task<AuthResult> authResultTask, Fragment fragment) {
         FirebaseUser firebaseUser = authResultTask.getResult().getUser();
         User user = new User(firebaseUser.getUid(), firebaseUser.getDisplayName(), firebaseUser.getEmail(), firebaseUser.getPhotoUrl().toString());
 
-        UserHelper.getUser(user.getUid(), null)
+        UserHelper.getUser(user.getUid())
                 .addOnCompleteListener(task -> {
                     if (!task.getResult().exists()) {
                         UserHelper.createUser(user);
                     }
                 });
+        Intent intent = new Intent(fragment.getContext(), HomeActivity.class);
+        fragment.startActivity(intent);
     }
 
     public void onFailureListener(Exception e) {

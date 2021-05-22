@@ -45,8 +45,20 @@ public class MapViewFragment extends Fragment {
         mapViewModel = Injection.provideMapViewModel(Injection.provideMapViewModelFactory(getContext()));
         googleMapsComponent = new GoogleMapsComponent(view);
         googleMapsComponent.getMapView().onCreate(savedInstanceState);
-
         this.requestLocationPermission();
+
+    }
+
+    @AfterPermissionGranted(RC_LOCATION_PERM)
+    private void requestLocationPermission() {
+        if (!EasyPermissions.hasPermissions(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)) {
+            EasyPermissions.requestPermissions(this, getString(R.string.app_name) + getString(R.string.permission_location_request), RC_LOCATION_PERM, Manifest.permission.ACCESS_FINE_LOCATION);
+        } else {
+            if (googleMapsComponent.isLocationEnabled(getContext())) {
+                googleMapsComponent.getLastLocation(getContext());
+                this.getPlaces();
+            }
+        }
     }
 
     private void getPlaces() {
@@ -56,16 +68,6 @@ public class MapViewFragment extends Fragment {
             }
         });
         mapViewModel.getPlaces();
-    }
-
-    @AfterPermissionGranted(RC_LOCATION_PERM)
-    private void requestLocationPermission() {
-        if (!EasyPermissions.hasPermissions(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)) {
-            EasyPermissions.requestPermissions(this, getString(R.string.app_name) + getString(R.string.permission_location_request), RC_LOCATION_PERM, Manifest.permission.ACCESS_FINE_LOCATION);
-        } else {
-            googleMapsComponent.getLastLocation(getContext());
-            this.getPlaces();
-        }
     }
 
     @Override

@@ -3,9 +3,11 @@ package fr.ferrerasroca.go4lunch.ui.home.view;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -21,6 +23,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.Task;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -32,7 +35,6 @@ public class GoogleMapsComponent implements OnMapReadyCallback, GoogleMap.OnMyLo
     private LocationRequest locationRequest;
     private Location lastLocation;
     private static GoogleMap currentGoogleMap;
-
     public static final long LOCATION_INTERVAL = 300000;
 
     public GoogleMapsComponent(View view) {
@@ -87,7 +89,10 @@ public class GoogleMapsComponent implements OnMapReadyCallback, GoogleMap.OnMyLo
         this.configureLocationRequest();
 
         FusedLocationProviderClient providerClient = LocationServices.getFusedLocationProviderClient(context);
-        providerClient.requestLocationUpdates(locationRequest, this.locationCallback, Looper.myLooper());
+
+        if (isLocationEnabled(context)) {
+            providerClient.requestLocationUpdates(locationRequest, this.locationCallback, Looper.myLooper());
+        }
     }
 
     private void configureLocationRequest() {
@@ -112,5 +117,13 @@ public class GoogleMapsComponent implements OnMapReadyCallback, GoogleMap.OnMyLo
                 .position(latLng)
                 .snippet(snippet)
                 .draggable(isDraggable));
+    }
+
+    public Boolean isLocationEnabled(Context context) {
+        LocationManager systemService = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        String gpsProvider = LocationManager.GPS_PROVIDER;
+        String networkProvider = LocationManager.NETWORK_PROVIDER;
+
+        return systemService.isProviderEnabled(gpsProvider) && systemService.isProviderEnabled(networkProvider);
     }
 }
