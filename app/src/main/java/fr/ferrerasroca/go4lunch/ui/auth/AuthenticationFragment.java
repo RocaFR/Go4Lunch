@@ -1,11 +1,15 @@
 package fr.ferrerasroca.go4lunch.ui.auth;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import org.jetbrains.annotations.NotNull;
 
 
+import fr.ferrerasroca.go4lunch.R;
 import fr.ferrerasroca.go4lunch.data.injections.Injection;
 import fr.ferrerasroca.go4lunch.data.injections.ViewModelFactory;
 import fr.ferrerasroca.go4lunch.databinding.FragmentAuthenticationBinding;
@@ -58,8 +63,33 @@ public class AuthenticationFragment extends Fragment {
     }
 
     private void configureListeners() {
-        viewBinding.buttonSignInGoogle.setOnClickListener(view -> userViewModel.launchGoogleSignInActivity(this));
-        viewBinding.buttonSignInFacebook.setOnClickListener(view -> userViewModel.launchFacebookSignInActivity(this));
+        viewBinding.buttonSignInGoogle.setOnClickListener(view -> {
+            if (isNetworkAvailable()) {
+                userViewModel.launchGoogleSignInActivity(this);
+            } else {
+                this.displayNetworkErrorMessage();
+            }
+        });
+
+        viewBinding.buttonSignInFacebook.setOnClickListener(view -> {
+            if (isNetworkAvailable()) {
+                userViewModel.launchFacebookSignInActivity(this);
+            } else {
+                this.displayNetworkErrorMessage();
+            }
+        });
+    }
+
+    private Boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        return networkInfo != null && networkInfo.isConnectedOrConnecting();
+    }
+
+    private void displayNetworkErrorMessage() {
+        Toast.makeText(getContext(), getString(R.string.network_unavailable), Toast.LENGTH_LONG).show();
     }
 
     @Override
