@@ -2,8 +2,9 @@
 <resources>
     <color name="primaryColor">#ff4e29</color>
     <color name="secondaryColor">#c91d12</color>
-    <color name="primaryColorLight">#ff7f4e</color>d
-    <color name="primarytextColor">@color/white</color>d
+    <color name="primaryColorLight">#ff7f4e</color>
+    <color name="primarytextColor">@color/white</color>
+    <color name="secondarytextColor">#5A5A5A</color>
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>

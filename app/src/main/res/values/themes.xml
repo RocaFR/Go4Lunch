@@ -18,6 +18,16 @@
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>-->
     </style>
+    <!-- Classic paragraph -->
+    <style name="Go4Lunch.Paragraph" parent="Go4Lunch">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/secondarytextColor</item>
+    </style>
+    <!-- Title -->
+    <style name="Go4Lunch.Title" parent="Go4Lunch">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
     <!-- Login buttons -->
     <style name="LoginButton" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:textColor">@color/white</item>
