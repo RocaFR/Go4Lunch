@@ -28,7 +28,7 @@ public class AuthenticationActivity extends AppCompatActivity {
         Log.e("TAG", "onDestroy: auth activity");
     }
 
-    public static WeakReference<Activity> getActivity() {
-        return activity;
+    public static void cleanAuthenticationActivity() {
+        activity.get().finish();
     }
 }

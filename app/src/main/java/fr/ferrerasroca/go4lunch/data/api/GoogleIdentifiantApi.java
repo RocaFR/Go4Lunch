@@ -23,6 +23,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import fr.ferrerasroca.go4lunch.R;
 import fr.ferrerasroca.go4lunch.data.models.User;
 import fr.ferrerasroca.go4lunch.data.repositories.UserRepository;
+import fr.ferrerasroca.go4lunch.ui.auth.AuthenticationActivity;
 import fr.ferrerasroca.go4lunch.ui.home.view.HomeActivity;
 
 public class GoogleIdentifiantApi  {
@@ -42,7 +43,6 @@ public class GoogleIdentifiantApi  {
 
     public void createUserIfSuccess(int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data, Fragment fragment) {
         if (resultCode == Activity.RESULT_OK) {
-            Log.e("TAG", "createUserIfSuccess: OK");
             GoogleSignIn.getSignedInAccountFromIntent(data).addOnCompleteListener(task -> subscribeUserIntoFirebaseAuthentication(task, fragment));
         } else {
             Toast.makeText(fragment.getContext(), fragment.getString(R.string.google_connexion_canceled), Toast.LENGTH_LONG).show();
@@ -58,7 +58,6 @@ public class GoogleIdentifiantApi  {
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             createUserIntoFirestore(task, fragment);
-                            Toast.makeText(fragment.getContext(), fragment.getString(R.string.welcome_signin), Toast.LENGTH_LONG).show();
                         }
                     });
         } catch (ApiException e) {
@@ -78,7 +77,7 @@ public class GoogleIdentifiantApi  {
                 });
         Intent intent = new Intent(fragment.getContext(), HomeActivity.class);
         fragment.startActivity(intent);
-        fragment.getActivity().finish();
+        AuthenticationActivity.cleanAuthenticationActivity();
     }
 
     public void onFailureListener(Exception e) {
