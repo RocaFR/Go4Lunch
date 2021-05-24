@@ -32,7 +32,6 @@
     <string name="menu_bottomNavigationView_listView">List View</string>
     <string name="menu_bottomNavigationView_workmates">Workmates</string>
     <string name="permission_location_request">" needs your location to work properly."</string>
-    <string name="google_maps_platform_api_key">AIzaSyA7Bz7oYJDd0eiWUbdaPgNOxSwyMZI-kJk</string>
     <string name="navigation_view_user_disconnected">User disconnected</string>
     <string name="network_unavailable">Network unavailable, please turn on.</string>
     <string name="location_disabled">Location disabled, please turn on.</string>

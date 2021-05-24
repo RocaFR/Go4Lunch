@@ -5,6 +5,7 @@ import android.view.View;
 
 import com.google.android.libraries.places.api.Places;
 
+import fr.ferrerasroca.go4lunch.BuildConfig;
 import fr.ferrerasroca.go4lunch.R;
 import fr.ferrerasroca.go4lunch.ui.home.view.GoogleMapsComponent;
 import fr.ferrerasroca.go4lunch.data.api.PlacesApi;
@@ -24,7 +25,7 @@ public class Injection {
     }
 
     public static PlacesApi provideGooglePlacesApi(Context context) {
-        Places.initialize(context, "AIzaSyA7Bz7oYJDd0eiWUbdaPgNOxSwyMZI-kJk");
+        Places.initialize(context, BuildConfig.GOOGLE_API_KEY);
         return new PlacesApi(Places.createClient(context));
     }
 

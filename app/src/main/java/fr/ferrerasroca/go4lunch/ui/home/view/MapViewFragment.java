@@ -6,6 +6,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,6 +75,7 @@ public class MapViewFragment extends Fragment {
     private void getPlaces() {
         mapViewModel.placeLikelihoodLiveData.observe(getViewLifecycleOwner(), placeLikelihoods -> {
             for (PlaceLikelihood place : placeLikelihoods) {
+                Log.e("", "getPlaces: " + place.getPlace().getName());
                 googleMapsComponent.addMarker(place.getPlace().getLatLng(), place.getPlace().getName(), place.getPlace().getTypes().toString(), false);
             }
         });
