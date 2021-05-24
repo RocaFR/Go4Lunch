@@ -2,10 +2,14 @@ package fr.ferrerasroca.go4lunch.ui.home.view;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -56,7 +60,13 @@ public class MapViewFragment extends Fragment {
         } else {
             if (googleMapsComponent.isLocationEnabled(getContext())) {
                 googleMapsComponent.getLastLocation(getContext());
-                this.getPlaces();
+                if (isNetworkAvailable()) {
+                    this.getPlaces();
+                } else {
+                    Toast.makeText(getContext(), "Network unavailable, please turn on.", Toast.LENGTH_LONG).show();
+                }
+            } else {
+                Toast.makeText(getContext(), "Location disabled, please turn on.", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -68,6 +78,14 @@ public class MapViewFragment extends Fragment {
             }
         });
         mapViewModel.getPlaces();
+    }
+
+    private Boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
 
     @Override

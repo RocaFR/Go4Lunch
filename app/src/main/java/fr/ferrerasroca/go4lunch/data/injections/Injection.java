@@ -24,7 +24,7 @@ public class Injection {
     }
 
     public static PlacesApi provideGooglePlacesApi(Context context) {
-        Places.initialize(context, context.getString(R.string.google_maps_platform_api_key));
+        Places.initialize(context, "AIzaSyA7Bz7oYJDd0eiWUbdaPgNOxSwyMZI-kJk");
         return new PlacesApi(Places.createClient(context));
     }
 
