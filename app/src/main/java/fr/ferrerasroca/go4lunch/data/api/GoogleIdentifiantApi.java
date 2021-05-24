@@ -78,6 +78,7 @@ public class GoogleIdentifiantApi  {
                 });
         Intent intent = new Intent(fragment.getContext(), HomeActivity.class);
         fragment.startActivity(intent);
+        fragment.getActivity().finish();
     }
 
     public void onFailureListener(Exception e) {

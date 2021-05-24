@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
              finish();
         } else  {
             startActivity(new Intent(this, AuthenticationActivity.class));
+            finish();
         }
     }
 

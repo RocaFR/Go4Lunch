@@ -83,5 +83,6 @@ public class FacebookLoginApi {
                 });
         Intent intent = new Intent(fragment.getContext(), HomeActivity.class);
         fragment.startActivity(intent);
+        fragment.getActivity().finish();
     }
 }
