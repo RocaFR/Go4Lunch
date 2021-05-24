@@ -63,10 +63,10 @@ public class MapViewFragment extends Fragment {
                 if (isNetworkAvailable()) {
                     this.getPlaces();
                 } else {
-                    Toast.makeText(getContext(), "Network unavailable, please turn on.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), getString(R.string.network_unavailable), Toast.LENGTH_LONG).show();
                 }
             } else {
-                Toast.makeText(getContext(), "Location disabled, please turn on.", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), getString(R.string.location_disabled), Toast.LENGTH_LONG).show();
             }
         }
     }
