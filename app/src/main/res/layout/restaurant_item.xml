@@ -32,6 +32,7 @@
         app:layout_constraintStart_toStartOf="@id/textView_restaurantAddress"
         android:layout_marginTop="@dimen/margin_top_lines"
         style="@style/Go4Lunch.Paragraph"
+        android:textStyle="italic"
         android:text="Open util 7 pm" />
 
     <com.google.android.material.textview.MaterialTextView
@@ -44,6 +45,16 @@
         android:layout_marginRight="@dimen/margin_top_lines"
         style="@style/Go4Lunch.Paragraph"
         android:text="120m" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:id="@+id/restaurant_imageView_ParticipantsNumber"
+        app:layout_constraintTop_toTopOf="@id/textView_restaurantParticipantsNumber"
+        app:layout_constraintBottom_toBottomOf="@id/textView_restaurantParticipantsNumber"
+        app:layout_constraintEnd_toStartOf="@id/textView_restaurantParticipantsNumber"
+        android:src="@drawable/ic_account_circle_white_36dp"
+        android:tint="@color/black"/>
 
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="wrap_content"
