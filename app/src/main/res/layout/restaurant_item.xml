@@ -12,7 +12,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         style="@style/Go4Lunch.Title"
-        android:text="Le Zinc" />
+        android:text="Le Zinc !" />
 
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="wrap_content"
