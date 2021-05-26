@@ -1,4 +1,4 @@
-package fr.ferrerasroca.go4lunch.data.api;
+package fr.ferrerasroca.go4lunch.data.api.authentication;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import fr.ferrerasroca.go4lunch.R;
+import fr.ferrerasroca.go4lunch.data.api.user.UserHelper;
 import fr.ferrerasroca.go4lunch.data.models.User;
 import fr.ferrerasroca.go4lunch.data.repositories.UserRepository;
 import fr.ferrerasroca.go4lunch.ui.auth.AuthenticationActivity;

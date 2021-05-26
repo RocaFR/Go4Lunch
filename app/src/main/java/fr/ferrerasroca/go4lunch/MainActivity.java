@@ -1,4 +1,4 @@
-package fr.ferrerasroca.go4lunch.ui;
+package fr.ferrerasroca.go4lunch;
 
 import android.content.Intent;
 import android.os.Bundle;

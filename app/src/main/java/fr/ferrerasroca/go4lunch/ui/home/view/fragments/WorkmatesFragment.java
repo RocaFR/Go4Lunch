@@ -1,12 +1,11 @@
-package fr.ferrerasroca.go4lunch.ui.home.view;
+package fr.ferrerasroca.go4lunch.ui.home.view.fragments;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.fragment.app.Fragment;
 
 import fr.ferrerasroca.go4lunch.R;
 

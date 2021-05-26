@@ -16,7 +16,7 @@
         android:theme="@style/Fullscreen">
         <activity android:name=".ui.home.view.HomeActivity" />
         <activity android:name=".ui.auth.AuthenticationActivity" />
-        <activity android:name=".ui.MainActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

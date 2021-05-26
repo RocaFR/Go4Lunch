@@ -1,14 +1,11 @@
 package fr.ferrerasroca.go4lunch.data.injections;
 
 import android.content.Context;
-import android.view.View;
 
 import com.google.android.libraries.places.api.Places;
 
 import fr.ferrerasroca.go4lunch.BuildConfig;
-import fr.ferrerasroca.go4lunch.R;
-import fr.ferrerasroca.go4lunch.ui.home.view.GoogleMapsComponent;
-import fr.ferrerasroca.go4lunch.data.api.PlacesApi;
+import fr.ferrerasroca.go4lunch.data.api.places.PlacesApi;
 import fr.ferrerasroca.go4lunch.data.repositories.PlacesRepository;
 import fr.ferrerasroca.go4lunch.data.repositories.UserRepository;
 import fr.ferrerasroca.go4lunch.ui.home.viewmodel.MapViewModel;
@@ -20,8 +17,8 @@ public class Injection {
         return new UserRepository();
     }
 
-    public static PlacesRepository providePlacesRepository(PlacesApi placesApi) {
-        return new PlacesRepository(placesApi);
+    public static PlacesRepository providePlacesRepository() {
+        return new PlacesRepository();
     }
 
     public static PlacesApi provideGooglePlacesApi(Context context) {
@@ -42,8 +39,8 @@ public class Injection {
         return new ViewModelFactory(userRepository);
     }
 
-    public static ViewModelFactory provideMapViewModelFactory(Context context) {
-        PlacesRepository placesRepository = providePlacesRepository(provideGooglePlacesApi(context));
+    public static ViewModelFactory provideMapViewModelFactory() {
+        PlacesRepository placesRepository = providePlacesRepository();
         return new ViewModelFactory(placesRepository);
     }
 }

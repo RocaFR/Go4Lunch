@@ -1,4 +1,4 @@
-package fr.ferrerasroca.go4lunch.ui.home.view;
+package fr.ferrerasroca.go4lunch.ui.home.view.fragments;
 
 import android.os.Bundle;
 

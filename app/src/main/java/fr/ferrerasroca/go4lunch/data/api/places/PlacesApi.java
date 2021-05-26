@@ -1,4 +1,4 @@
-package fr.ferrerasroca.go4lunch.data.api;
+package fr.ferrerasroca.go4lunch.data.api.places;
 
 import android.annotation.SuppressLint;
 

@@ -1,4 +1,4 @@
-package fr.ferrerasroca.go4lunch.data.api;
+package fr.ferrerasroca.go4lunch.data.api.user;
 
 import androidx.annotation.NonNull;
 

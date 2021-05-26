@@ -1,12 +1,10 @@
-package fr.ferrerasroca.go4lunch.ui.home.view;
+package fr.ferrerasroca.go4lunch.ui.home.view.fragments;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,13 +13,20 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 
-import com.google.android.libraries.places.api.model.PlaceLikelihood;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 import fr.ferrerasroca.go4lunch.R;
 import fr.ferrerasroca.go4lunch.data.injections.Injection;
+import fr.ferrerasroca.go4lunch.data.models.places.Place;
+import fr.ferrerasroca.go4lunch.ui.home.view.GoogleMapsComponent;
 import fr.ferrerasroca.go4lunch.ui.home.viewmodel.MapViewModel;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -35,7 +40,6 @@ public class MapViewFragment extends Fragment {
     public MapViewFragment() { }
     public static MapViewFragment newInstance() { return new MapViewFragment(); }
 
-    @SuppressLint("MissingPermission")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -46,12 +50,10 @@ public class MapViewFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        mapViewModel = Injection.provideMapViewModel(Injection.provideMapViewModelFactory(getContext()));
         googleMapsComponent = new GoogleMapsComponent(view);
         googleMapsComponent.getMapView().onCreate(savedInstanceState);
-        this.requestLocationPermission();
 
+        mapViewModel = Injection.provideMapViewModel(Injection.provideMapViewModelFactory());
     }
 
     @AfterPermissionGranted(RC_LOCATION_PERM)
@@ -60,27 +62,45 @@ public class MapViewFragment extends Fragment {
             EasyPermissions.requestPermissions(this, getString(R.string.app_name) + getString(R.string.permission_location_request), RC_LOCATION_PERM, Manifest.permission.ACCESS_FINE_LOCATION);
         } else {
             if (googleMapsComponent.isLocationEnabled(getContext())) {
-                googleMapsComponent.getLastLocation(getContext());
-                if (isNetworkAvailable()) {
-                    this.getPlaces();
-                } else {
-                    Toast.makeText(getContext(), getString(R.string.network_unavailable), Toast.LENGTH_LONG).show();
-                }
+                googleMapsComponent.getLocation(getContext(), callback);
             } else {
                 Toast.makeText(getContext(), getString(R.string.location_disabled), Toast.LENGTH_LONG).show();
             }
         }
     }
 
+    private final LocationCallback callback = new LocationCallback() {
+        @Override
+        public void onLocationResult(@NonNull @NotNull LocationResult locationResult) {
+            super.onLocationResult(locationResult);
+
+            googleMapsComponent.setLastLocation(locationResult.getLastLocation());
+            LatLng latLng = new LatLng(googleMapsComponent.getLastLocation().getLatitude(), googleMapsComponent.getLastLocation().getLongitude());
+            googleMapsComponent.moveGoogleMapCamera(latLng);
+
+            getPlaces();
+        }
+    };
+
     private void getPlaces() {
-        mapViewModel.placeLikelihoodLiveData.observe(getViewLifecycleOwner(), placeLikelihoods -> {
-            for (PlaceLikelihood place : placeLikelihoods) {
-                Log.e("", "getPlaces: " + place.getPlace().getName());
-                googleMapsComponent.addMarker(place.getPlace().getLatLng(), place.getPlace().getName(), place.getPlace().getTypes().toString(), false);
-            }
-        });
-        mapViewModel.getPlaces();
+        mapViewModel.getPlaces().observe(getViewLifecycleOwner(), placesObserver);
+        if (isNetworkAvailable()) {
+            mapViewModel.retrievePlaces(googleMapsComponent.getLastLocation());
+        }
     }
+
+    final Observer<List<Place>> placesObserver = new Observer<List<Place>>() {
+        @Override
+        public void onChanged(List<Place> places) {
+            for (Place place : places) {
+                Double lat = place.getGeometry().getLocation().getLat();
+                Double lng = place.getGeometry().getLocation().getLng();
+                LatLng latLng = new LatLng(lat, lng);
+
+                googleMapsComponent.addMarker(latLng, place.getName(), place.getVicinity(), false);
+            }
+        }
+    };
 
     private Boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager =
@@ -107,6 +127,7 @@ public class MapViewFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        this.requestLocationPermission();
         googleMapsComponent.getMapView().onStart();
     }
 

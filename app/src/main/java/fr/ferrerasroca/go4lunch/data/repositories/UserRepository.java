@@ -5,10 +5,9 @@ import android.content.Intent;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import fr.ferrerasroca.go4lunch.data.api.FacebookLoginApi;
-import fr.ferrerasroca.go4lunch.data.api.GoogleIdentifiantApi;
-import fr.ferrerasroca.go4lunch.data.api.UserHelper;
-import fr.ferrerasroca.go4lunch.data.models.User;
+import fr.ferrerasroca.go4lunch.data.api.authentication.FacebookLoginApi;
+import fr.ferrerasroca.go4lunch.data.api.authentication.GoogleIdentifiantApi;
+import fr.ferrerasroca.go4lunch.data.api.user.UserHelper;
 
 public class UserRepository {
 

@@ -19,7 +19,10 @@ import fr.ferrerasroca.go4lunch.R;
 import fr.ferrerasroca.go4lunch.data.injections.Injection;
 import fr.ferrerasroca.go4lunch.data.models.User;
 import fr.ferrerasroca.go4lunch.databinding.ActivityHomeBinding;
-import fr.ferrerasroca.go4lunch.ui.MainActivity;
+import fr.ferrerasroca.go4lunch.MainActivity;
+import fr.ferrerasroca.go4lunch.ui.home.view.fragments.ListViewFragment;
+import fr.ferrerasroca.go4lunch.ui.home.view.fragments.MapViewFragment;
+import fr.ferrerasroca.go4lunch.ui.home.view.fragments.WorkmatesFragment;
 import fr.ferrerasroca.go4lunch.ui.home.viewmodel.UserViewModel;
 
 public class HomeActivity extends AppCompatActivity {
