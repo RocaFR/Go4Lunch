@@ -1,46 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="10dp">
 
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="wrap_content"
+        android:maxWidth="250dp"
         android:layout_height="wrap_content"
         android:id="@+id/textView_restaurantName"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         style="@style/Go4Lunch.Title"
-        android:text="Le Zinc !" />
+        android:text="Le Zinc !FDFDFDFDFDFDFDFDFDFDFDFDFDFD" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:layout_width="wrap_content"
+        android:layout_width="220dp"
         android:layout_height="wrap_content"
         android:id="@+id/textView_restaurantAddress"
         app:layout_constraintTop_toBottomOf="@id/textView_restaurantName"
         app:layout_constraintStart_toStartOf="@id/textView_restaurantName"
         android:layout_marginTop="@dimen/margin_top_lines"
         style="@style/Go4Lunch.Paragraph"
+        android:ellipsize="end"
+        android:lines="1"
         android:text="12 rue du Faubourg Poissonnière" />
 
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView_restaurantOpenHours"
+        android:id="@+id/textView_restaurantOpeningHours"
         app:layout_constraintTop_toBottomOf="@id/textView_restaurantAddress"
         app:layout_constraintStart_toStartOf="@id/textView_restaurantAddress"
         android:layout_marginTop="@dimen/margin_top_lines"
         style="@style/Go4Lunch.Paragraph"
         android:textStyle="italic"
-        android:text="Open util 7 pm" />
+        android:text="Not specified" />
 
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView_restaurantDistance"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/restaurant_picture"
+        app:layout_constraintEnd_toStartOf="@id/imageView_restaurant_picture"
         android:layout_marginTop="@dimen/margin_top_lines"
         android:layout_marginRight="@dimen/margin_top_lines"
         style="@style/Go4Lunch.Paragraph"
@@ -50,18 +53,18 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:id="@+id/restaurant_imageView_ParticipantsNumber"
-        app:layout_constraintTop_toTopOf="@id/textView_restaurantParticipantsNumber"
-        app:layout_constraintBottom_toBottomOf="@id/textView_restaurantParticipantsNumber"
-        app:layout_constraintEnd_toStartOf="@id/textView_restaurantParticipantsNumber"
+        app:layout_constraintTop_toTopOf="@id/textView_restaurantNumberOfParticipants"
+        app:layout_constraintBottom_toBottomOf="@id/textView_restaurantNumberOfParticipants"
+        app:layout_constraintEnd_toStartOf="@id/textView_restaurantNumberOfParticipants"
         android:src="@drawable/ic_account_circle_white_36dp"
         android:tint="@color/black"/>
 
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView_restaurantParticipantsNumber"
+        android:id="@+id/textView_restaurantNumberOfParticipants"
         app:layout_constraintTop_toBottomOf="@id/textView_restaurantDistance"
-        app:layout_constraintEnd_toStartOf="@id/restaurant_picture"
+        app:layout_constraintEnd_toStartOf="@id/imageView_restaurant_picture"
         android:layout_marginTop="@dimen/margin_top_lines"
         android:layout_marginRight="@dimen/margin_top_lines"
         style="@style/Go4Lunch.Paragraph"
@@ -70,9 +73,9 @@
     <androidx.appcompat.widget.AppCompatRatingBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView_restaurantStars"
-        app:layout_constraintTop_toBottomOf="@id/textView_restaurantParticipantsNumber"
-        app:layout_constraintEnd_toStartOf="@id/restaurant_picture"
+        android:id="@+id/ratingBar_restaurantStars"
+        app:layout_constraintTop_toBottomOf="@id/textView_restaurantNumberOfParticipants"
+        app:layout_constraintEnd_toStartOf="@id/imageView_restaurant_picture"
         android:layout_marginTop="@dimen/margin_top_lines"
         android:layout_marginRight="@dimen/margin_top_lines"
         style="@style/Widget.AppCompat.RatingBar.Small"
@@ -84,7 +87,7 @@
     <com.google.android.material.imageview.ShapeableImageView
         android:layout_width="75dp"
         android:layout_height="75dp"
-        android:id="@+id/restaurant_picture"
+        android:id="@+id/imageView_restaurant_picture"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"

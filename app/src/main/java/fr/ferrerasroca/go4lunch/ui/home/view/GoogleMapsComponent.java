@@ -3,7 +3,6 @@ package fr.ferrerasroca.go4lunch.ui.home.view;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
@@ -25,16 +24,20 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.jetbrains.annotations.NotNull;
 
 import fr.ferrerasroca.go4lunch.R;
+import fr.ferrerasroca.go4lunch.utils.LocationUtils;
 
 public class GoogleMapsComponent implements OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener {
 
-    private final MapView mapView;
+    private MapView mapView;
     private LocationRequest locationRequest;
     private Location lastLocation;
     private static GoogleMap currentGoogleMap;
     public static final long LOCATION_INTERVAL = 300000;
+    public static final int RC_LOCATION_PERM = 2903;
 
-    public GoogleMapsComponent(View view) {
+    public GoogleMapsComponent() { }
+
+    public void configureGoogleMaps(View view) {
         this.mapView = view.findViewById(R.id.mapView);
         this.mapView.getMapAsync(this);
     }
@@ -84,7 +87,7 @@ public class GoogleMapsComponent implements OnMapReadyCallback, GoogleMap.OnMyLo
 
         FusedLocationProviderClient providerClient = LocationServices.getFusedLocationProviderClient(context);
 
-        if (isLocationEnabled(context)) {
+        if (LocationUtils.isLocationEnabled(context)) {
             providerClient.requestLocationUpdates(locationRequest, callback, Looper.myLooper());
         }
     }
@@ -93,14 +96,6 @@ public class GoogleMapsComponent implements OnMapReadyCallback, GoogleMap.OnMyLo
         this.locationRequest = LocationRequest.create()
                 .setInterval(LOCATION_INTERVAL)
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-    }
-
-    public Boolean isLocationEnabled(Context context) {
-        LocationManager systemService = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        String gpsProvider = LocationManager.GPS_PROVIDER;
-        String networkProvider = LocationManager.NETWORK_PROVIDER;
-
-        return systemService.isProviderEnabled(gpsProvider) && systemService.isProviderEnabled(networkProvider);
     }
 
     public void addMarker(LatLng latLng , String title, String snippet, Boolean isDraggable) {

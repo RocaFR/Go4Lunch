@@ -28,14 +28,17 @@ import fr.ferrerasroca.go4lunch.data.injections.Injection;
 import fr.ferrerasroca.go4lunch.data.models.places.Place;
 import fr.ferrerasroca.go4lunch.ui.home.view.GoogleMapsComponent;
 import fr.ferrerasroca.go4lunch.ui.home.viewmodel.MapViewModel;
+import fr.ferrerasroca.go4lunch.utils.LocationUtils;
+import fr.ferrerasroca.go4lunch.utils.NetworkUtils;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
+
+import static fr.ferrerasroca.go4lunch.ui.home.view.GoogleMapsComponent.RC_LOCATION_PERM;
 
 public class MapViewFragment extends Fragment {
 
     private GoogleMapsComponent googleMapsComponent;
     private MapViewModel mapViewModel;
-    private static final int RC_LOCATION_PERM = 2903;
 
     public MapViewFragment() { }
     public static MapViewFragment newInstance() { return new MapViewFragment(); }
@@ -50,10 +53,16 @@ public class MapViewFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        googleMapsComponent = new GoogleMapsComponent(view);
+
+        this.configureGoogleMaps(view);
         googleMapsComponent.getMapView().onCreate(savedInstanceState);
 
         mapViewModel = Injection.provideMapViewModel(Injection.provideMapViewModelFactory());
+    }
+
+    private void configureGoogleMaps(View view) {
+        googleMapsComponent = new GoogleMapsComponent();
+        googleMapsComponent.configureGoogleMaps(view);
     }
 
     @AfterPermissionGranted(RC_LOCATION_PERM)
@@ -61,7 +70,7 @@ public class MapViewFragment extends Fragment {
         if (!EasyPermissions.hasPermissions(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)) {
             EasyPermissions.requestPermissions(this, getString(R.string.app_name) + getString(R.string.permission_location_request), RC_LOCATION_PERM, Manifest.permission.ACCESS_FINE_LOCATION);
         } else {
-            if (googleMapsComponent.isLocationEnabled(getContext())) {
+            if (LocationUtils.isLocationEnabled(getContext())) {
                 googleMapsComponent.getLocation(getContext(), callback);
             } else {
                 Toast.makeText(getContext(), getString(R.string.location_disabled), Toast.LENGTH_LONG).show();
@@ -84,7 +93,7 @@ public class MapViewFragment extends Fragment {
 
     private void getPlaces() {
         mapViewModel.getPlaces().observe(getViewLifecycleOwner(), placesObserver);
-        if (isNetworkAvailable()) {
+        if (NetworkUtils.isNetworkAvailable(getContext())) {
             mapViewModel.retrievePlaces(googleMapsComponent.getLastLocation());
         }
     }
@@ -101,14 +110,6 @@ public class MapViewFragment extends Fragment {
             }
         }
     };
-
-    private Boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager =
-                (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-
-        return networkInfo != null && networkInfo.isConnectedOrConnecting();
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull @NotNull String[] permissions, @NonNull @NotNull int[] grantResults) {

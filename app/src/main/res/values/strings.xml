@@ -35,4 +35,5 @@
     <string name="navigation_view_user_disconnected">User disconnected</string>
     <string name="network_unavailable">Network unavailable, please turn on.</string>
     <string name="location_disabled">Location disabled, please turn on.</string>
+    <string name="listview_norestaurant">No restaurant :(</string>
 </resources>
