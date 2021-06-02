@@ -6,13 +6,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.home.view.fragments.ListViewFragment">
 
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressbar_restaurants"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:indeterminate="true" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/restaurant_recyclerView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/restaurant_item"/>
+        tools:listitem="@layout/restaurant_item" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -23,8 +31,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:text="@string/listview_norestaurant"
+        android:visibility="gone"
         style="@style/Go4Lunch.Paragraph" />
-
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

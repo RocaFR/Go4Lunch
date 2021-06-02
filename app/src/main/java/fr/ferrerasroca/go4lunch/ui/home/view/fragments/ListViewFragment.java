@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +43,7 @@ public class ListViewFragment extends Fragment {
     private MapViewModel mapViewModel;
     private GoogleMapsComponent googleMapsComponent;
     private TextView textviewNoRestaurant;
+    private ProgressBar progressBar;
     private RecyclerView recyclerView;
 
     public ListViewFragment() { }
@@ -61,12 +63,18 @@ public class ListViewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_list_view, container, false);
-        textviewNoRestaurant = view.findViewById(R.id.textView_noRestaurant);
 
-        this.googleMapsComponent = new GoogleMapsComponent();
-        this.recyclerView = view.findViewById(R.id.restaurant_recyclerView);
+        this.configureViews(view);
 
         return view;
+    }
+
+    private void configureViews(View view) {
+        textviewNoRestaurant = view.findViewById(R.id.textView_noRestaurant);
+        progressBar = view.findViewById(R.id.progressbar_restaurants);
+        recyclerView = view.findViewById(R.id.restaurant_recyclerView);
+        googleMapsComponent = new GoogleMapsComponent();
+
     }
 
     @Override
@@ -109,12 +117,15 @@ public class ListViewFragment extends Fragment {
         }
     }
 
-    private Observer<List<Place>> placesObserver = new Observer<List<Place>>() {
+    private final Observer<List<Place>> placesObserver = new Observer<List<Place>>() {
         @Override
         public void onChanged(List<Place> places) {
             if (!places.isEmpty()) {
                 textviewNoRestaurant.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
                 configureRecyclerview(places);
+            } else {
+                textviewNoRestaurant.setVisibility(View.VISIBLE);
             }
         }
     };

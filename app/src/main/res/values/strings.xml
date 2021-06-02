@@ -36,4 +36,9 @@
     <string name="network_unavailable">Network unavailable, please turn on.</string>
     <string name="location_disabled">Location disabled, please turn on.</string>
     <string name="listview_norestaurant">No restaurant :(</string>
+    <string name="restaurant_name_tools">Le Zinc !</string>
+    <string name="restaurant_address_tools">12 rue du Faubourg Poissonnière</string>
+    <string name="restaurant_openinghours_not_specified">Not specified</string>
+    <string name="restaurant_distance_tools">120m</string>
+    <string name="restaurant_numberparticipants_tools">(2)</string>
 </resources>
