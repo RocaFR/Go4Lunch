@@ -3,6 +3,7 @@ package fr.ferrerasroca.go4lunch.data.models.places;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Place {
@@ -24,7 +25,7 @@ public class Place {
     private OpeningHours openingHours;
     @SerializedName("photos")
     @Expose
-    private List<Photo> photos = null;
+    private List<Photo> photos = new ArrayList<>();
     @SerializedName("place_id")
     @Expose
     private String placeId;
@@ -55,6 +56,7 @@ public class Place {
     @SerializedName("permanently_closed")
     @Expose
     private Boolean permanentlyClosed;
+    private String photoUrl = null;
 
     public String getBusinessStatus() {
         return businessStatus;
@@ -182,5 +184,13 @@ public class Place {
 
     public void setPermanentlyClosed(Boolean permanentlyClosed) {
         this.permanentlyClosed = permanentlyClosed;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 }

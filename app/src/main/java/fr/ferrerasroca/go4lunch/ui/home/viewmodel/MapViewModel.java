@@ -8,7 +8,10 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
+import fr.ferrerasroca.go4lunch.BuildConfig;
 import fr.ferrerasroca.go4lunch.data.models.places.Place;
 import fr.ferrerasroca.go4lunch.data.models.places.Results;
 import fr.ferrerasroca.go4lunch.data.repositories.PlacesRepository;
@@ -31,8 +34,20 @@ public class MapViewModel extends ViewModel {
         placesRepository.getResults(location).enqueue(new Callback<Results>() {
             @Override
             public void onResponse(Call<Results> call, Response<Results> response) {
-                    List<Place> places = response.body().getPlaces();
+                Results body = response.body();
+                if (response.isSuccessful() && body != null) {
+                    List<Place> places = body.getPlaces().stream().map(new Function<Place, Place>() {
+                        @Override
+                        public Place apply(Place place) {
+                            if (!place.getPhotos().isEmpty()) {
+                                String photoUrl = place.getPhotos().get(0).getPhotoReference();
+                                place.setPhotoUrl("https://maps.googleapis.com/maps/api/place/photo?key=" + BuildConfig.GOOGLE_API_KEY + "&photoreference=" + photoUrl + "&maxwidth=500");
+                            }
+                            return place;
+                        }
+                    }).collect(Collectors.toList());
                     _resultsLiveData.postValue(places);
+                }
             }
 
             @Override

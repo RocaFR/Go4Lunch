@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatRatingBar;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.google.android.material.imageview.ShapeableImageView;
 
@@ -46,6 +47,8 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
             textviewOpeningHours.setText(place.getOpeningHours().getOpenNow() ? "Open" : "Close");
             if (place.getOpeningHours().getOpenNow()) textviewOpeningHours.setTypeface(textviewOpeningHours.getTypeface(), Typeface.BOLD);
         }
+
+        Glide.with(itemView.getContext()).load(place.getPhotoUrl()).error(R.drawable.ic_baseline_stop_circle_24).into(imageviewPicture);
 
         //textviewDistance.setText(TextUtils.isEmpty(place.getName()) ? "" : place.getName());
         //textviewNumberOfParticipants.setText(TextUtils.isEmpty(place.getName()) ? "" : place.getName());

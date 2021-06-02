@@ -2,6 +2,7 @@ package fr.ferrerasroca.go4lunch.ui.home.view.fragments;
 
 import android.Manifest;
 import android.content.Context;
+import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
