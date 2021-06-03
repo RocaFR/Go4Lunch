@@ -34,7 +34,7 @@ public class Place {
     private PlusCode plusCode;
     @SerializedName("rating")
     @Expose
-    private Double rating;
+    private Float rating = -1f;
     @SerializedName("reference")
     @Expose
     private String reference;
@@ -57,6 +57,7 @@ public class Place {
     @Expose
     private Boolean permanentlyClosed;
     private String photoUrl = null;
+    private String distanceFromUser = null;
 
     public String getBusinessStatus() {
         return businessStatus;
@@ -122,11 +123,11 @@ public class Place {
         this.plusCode = plusCode;
     }
 
-    public Double getRating() {
+    public Float getRating() {
         return rating;
     }
 
-    public void setRating(Double rating) {
+    public void setRating(Float rating) {
         this.rating = rating;
     }
 
@@ -192,5 +193,17 @@ public class Place {
 
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
+    }
+
+    public Boolean isRated() {
+        return this.rating > 0f;
+    }
+
+    public String getDistanceFromUser() {
+        return distanceFromUser;
+    }
+
+    public void setDistanceFromUser(String distanceFromUser) {
+        this.distanceFromUser = distanceFromUser;
     }
 }

@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.maps.model.LatLng;
@@ -132,10 +131,10 @@ public class ListViewFragment extends Fragment {
 
     private void configureRecyclerview(List<Place> places) {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-        RestaurantAdapter restaurantAdapter = new RestaurantAdapter(places, Glide.with(this));
-        this.recyclerView.setLayoutManager(layoutManager);
-        this.recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
-        this.recyclerView.setAdapter(restaurantAdapter);
+        RestaurantAdapter restaurantAdapter = new RestaurantAdapter(places, googleMapsComponent.getLastLocation());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        recyclerView.setAdapter(restaurantAdapter);
     }
 
 }

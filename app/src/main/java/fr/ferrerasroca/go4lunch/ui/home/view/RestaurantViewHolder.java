@@ -1,6 +1,8 @@
 package fr.ferrerasroca.go4lunch.ui.home.view;
 
+import android.annotation.SuppressLint;
 import android.graphics.Typeface;
+import android.location.Location;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
@@ -10,7 +12,6 @@ import androidx.appcompat.widget.AppCompatRatingBar;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
 import com.google.android.material.imageview.ShapeableImageView;
 
 import org.jetbrains.annotations.NotNull;
@@ -40,17 +41,37 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
         imageviewPicture = itemView.findViewById(R.id.imageView_restaurant_picture);
     }
 
-    public void updateRestaurantWithPlace(Place place, RequestManager glide) {
+    @SuppressLint("SetTextI18n")
+    public void updateRestaurantWithPlace(Place place, Location userLocation) {
         textviewName.setText(TextUtils.isEmpty(place.getName()) ? "" : place.getName());
         textviewAddress.setText(TextUtils.isEmpty(place.getVicinity()) ? "" : place.getVicinity());
+        Glide.with(itemView.getContext()).load(place.getPhotoUrl()).error(R.drawable.ic_baseline_stop_circle_24).into(imageviewPicture);
+        textviewDistance.setText(place.getDistanceFromUser() + itemView.getContext().getString(R.string.distance_unit));
+
+        this.configureOpeningHours(place);
+        this.configureRating(place);
+
+        //textviewNumberOfParticipants.setText(TextUtils.isEmpty(place.getName()) ? "" : place.getName());
+    }
+
+    private void configureOpeningHours(Place place) {
         if (place.getOpeningHours() != null ) {
             textviewOpeningHours.setText(place.getOpeningHours().getOpenNow() ? "Open" : "Close");
             if (place.getOpeningHours().getOpenNow()) textviewOpeningHours.setTypeface(textviewOpeningHours.getTypeface(), Typeface.BOLD);
         }
-
-        Glide.with(itemView.getContext()).load(place.getPhotoUrl()).error(R.drawable.ic_baseline_stop_circle_24).into(imageviewPicture);
-
-        //textviewDistance.setText(TextUtils.isEmpty(place.getName()) ? "" : place.getName());
-        //textviewNumberOfParticipants.setText(TextUtils.isEmpty(place.getName()) ? "" : place.getName());
     }
+
+    private void configureRating(Place place) {
+        if (place.isRated()) {
+            Float convertedRating = this.convertRating(5f, 3f, place.getRating());
+            ratingbarStars.setRating(convertedRating);
+        } else {
+            ratingbarStars.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private Float convertRating(Float highestBaseRating, Float newHighestBaseRating, Float rating) {
+        return (rating / highestBaseRating) * newHighestBaseRating;
+    }
+
 }

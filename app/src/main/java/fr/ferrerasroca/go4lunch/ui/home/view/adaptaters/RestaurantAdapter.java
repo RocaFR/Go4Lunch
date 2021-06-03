@@ -1,12 +1,11 @@
 package fr.ferrerasroca.go4lunch.ui.home.view.adaptaters;
 
+import android.location.Location;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.bumptech.glide.RequestManager;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -19,11 +18,11 @@ import fr.ferrerasroca.go4lunch.ui.home.view.RestaurantViewHolder;
 public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantViewHolder> {
 
     private final List<Place> places;
-    private final RequestManager glide;
+    private final Location userLocation;
 
-    public RestaurantAdapter(List<Place> places, RequestManager glide) {
+    public RestaurantAdapter(List<Place> places, Location userLocation) {
         this.places = places;
-        this.glide = glide;
+        this.userLocation = userLocation;
     }
 
     @NonNull
@@ -35,7 +34,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull RestaurantViewHolder holder, int position) {
-        holder.updateRestaurantWithPlace(places.get(position), glide);
+        holder.updateRestaurantWithPlace(places.get(position), userLocation);
     }
 
     @Override

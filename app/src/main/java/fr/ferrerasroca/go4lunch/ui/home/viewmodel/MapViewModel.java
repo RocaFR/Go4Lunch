@@ -43,6 +43,8 @@ public class MapViewModel extends ViewModel {
                                 String photoUrl = place.getPhotos().get(0).getPhotoReference();
                                 place.setPhotoUrl("https://maps.googleapis.com/maps/api/place/photo?key=" + BuildConfig.GOOGLE_API_KEY + "&photoreference=" + photoUrl + "&maxwidth=500");
                             }
+                            String distance = calculDistanceBetweenUserAndRestaurant(place, location);
+                            place.setDistanceFromUser(distance);
                             return place;
                         }
                     }).collect(Collectors.toList());
@@ -55,6 +57,21 @@ public class MapViewModel extends ViewModel {
                 Log.e("TAG", "onFailure: " +  t.getMessage());
             }
         });
+    }
+
+    private String calculDistanceBetweenUserAndRestaurant(Place place, Location userLocation) {
+        double startLatitude = userLocation.getLatitude();
+        double startLongitude = userLocation.getLongitude();
+        double endLatitude = place.getGeometry().getLocation().getLat();
+        double endLongitude = place.getGeometry().getLocation().getLng();
+        float[] results = new float[1];
+
+        Location.distanceBetween(startLatitude, startLongitude, endLatitude, endLongitude, results);
+        float f = results[0];
+        int intDistance = Math.round(f);
+        String distance = Integer.toString(intDistance);
+
+        return distance;
     }
 
     public LiveData<List<Place>> getPlaces() {
