@@ -1,3 +1,45 @@
 <resources>
     <string name="app_name">Go4Lunch</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome!"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="app_description">Find a nice restaurant and invite your coworkers to lunch !</string>
+    <string name="button_login_facebook">Sign in with Facebook</string>
+    <string name="button_login_google">Sign in with Google</string>
+    <string name="google_web_client_id">1003255926076-f73f5lum45ej8jtv3708ngs666g80tjm.apps.googleusercontent.com</string>
+    <string name="google_signin_error">Google sign in error</string>
+    <string name="welcome_signin">"Welcome "</string>
+    <string name="google_connexion_canceled">Google sign in canceled.</string>
+    <string name="facebook_app_id">321850112783246</string>
+    <string name="facebook_application_id">321850112783246</string>
+    <string name="fb_login_protocol_scheme">fb321850112783246</string>
+    <string name="facebook_sign_in_canceled">Facebook sign in canceled.</string>
+    <string name="facebook_sign_in_error">Facebook sign in error.</string>
+    <string name="menu_fragment_home_search">Search</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navdrawer_menu_your_lunch">YOUR LUNCH</string>
+    <string name="navdrawer_menu_settings">SETTINGS</string>
+    <string name="navdrawer_menu_logout">LOGOUT</string>
+    <string name="menu_bottomNavigationView_mapView">Map View</string>
+    <string name="menu_bottomNavigationView_listView">List View</string>
+    <string name="menu_bottomNavigationView_workmates">Workmates</string>
+    <string name="permission_location_request">" needs your location to work properly."</string>
+    <string name="navigation_view_user_disconnected">User disconnected</string>
+    <string name="network_unavailable">Network unavailable, please turn on.</string>
+    <string name="location_disabled">Location disabled, please turn on.</string>
+    <string name="listview_norestaurant">No restaurant :(</string>
+    <string name="restaurant_name_tools">Le Zinc !</string>
+    <string name="restaurant_address_tools">12 rue du Faubourg Poissonnière</string>
+    <string name="restaurant_openinghours_not_specified">Not specified</string>
+    <string name="restaurant_distance_tools">120m</string>
+    <string name="restaurant_numberparticipants_tools">(2)</string>
+    <string name="distance_unit">m</string>
 </resources>
