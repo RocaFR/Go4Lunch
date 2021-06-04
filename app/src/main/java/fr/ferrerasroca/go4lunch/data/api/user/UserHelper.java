@@ -8,6 +8,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -15,8 +16,8 @@ import fr.ferrerasroca.go4lunch.data.models.User;
 
 public class UserHelper {
 
-    public interface OnUserRetrievedListener {
-        void onUserRetrieved(User user);
+    public interface Listener {
+        void onRetrieved(User user);
     }
 
     private static final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -34,14 +35,20 @@ public class UserHelper {
         return getUserCollection().document(userUid).get();
     }
 
-    public static Task<DocumentSnapshot> getUser(String userUid, OnUserRetrievedListener onUserRetrievedListener) {
+    public static Task<DocumentSnapshot> getUser(String userUid, Listener listener) {
         return getUserCollection().document(userUid).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull @NotNull Task<DocumentSnapshot> task) {
-                            onUserRetrievedListener.onUserRetrieved(task.getResult().toObject(User.class));
+                            listener.onRetrieved(task.getResult().toObject(User.class));
                     }
                 });
+    }
+
+    public static Task<QuerySnapshot> retrieveUsers() {
+        return getUserCollection()
+                .orderBy("username")
+                .get();
     }
 
     public static Boolean isCurrentUserLogged() {

@@ -5,16 +5,30 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.progressindicator.LinearProgressIndicator;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 import fr.ferrerasroca.go4lunch.R;
+import fr.ferrerasroca.go4lunch.data.injections.Injection;
+import fr.ferrerasroca.go4lunch.data.models.User;
+import fr.ferrerasroca.go4lunch.ui.home.view.adaptaters.WorkmateAdapter;
+import fr.ferrerasroca.go4lunch.ui.home.viewmodel.UserViewModel;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link WorkmatesFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class WorkmatesFragment extends Fragment {
+
+    private UserViewModel userViewModel;
+    private LinearProgressIndicator progressIndicator;
+    private RecyclerView recyclerView;
 
     public WorkmatesFragment() { }
 
@@ -25,12 +39,53 @@ public class WorkmatesFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        userViewModel = Injection.provideUserViewModel(Injection.provideUserViewModelFactory());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_workmates, container, false);
+        View view = inflater.inflate(R.layout.fragment_workmates, container, false);
+
+        this.configureViews(view);
+
+        return  view;
+    }
+
+    private void configureViews(View view) {
+        progressIndicator = view.findViewById(R.id.progressbar_workmates);
+        recyclerView = view.findViewById(R.id.workmates_recyclerView);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        this.getUsersFromFirestore();
+    }
+
+    private void getUsersFromFirestore() {
+        userViewModel.getUsers().observe(getViewLifecycleOwner(), users -> {
+            configureProgressbar(users);
+            configureRecyclerView(users);
+        });
+        userViewModel.retrieveUsers();
+    }
+
+    private void configureProgressbar(List<User> users) {
+        if (!users.isEmpty()) {
+            progressIndicator.setVisibility(View.GONE);
+        } else {
+            progressIndicator.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void configureRecyclerView(List<User> users) {
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        WorkmateAdapter workmateAdapter = new WorkmateAdapter(users);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL));
+        recyclerView.setAdapter(workmateAdapter);
     }
 }

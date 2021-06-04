@@ -10,13 +10,15 @@ import androidx.lifecycle.ViewModel;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.List;
+
 import fr.ferrerasroca.go4lunch.data.models.User;
 import fr.ferrerasroca.go4lunch.data.repositories.UserRepository;
 
 public class UserViewModel extends ViewModel {
 
     private final UserRepository userRepository;
-    private MutableLiveData<User> _userMutableLiveData = new MutableLiveData<>();
+    private final MutableLiveData<User> _userMutableLiveData = new MutableLiveData<>();
     public LiveData<User> userLiveData = _userMutableLiveData;
     private final FirebaseAuth firebaseAuth;
 
@@ -43,7 +45,7 @@ public class UserViewModel extends ViewModel {
 
     public void getUser() {
         if (this.firebaseAuth.getCurrentUser() != null) {
-            userRepository.getUser(this.firebaseAuth.getCurrentUser().getUid(), user -> _userMutableLiveData.postValue(user));
+            userRepository.getUser(this.firebaseAuth.getCurrentUser().getUid(), _userMutableLiveData::postValue);
         }
     }
 
@@ -51,5 +53,13 @@ public class UserViewModel extends ViewModel {
         if (this.firebaseAuth.getCurrentUser() != null) {
             this.firebaseAuth.signOut();
         }
+    }
+
+    public LiveData<List<User>> getUsers() {
+        return userRepository.getUsers();
+    }
+
+    public void retrieveUsers() {
+        userRepository.retrieveUsers();
     }
 }

@@ -1,4 +1,4 @@
-package fr.ferrerasroca.go4lunch.ui.home.view;
+package fr.ferrerasroca.go4lunch.ui.home.view.viewholders;
 
 import android.annotation.SuppressLint;
 import android.graphics.Typeface;

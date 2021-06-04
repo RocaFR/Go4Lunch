@@ -1,0 +1,34 @@
+package fr.ferrerasroca.go4lunch.ui.home.view.viewholders;
+
+import android.text.TextUtils;
+import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+import com.google.android.material.imageview.ShapeableImageView;
+import com.google.android.material.textview.MaterialTextView;
+
+import org.jetbrains.annotations.NotNull;
+
+import fr.ferrerasroca.go4lunch.R;
+import fr.ferrerasroca.go4lunch.data.models.User;
+
+public class WorkmateViewHolder extends RecyclerView.ViewHolder {
+
+    private final ShapeableImageView imageviewWorkmate;
+    private final MaterialTextView textviewWorkmateChoice;
+
+    public WorkmateViewHolder(@NonNull @NotNull View itemView) {
+        super(itemView);
+
+        imageviewWorkmate = itemView.findViewById(R.id.imageView_workmate);
+        textviewWorkmateChoice = itemView.findViewById(R.id.textView_workmateChoice);
+    }
+
+    public void updateWorkmate(User user) {
+        Glide.with(itemView.getContext()).load(user.getProfilePictureUrl()).into(imageviewWorkmate);
+        textviewWorkmateChoice.setText(TextUtils.isEmpty(user.getUsername()) ? "" : user.getUsername());
+    }
+}

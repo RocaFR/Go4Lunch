@@ -13,7 +13,7 @@ import java.util.List;
 
 import fr.ferrerasroca.go4lunch.R;
 import fr.ferrerasroca.go4lunch.data.models.places.Place;
-import fr.ferrerasroca.go4lunch.ui.home.view.RestaurantViewHolder;
+import fr.ferrerasroca.go4lunch.ui.home.view.viewholders.RestaurantViewHolder;
 
 public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantViewHolder> {
 

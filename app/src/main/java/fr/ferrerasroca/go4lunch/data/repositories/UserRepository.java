@@ -4,16 +4,26 @@ import android.content.Intent;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
+import com.google.firebase.firestore.DocumentSnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import fr.ferrerasroca.go4lunch.data.api.authentication.FacebookLoginApi;
 import fr.ferrerasroca.go4lunch.data.api.authentication.GoogleIdentifiantApi;
 import fr.ferrerasroca.go4lunch.data.api.user.UserHelper;
+import fr.ferrerasroca.go4lunch.data.models.User;
 
 public class UserRepository {
 
     private final FacebookLoginApi facebookLoginApi;
     private final GoogleIdentifiantApi googleIdentifiantApi;
     public static final int RC_GOOGLE_SIGN_IN = 2901;
+    private final MutableLiveData<List<User>> _usersMutableLiveData = new MutableLiveData<>();
+    private final LiveData<List<User>> usersLiveData = _usersMutableLiveData;
 
     public UserRepository() {
         this.googleIdentifiantApi = new GoogleIdentifiantApi();
@@ -40,7 +50,24 @@ public class UserRepository {
         return UserHelper.isCurrentUserLogged();
     }
 
-    public void getUser(String uid, UserHelper.OnUserRetrievedListener onUserRetrievedListener) {
-        UserHelper.getUser(uid, onUserRetrievedListener);
+    public void getUser(String uid, UserHelper.Listener listener) {
+        UserHelper.getUser(uid, listener);
+    }
+
+    public LiveData<List<User>> getUsers() {
+        return usersLiveData;
+    }
+
+    public void retrieveUsers() {
+        UserHelper.retrieveUsers().addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult() != null) {
+                List<User> users = new ArrayList<>();
+                for (DocumentSnapshot snapshot : task.getResult().getDocuments()) {
+                    User user = snapshot.toObject(User.class);
+                    users.add(user);
+                }
+                if (!users.isEmpty()) _usersMutableLiveData.postValue(users);
+            }
+        });
     }
 }
