@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.home.view.RestaurantActivity">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:id="@+id/imageView_restaurant_picture_banner"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:src="@mipmap/restaurant_picture_tools"
+        android:scaleType="centerCrop" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/fab_userChoice"
+        android:contentDescription="@string/fab_userChoice"
+        app:layout_constraintTop_toTopOf="@id/constraintLayout_restaurant_infos"
+        app:layout_constraintBottom_toTopOf="@id/constraintLayout_restaurant_infos"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="20dp"
+        app:backgroundTint="@android:color/white"
+        app:tint="@android:color/holo_green_light"
+        android:src="@drawable/ic_baseline_check_circle_50" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/constraintLayout_restaurant_infos"
+        app:layout_constraintTop_toBottomOf="@id/imageView_restaurant_picture_banner"
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@color/primaryColorLight"
+        android:padding="15dp" >
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView_restaurantName"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            style="@style/Go4Lunch.Title"
+            android:textColor="@color/white"
+            tools:text="Le Zinc" />
+
+        <androidx.appcompat.widget.AppCompatRatingBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ratingBar_restaurantStars"
+            app:layout_constraintBottom_toBottomOf="@id/textView_restaurantName"
+            app:layout_constraintTop_toTopOf="@id/textView_restaurantName"
+            app:layout_constraintStart_toEndOf="@id/textView_restaurantName"
+            android:layout_marginStart="@dimen/margin_base"
+            android:layout_marginTop="@dimen/margin_base"
+            android:layout_marginEnd="@dimen/margin_base"
+            style="@style/Widget.AppCompat.RatingBar.Small"
+            android:numStars="3"
+            android:rating="2"
+            app:progressTint="@color/quantum_yellow"
+            app:secondaryProgressTint="@android:color/transparent" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView_restaurant_address"
+            app:layout_constraintTop_toBottomOf="@id/textView_restaurantName"
+            app:layout_constraintStart_toStartOf="@id/textView_restaurantName"
+            style="@style/Go4Lunch.Paragraph"
+            android:textColor="@color/white"
+            tools:text="12 rue du Faubourg Poissonnière" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageButton_phone"
+        app:layout_constraintTop_toBottomOf="@id/constraintLayout_restaurant_infos"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_baseline_local_phone_30"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView_phone"
+        app:layout_constraintTop_toBottomOf="@id/imageButton_phone"
+        app:layout_constraintStart_toStartOf="@id/imageButton_phone"
+        app:layout_constraintEnd_toEndOf="@id/imageButton_phone"
+        style="@style/Go4Lunch.Title"
+        android:textColor="@color/primaryColorLight"
+        android:textStyle="bold"
+        android:textAllCaps="true"
+        android:text="@string/imageButon_call" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/imageButton_like"
+        app:layout_constraintTop_toTopOf="@id/imageButton_phone"
+        app:layout_constraintBottom_toBottomOf="@id/imageButton_phone"
+        app:layout_constraintStart_toEndOf="@id/imageButton_phone"
+        app:layout_constraintEnd_toStartOf="@id/imageButton_website"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_baseline_star_30"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView_like"
+        app:layout_constraintTop_toBottomOf="@id/imageButton_like"
+        app:layout_constraintStart_toStartOf="@id/imageButton_like"
+        app:layout_constraintEnd_toEndOf="@id/imageButton_like"
+        style="@style/Go4Lunch.Title"
+        android:textColor="@color/primaryColorLight"
+        android:textStyle="bold"
+        android:textAllCaps="true"
+        android:text="@string/imageButton_like" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/imageButton_website"
+        app:layout_constraintTop_toTopOf="@id/imageButton_phone"
+        app:layout_constraintBottom_toBottomOf="@id/imageButton_phone"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="40dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_baseline_public_30"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView_website"
+        app:layout_constraintTop_toBottomOf="@id/imageButton_website"
+        app:layout_constraintStart_toStartOf="@id/imageButton_website"
+        app:layout_constraintEnd_toEndOf="@id/imageButton_website"
+        style="@style/Go4Lunch.Title"
+        android:textColor="@color/primaryColorLight"
+        android:textStyle="bold"
+        android:textAllCaps="true"
+        android:text="@string/imageButton_website" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:id="@+id/horizontalLine_separator"
+            app:layout_constraintTop_toBottomOf="@id/textView_phone"
+            app:layout_constraintEnd_toStartOf="parent"
+            android:layout_marginTop="20dp"
+            android:background="@color/separator_line" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/recyclerView_workmates"
+        app:layout_constraintTop_toBottomOf="@id/horizontalLine_separator"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:listitem="@layout/workmates_restaurant_view_item" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

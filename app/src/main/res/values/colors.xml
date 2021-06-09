@@ -16,4 +16,5 @@
     <color name="google">#e8412f</color>
     <color name="icon_background">#C91D12</color>
     <color name="login_background_background">#FFFFFF</color>
+    <color name="separator_line">#2F000000</color>
 </resources>

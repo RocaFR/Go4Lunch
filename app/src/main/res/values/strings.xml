@@ -42,4 +42,8 @@
     <string name="restaurant_distance_tools">120m</string>
     <string name="restaurant_numberparticipants_tools">(2)</string>
     <string name="distance_unit">m</string>
+    <string name="imageButon_call">CALL</string>
+    <string name="imageButton_like">LIKE</string>
+    <string name="imageButton_website">WEBSITE</string>
+    <string name="fab_userChoice">User choice</string>
 </resources>
