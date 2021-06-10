@@ -36,7 +36,7 @@ public class RestaurantActivity extends AppCompatActivity {
 
     private void retrievePlaceDetails(String placeID) {
         placesViewModel.getPlace().observe(this, this::configureViews);
-        placesViewModel.retrievePlace(placeID);
+        placesViewModel.retrievePlaceByID(placeID);
     }
 
     private void configureViews(Place place) {

@@ -10,10 +10,10 @@ import retrofit2.http.Query;
 
 public interface PlacesService {
     @GET("nearbysearch/json?radius=1000&type=restaurant")
-    Call<NearbyPlacesResponse> getResults(@Query(value = "location", encoded = true) String location, @Query("key") String api_key);
+    Call<NearbyPlacesResponse> getNearbyPlaces(@Query(value = "location", encoded = true) String location, @Query("key") String api_key);
 
     @GET("details/json?")
-    Call<PlaceDetailResponse> getPlaceByID(@Query("place_id") String placeID , @Query("key") String apiKey);
+    Call<PlaceDetailResponse> getPlaceDetails(@Query("place_id") String placeID , @Query("key") String apiKey);
 
     public static final Retrofit retrofit = new Retrofit.Builder()
             .baseUrl("https://maps.googleapis.com/maps/api/place/")

@@ -122,7 +122,7 @@ public class ListViewFragment extends Fragment {
     private void getPlaces() {
         placesViewModel.getPlaces().observe(getViewLifecycleOwner(), placesObserver);
         if (NetworkUtils.isNetworkAvailable(getContext())) {
-            placesViewModel.retrievePlaces(googleMapsComponent.getLastLocation());
+            placesViewModel.retrieveNearbyPlaces(googleMapsComponent.getLastLocation());
         }
     }
 
