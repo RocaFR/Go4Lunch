@@ -42,7 +42,7 @@ public class RestaurantActivity extends AppCompatActivity {
     private void configureViews(Place place) {
         viewBinding.textViewRestaurantName.setText(TextUtils.isEmpty(place.getName()) ? "" : place.getName());
         viewBinding.textViewRestaurantAddress.setText(TextUtils.isEmpty(place.getVicinity()) ? "" : place.getVicinity());
-        Glide.with(this).load(place.getPhotoUrl()).error(R.color.black).into(viewBinding.imageViewRestaurantPictureBanner);
+        Glide.with(this).load(place.getPhotoUrl()).error(R.drawable.ic_baseline_broken_image_24).into(viewBinding.imageViewRestaurantPictureBanner);
         this.configureRating(place);
     }
 

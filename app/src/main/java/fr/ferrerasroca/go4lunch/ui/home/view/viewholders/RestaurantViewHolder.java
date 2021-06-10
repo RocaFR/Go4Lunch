@@ -46,7 +46,7 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
     public void updateRestaurantWithPlace(Place place, Location userLocation) {
         textviewName.setText(TextUtils.isEmpty(place.getName()) ? "" : place.getName());
         textviewAddress.setText(TextUtils.isEmpty(place.getVicinity()) ? "" : place.getVicinity());
-        Glide.with(itemView.getContext()).load(place.getPhotoUrl()).error(R.drawable.ic_baseline_stop_circle_24).into(imageviewPicture);
+        Glide.with(itemView.getContext()).load(place.getPhotoUrl()).error(R.drawable.ic_baseline_broken_image_24).into(imageviewPicture);
         textviewDistance.setText(place.getDistanceFromUser() + itemView.getContext().getString(R.string.distance_unit));
 
         this.configureOpeningHours(place);
