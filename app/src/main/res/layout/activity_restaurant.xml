@@ -161,6 +161,17 @@
             android:layout_marginTop="@dimen/margin_little"
             android:background="@color/separator_line" />
 
+    <com.google.android.material.imageview.ShapeableImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView_noWorkmates"
+        app:layout_constraintTop_toTopOf="@id/horizontalLine_separator"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"
+        android:src="@drawable/ic_person_off_36dp"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="0dp"

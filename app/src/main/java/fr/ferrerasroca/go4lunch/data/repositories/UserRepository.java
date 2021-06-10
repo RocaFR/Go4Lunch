@@ -1,6 +1,7 @@
 package fr.ferrerasroca.go4lunch.data.repositories;
 
 import android.content.Intent;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -66,9 +67,9 @@ public class UserRepository {
                     User user = snapshot.toObject(User.class);
                     users.add(user);
                 }
-                if (!users.isEmpty()) _usersMutableLiveData.postValue(users);
+                _usersMutableLiveData.postValue(users);
             }
-        });
+        }).addOnFailureListener(e -> Log.e("TAG", "onFailure: " + e.getMessage()));
     }
 
     public void retrieveUsersByPlaceID(String placeID) {
@@ -79,8 +80,8 @@ public class UserRepository {
                     User user = snapshot.toObject(User.class);
                     users.add(user);
                 }
-                if (!users.isEmpty()) _usersMutableLiveData.postValue(users);
+                _usersMutableLiveData.postValue(users);
             }
-        });
+        }).addOnFailureListener(e -> Log.e("TAG", "onFailure: " + e.getMessage()));
     }
 }
