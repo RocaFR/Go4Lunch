@@ -9,8 +9,8 @@ import androidx.lifecycle.MutableLiveData;
 import fr.ferrerasroca.go4lunch.BuildConfig;
 import fr.ferrerasroca.go4lunch.data.api.places.PlacesCalls;
 import fr.ferrerasroca.go4lunch.data.models.places.Place;
-import fr.ferrerasroca.go4lunch.data.models.places.Result;
-import fr.ferrerasroca.go4lunch.data.models.places.Results;
+import fr.ferrerasroca.go4lunch.data.models.places.responses.PlaceDetailResponse;
+import fr.ferrerasroca.go4lunch.data.models.places.responses.NearbyPlacesResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -22,14 +22,14 @@ public class PlacesRepository {
 
     public PlacesRepository() {}
 
-    public Call<Results> getResults(Location location) {
+    public Call<NearbyPlacesResponse> getResults(Location location) {
         return PlacesCalls.getResults(location);
     }
 
     public void retrievePlaceByID(String placeID) {
-        PlacesCalls.getPlaceByID(placeID).enqueue(new Callback<Result>() {
+        PlacesCalls.getPlaceByID(placeID).enqueue(new Callback<PlaceDetailResponse>() {
             @Override
-            public void onResponse(Call<Result> call, Response<Result> response) {
+            public void onResponse(Call<PlaceDetailResponse> call, Response<PlaceDetailResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     Place place = response.body().getPlace();
                     if (!place.getPhotos().isEmpty()) {
@@ -41,7 +41,7 @@ public class PlacesRepository {
             }
 
             @Override
-            public void onFailure(Call<Result> call, Throwable t) {
+            public void onFailure(Call<PlaceDetailResponse> call, Throwable t) {
                 Log.e("TAG", "onFailure: " + t.getMessage());
             }
         });

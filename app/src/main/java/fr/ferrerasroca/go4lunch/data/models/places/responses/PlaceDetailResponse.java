@@ -1,9 +1,11 @@
-package fr.ferrerasroca.go4lunch.data.models.places;
+package fr.ferrerasroca.go4lunch.data.models.places.responses;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Result {
+import fr.ferrerasroca.go4lunch.data.models.places.Place;
+
+public class PlaceDetailResponse {
 
     @SerializedName("result")
     @Expose

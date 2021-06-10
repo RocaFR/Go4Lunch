@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 import fr.ferrerasroca.go4lunch.BuildConfig;
 import fr.ferrerasroca.go4lunch.data.models.places.Place;
-import fr.ferrerasroca.go4lunch.data.models.places.Results;
+import fr.ferrerasroca.go4lunch.data.models.places.responses.NearbyPlacesResponse;
 import fr.ferrerasroca.go4lunch.data.repositories.PlacesRepository;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,12 +31,12 @@ public class PlacesViewModel extends ViewModel {
     }
 
     public void retrievePlaces(Location location) {
-        placesRepository.getResults(location).enqueue(new Callback<Results>() {
+        placesRepository.getResults(location).enqueue(new Callback<NearbyPlacesResponse>() {
             @Override
-            public void onResponse(Call<Results> call, Response<Results> response) {
-                Results body = response.body();
-                if (response.isSuccessful() && body != null) {
-                    List<Place> places = body.getPlaces().stream().map(new Function<Place, Place>() {
+            public void onResponse(Call<NearbyPlacesResponse> call, Response<NearbyPlacesResponse> response) {
+                NearbyPlacesResponse nearbyPlacesResponse = response.body();
+                if (response.isSuccessful() && nearbyPlacesResponse != null) {
+                    List<Place> places = nearbyPlacesResponse.getPlaces().stream().map(new Function<Place, Place>() {
                         @Override
                         public Place apply(Place place) {
                             if (!place.getPhotos().isEmpty()) {
@@ -53,7 +53,7 @@ public class PlacesViewModel extends ViewModel {
             }
 
             @Override
-            public void onFailure(Call<Results> call, Throwable t) {
+            public void onFailure(Call<NearbyPlacesResponse> call, Throwable t) {
                 Log.e("TAG", "onFailure: " +  t.getMessage());
             }
         });

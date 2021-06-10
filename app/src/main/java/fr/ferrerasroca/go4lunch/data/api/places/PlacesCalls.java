@@ -3,13 +3,13 @@ package fr.ferrerasroca.go4lunch.data.api.places;
 import android.location.Location;
 
 import fr.ferrerasroca.go4lunch.BuildConfig;
-import fr.ferrerasroca.go4lunch.data.models.places.Result;
-import fr.ferrerasroca.go4lunch.data.models.places.Results;
+import fr.ferrerasroca.go4lunch.data.models.places.responses.PlaceDetailResponse;
+import fr.ferrerasroca.go4lunch.data.models.places.responses.NearbyPlacesResponse;
 import retrofit2.Call;
 
 public class PlacesCalls {
 
-    public static Call<Results> getResults(Location location) {
+    public static Call<NearbyPlacesResponse> getResults(Location location) {
         PlacesService placesService = PlacesService.retrofit.create(PlacesService.class);
 
         String latitude = Double.toString(location.getLatitude());
@@ -19,7 +19,7 @@ public class PlacesCalls {
         return placesService.getResults(stringLocation, BuildConfig.GOOGLE_API_KEY);
     }
 
-    public static Call<Result> getPlaceByID(String placeID) {
+    public static Call<PlaceDetailResponse> getPlaceByID(String placeID) {
         PlacesService placesService = PlacesService.retrofit.create(PlacesService.class);
 
         return placesService.getPlaceByID(placeID, BuildConfig.GOOGLE_API_KEY);
