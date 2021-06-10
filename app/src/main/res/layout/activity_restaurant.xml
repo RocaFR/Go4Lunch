@@ -13,7 +13,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:src="@mipmap/restaurant_picture_tools"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        android:background="@color/black"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
@@ -40,6 +41,7 @@
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:maxWidth="250dp"
             android:id="@+id/textView_restaurantName"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -50,7 +52,7 @@
         <androidx.appcompat.widget.AppCompatRatingBar
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/ratingBar_restaurantStars"
+            android:id="@+id/ratingBar_restaurant"
             app:layout_constraintBottom_toBottomOf="@id/textView_restaurantName"
             app:layout_constraintTop_toTopOf="@id/textView_restaurantName"
             app:layout_constraintStart_toEndOf="@id/textView_restaurantName"
@@ -60,12 +62,13 @@
             style="@style/Widget.AppCompat.RatingBar.Small"
             android:numStars="3"
             android:rating="2"
-            app:progressTint="@color/quantum_yellow"
-            app:secondaryProgressTint="@android:color/transparent" />
+            android:progressTint="@color/quantum_yellow"
+            android:secondaryProgressTint="@android:color/transparent" />
 
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:maxWidth="250dp"
             android:id="@+id/textView_restaurant_address"
             app:layout_constraintTop_toBottomOf="@id/textView_restaurantName"
             app:layout_constraintStart_toStartOf="@id/textView_restaurantName"
@@ -93,6 +96,7 @@
         app:layout_constraintTop_toBottomOf="@id/imageButton_phone"
         app:layout_constraintStart_toStartOf="@id/imageButton_phone"
         app:layout_constraintEnd_toEndOf="@id/imageButton_phone"
+        android:layout_marginTop="5dp"
         style="@style/Go4Lunch.Title"
         android:textColor="@color/primaryColorLight"
         android:textStyle="bold"
@@ -114,7 +118,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView_like"
-        app:layout_constraintTop_toBottomOf="@id/imageButton_like"
+        app:layout_constraintTop_toTopOf="@id/textView_phone"
+        app:layout_constraintBottom_toBottomOf="@id/textView_phone"
         app:layout_constraintStart_toStartOf="@id/imageButton_like"
         app:layout_constraintEnd_toEndOf="@id/imageButton_like"
         style="@style/Go4Lunch.Title"
@@ -138,7 +143,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textView_website"
-        app:layout_constraintTop_toBottomOf="@id/imageButton_website"
+        app:layout_constraintTop_toTopOf="@id/textView_phone"
+        app:layout_constraintBottom_toBottomOf="@id/textView_phone"
         app:layout_constraintStart_toStartOf="@id/imageButton_website"
         app:layout_constraintEnd_toEndOf="@id/imageButton_website"
         style="@style/Go4Lunch.Title"

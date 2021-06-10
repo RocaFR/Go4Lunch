@@ -18,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 
 import fr.ferrerasroca.go4lunch.R;
 import fr.ferrerasroca.go4lunch.data.models.places.Place;
+import fr.ferrerasroca.go4lunch.utils.PlaceUtils;
 
 public class RestaurantViewHolder extends RecyclerView.ViewHolder {
 
@@ -37,7 +38,7 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
         textviewOpeningHours = itemView.findViewById(R.id.textView_restaurantOpeningHours);
         textviewDistance = itemView.findViewById(R.id.textView_restaurantDistance);
         textviewNumberOfParticipants = itemView.findViewById(R.id.textView_restaurantNumberOfParticipants);
-        ratingbarStars = itemView.findViewById(R.id.ratingBar_restaurantStars);
+        ratingbarStars = itemView.findViewById(R.id.ratingBar_restaurant);
         imageviewPicture = itemView.findViewById(R.id.imageView_restaurant_picture);
     }
 
@@ -63,15 +64,10 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
 
     private void configureRating(Place place) {
         if (place.isRated()) {
-            Float convertedRating = this.convertRating(5f, 3f, place.getRating());
+            Float convertedRating = PlaceUtils.convertRating(5f, 3f, place.getRating());
             ratingbarStars.setRating(convertedRating);
         } else {
             ratingbarStars.setVisibility(View.INVISIBLE);
         }
     }
-
-    private Float convertRating(Float highestBaseRating, Float newHighestBaseRating, Float rating) {
-        return (rating / highestBaseRating) * newHighestBaseRating;
-    }
-
 }

@@ -1,10 +1,6 @@
 package fr.ferrerasroca.go4lunch.ui.home.view.fragments;
 
 import android.Manifest;
-import android.content.Context;
-import android.location.Location;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +10,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.Observer;
 
 import com.google.android.gms.location.LocationCallback;
@@ -29,7 +24,7 @@ import fr.ferrerasroca.go4lunch.R;
 import fr.ferrerasroca.go4lunch.data.injections.Injection;
 import fr.ferrerasroca.go4lunch.data.models.places.Place;
 import fr.ferrerasroca.go4lunch.ui.home.view.GoogleMapsComponent;
-import fr.ferrerasroca.go4lunch.ui.home.viewmodel.MapViewModel;
+import fr.ferrerasroca.go4lunch.ui.home.viewmodel.PlacesViewModel;
 import fr.ferrerasroca.go4lunch.utils.LocationUtils;
 import fr.ferrerasroca.go4lunch.utils.NetworkUtils;
 import pub.devrel.easypermissions.AfterPermissionGranted;
@@ -40,7 +35,7 @@ import static fr.ferrerasroca.go4lunch.ui.home.view.GoogleMapsComponent.RC_LOCAT
 public class MapViewFragment extends Fragment {
 
     private GoogleMapsComponent googleMapsComponent;
-    private MapViewModel mapViewModel;
+    private PlacesViewModel placesViewModel;
 
     public MapViewFragment() { }
     public static MapViewFragment newInstance() { return new MapViewFragment(); }
@@ -59,7 +54,7 @@ public class MapViewFragment extends Fragment {
         this.configureGoogleMaps(view);
         googleMapsComponent.getMapView().onCreate(savedInstanceState);
 
-        mapViewModel = Injection.provideMapViewModel(Injection.provideMapViewModelFactory());
+        placesViewModel = Injection.providePlacesViewModel(Injection.providePlacesViewModelFactory());
     }
 
     private void configureGoogleMaps(View view) {
@@ -94,9 +89,9 @@ public class MapViewFragment extends Fragment {
     };
 
     private void getPlaces() {
-        mapViewModel.getPlaces().observe(getViewLifecycleOwner(), placesObserver);
+        placesViewModel.getPlaces().observe(getViewLifecycleOwner(), placesObserver);
         if (NetworkUtils.isNetworkAvailable(getContext())) {
-            mapViewModel.retrievePlaces(googleMapsComponent.getLastLocation());
+            placesViewModel.retrievePlaces(googleMapsComponent.getLastLocation());
         }
     }
 
@@ -144,6 +139,7 @@ public class MapViewFragment extends Fragment {
     public void onPause() {
         super.onPause();
         googleMapsComponent.getMapView().onPause();
+        googleMapsComponent.stopLocationUpdates(callback);
     }
 
     @Override

@@ -32,6 +32,7 @@ public class HomeActivity extends AppCompatActivity {
     private TextView textViewUsername;
     private TextView textViewUserEmail;
     private ImageView imageViewUserProfilePicture;
+    public static final String EXTRA_PLACE_ID = "EXTRA_PLACE_ID";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -55,11 +55,15 @@ public class UserViewModel extends ViewModel {
         }
     }
 
-    public LiveData<List<User>> getUsers() {
-        return userRepository.getUsers();
-    }
-
     public void retrieveUsers() {
         userRepository.retrieveUsers();
+    }
+
+    public void retrieveUsersByPlaceID(String placeID) {
+        userRepository.retrieveUsersByPlaceID(placeID);
+    }
+
+    public LiveData<List<User>> getUsers() {
+        return userRepository.getUsers();
     }
 }

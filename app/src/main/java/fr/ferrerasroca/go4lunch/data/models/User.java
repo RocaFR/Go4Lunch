@@ -14,6 +14,7 @@ public class User {
     private String job;
     @Nullable
     private String profilePictureUrl;
+    private String placeIDChoice;
 
     /**
      * <p>Empty Firestore constructor.<br>
@@ -46,6 +47,7 @@ public class User {
     public String getJob() { return this.job; }
     @Nullable
     public String getProfilePictureUrl() { return profilePictureUrl; }
+    public String getPlaceIDChoice() { return placeIDChoice; }
 
     // #######
     // SETTERS
@@ -57,4 +59,5 @@ public class User {
     public void setBio(String bio) { this.bio = bio; }
     public void setJob(String job) { this.job = job; }
     public void setProfilePictureUrl(@Nullable String profilePictureUrl) { this.profilePictureUrl = profilePictureUrl; }
+    public void setPlaceIDChoice(String placeIDChoice) { this.placeIDChoice = placeIDChoice; }
 }

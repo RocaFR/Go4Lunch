@@ -32,6 +32,7 @@ public class GoogleMapsComponent implements OnMapReadyCallback, GoogleMap.OnMyLo
     private LocationRequest locationRequest;
     private Location lastLocation;
     private static GoogleMap currentGoogleMap;
+    private FusedLocationProviderClient providerClient;
     public static final long LOCATION_INTERVAL = 300000;
     public static final int RC_LOCATION_PERM = 2903;
 
@@ -85,7 +86,7 @@ public class GoogleMapsComponent implements OnMapReadyCallback, GoogleMap.OnMyLo
     public void getLocation(Context context, LocationCallback callback) {
         this.configureLocationRequest();
 
-        FusedLocationProviderClient providerClient = LocationServices.getFusedLocationProviderClient(context);
+        providerClient = LocationServices.getFusedLocationProviderClient(context);
 
         if (LocationUtils.isLocationEnabled(context)) {
             providerClient.requestLocationUpdates(locationRequest, callback, Looper.myLooper());
@@ -116,5 +117,9 @@ public class GoogleMapsComponent implements OnMapReadyCallback, GoogleMap.OnMyLo
 
     public MapView getMapView() {
         return this.mapView;
+    }
+
+    public void stopLocationUpdates(LocationCallback locationCallback) {
+        providerClient.removeLocationUpdates(locationCallback);
     }
 }

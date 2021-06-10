@@ -3,6 +3,7 @@ package fr.ferrerasroca.go4lunch.data.api.places;
 import android.location.Location;
 
 import fr.ferrerasroca.go4lunch.BuildConfig;
+import fr.ferrerasroca.go4lunch.data.models.places.Result;
 import fr.ferrerasroca.go4lunch.data.models.places.Results;
 import retrofit2.Call;
 
@@ -16,5 +17,11 @@ public class PlacesCalls {
         String stringLocation = latitude + "," + longitude;
 
         return placesService.getResults(stringLocation, BuildConfig.GOOGLE_API_KEY);
+    }
+
+    public static Call<Result> getPlaceByID(String placeID) {
+        PlacesService placesService = PlacesService.retrofit.create(PlacesService.class);
+
+        return placesService.getPlaceByID(placeID, BuildConfig.GOOGLE_API_KEY);
     }
 }

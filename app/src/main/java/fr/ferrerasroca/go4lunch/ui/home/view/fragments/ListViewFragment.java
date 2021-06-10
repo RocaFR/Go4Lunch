@@ -1,6 +1,7 @@
 package fr.ferrerasroca.go4lunch.ui.home.view.fragments;
 
 import android.Manifest;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -28,18 +30,21 @@ import fr.ferrerasroca.go4lunch.R;
 import fr.ferrerasroca.go4lunch.data.injections.Injection;
 import fr.ferrerasroca.go4lunch.data.models.places.Place;
 import fr.ferrerasroca.go4lunch.ui.home.view.GoogleMapsComponent;
+import fr.ferrerasroca.go4lunch.ui.home.view.RestaurantActivity;
 import fr.ferrerasroca.go4lunch.ui.home.view.adaptaters.RestaurantAdapter;
-import fr.ferrerasroca.go4lunch.ui.home.viewmodel.MapViewModel;
+import fr.ferrerasroca.go4lunch.ui.home.viewmodel.PlacesViewModel;
+import fr.ferrerasroca.go4lunch.utils.ItemClickSupport;
 import fr.ferrerasroca.go4lunch.utils.LocationUtils;
 import fr.ferrerasroca.go4lunch.utils.NetworkUtils;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
 import static fr.ferrerasroca.go4lunch.ui.home.view.GoogleMapsComponent.RC_LOCATION_PERM;
+import static fr.ferrerasroca.go4lunch.ui.home.view.HomeActivity.EXTRA_PLACE_ID;
 
 public class ListViewFragment extends Fragment {
 
-    private MapViewModel mapViewModel;
+    private PlacesViewModel placesViewModel;
     private GoogleMapsComponent googleMapsComponent;
     private TextView textviewNoRestaurant;
     private ProgressBar progressBar;
@@ -55,7 +60,7 @@ public class ListViewFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mapViewModel = Injection.provideMapViewModel(Injection.provideMapViewModelFactory());
+        placesViewModel = Injection.providePlacesViewModel(Injection.providePlacesViewModelFactory());
     }
 
     @Override
@@ -66,6 +71,11 @@ public class ListViewFragment extends Fragment {
         this.configureViews(view);
 
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
     }
 
     private void configureViews(View view) {
@@ -110,9 +120,9 @@ public class ListViewFragment extends Fragment {
     };
 
     private void getPlaces() {
-        mapViewModel.getPlaces().observe(getViewLifecycleOwner(), placesObserver);
+        placesViewModel.getPlaces().observe(getViewLifecycleOwner(), placesObserver);
         if (NetworkUtils.isNetworkAvailable(getContext())) {
-            mapViewModel.retrievePlaces(googleMapsComponent.getLastLocation());
+            placesViewModel.retrievePlaces(googleMapsComponent.getLastLocation());
         }
     }
 
@@ -135,6 +145,22 @@ public class ListViewFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(restaurantAdapter);
+        configureOnClickRecyclerView(places);
     }
 
+    private void configureOnClickRecyclerView(List<Place> places) {
+        ItemClickSupport.addTo(recyclerView, R.layout.restaurant_item)
+                .setOnItemClickListener((recyclerView, position, v) -> {
+                    Intent intent = new Intent(getContext(), RestaurantActivity.class);
+                    intent.putExtra(EXTRA_PLACE_ID, places.get(position).getPlaceId());
+                    startActivity(intent);
+                });
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        googleMapsComponent.stopLocationUpdates(callback);
+    }
 }

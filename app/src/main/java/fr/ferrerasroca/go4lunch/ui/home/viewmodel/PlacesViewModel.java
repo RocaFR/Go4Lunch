@@ -19,14 +19,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MapViewModel extends ViewModel {
+public class PlacesViewModel extends ViewModel {
 
     private final PlacesRepository placesRepository;
 
     private final MutableLiveData<List<Place>> _resultsLiveData = new MutableLiveData<>();
     private final LiveData<List<Place>> placesLiveData = _resultsLiveData;
 
-    public MapViewModel(PlacesRepository placesRepository) {
+    public PlacesViewModel(PlacesRepository placesRepository) {
         this.placesRepository = placesRepository;
     }
 
@@ -76,5 +76,13 @@ public class MapViewModel extends ViewModel {
 
     public LiveData<List<Place>> getPlaces() {
         return placesLiveData;
+    }
+
+    public void retrievePlace(String placeID) {
+        placesRepository.retrievePlaceByID(placeID);
+    }
+
+    public LiveData<Place> getPlace() {
+        return placesRepository.getPlace();
     }
 }

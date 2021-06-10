@@ -70,4 +70,17 @@ public class UserRepository {
             }
         });
     }
+
+    public void retrieveUsersByPlaceID(String placeID) {
+        UserHelper.retrieveUsersByPlaceID(placeID).addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult() != null) {
+                List<User> users = new ArrayList<>();
+                for (DocumentSnapshot snapshot : task.getResult().getDocuments()) {
+                    User user = snapshot.toObject(User.class);
+                    users.add(user);
+                }
+                if (!users.isEmpty()) _usersMutableLiveData.postValue(users);
+            }
+        });
+    }
 }

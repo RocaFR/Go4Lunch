@@ -51,6 +51,13 @@ public class UserHelper {
                 .get();
     }
 
+    public static Task<QuerySnapshot> retrieveUsersByPlaceID(String placeID) {
+        return getUserCollection()
+                .orderBy("username")
+                .whereEqualTo("placeIDChoice", placeID)
+                .get();
+    }
+
     public static Boolean isCurrentUserLogged() {
         return firebaseAuth.getCurrentUser() != null;
     }
