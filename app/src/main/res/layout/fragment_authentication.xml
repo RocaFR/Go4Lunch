@@ -18,7 +18,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:elevation="100dp"
+        android:elevation="@dimen/elevation"
         tools:ignore="UnusedAttribute" />
 
 
@@ -37,7 +37,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="40dp"/>
+        android:layout_marginTop="@dimen/margin_big"/>
 
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="wrap_content"
@@ -46,7 +46,7 @@
         app:layout_constraintStart_toStartOf="@id/imageView_logo"
         app:layout_constraintEnd_toEndOf="@id/imageView_logo"
         app:layout_constraintTop_toBottomOf="@id/imageView_logo"
-        android:textSize="70sp"
+        android:textSize="@dimen/app_title_size"
         android:textColor="@color/white"
         android:textStyle="bold"
         android:text="@string/app_name"/>
@@ -64,14 +64,14 @@
 
     <!-- Facebook button container -->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="300dp"
+        android:layout_width="@dimen/login_button_width"
         android:layout_height="wrap_content"
         android:id="@+id/container_button_facebook"
         android:background="@drawable/login_button_facebook"
         app:layout_constraintBottom_toTopOf="@id/container_button_google"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="10dp">
+        android:layout_marginBottom="@dimen/margin_little">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:layout_width="wrap_content"
@@ -100,9 +100,9 @@
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/button_login_facebook"
-        android:layout_width="300dp"
+        android:layout_width="@dimen/login_button_width"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="@dimen/margin_little"
         style="@style/LoginButton"
         app:layout_constraintBottom_toTopOf="@id/container_button_google"
         app:layout_constraintEnd_toEndOf="@id/container_button_google"
@@ -111,13 +111,13 @@
 
     <!-- Google button container -->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="300dp"
+        android:layout_width="@dimen/login_button_width"
         android:layout_height="wrap_content"
         android:id="@+id/container_button_google"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="@dimen/margin_big"
         android:background="@drawable/login_button_google">
 
         <com.google.android.material.imageview.ShapeableImageView

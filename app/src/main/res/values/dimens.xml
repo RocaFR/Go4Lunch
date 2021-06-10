@@ -2,5 +2,21 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="fragment_horizontal_margin">16dp</dimen>
     <dimen name="fragment_vertical_margin">16dp</dimen>
-    <dimen name="margin_base">5dp</dimen>
+    <dimen name="margin_veryLittle">5dp</dimen>
+    <dimen name="logo_navigationView_dimensions">100dp</dimen>
+    <dimen name="fab_border_margin">20dp</dimen>
+    <dimen name="constraintLayout_padding">15dp</dimen>
+    <dimen name="textView_maxWidth">250dp</dimen>
+    <dimen name="margin_big">40dp</dimen>
+    <dimen name="margin_little">10dp</dimen>
+    <dimen name="elevation">100dp</dimen>
+    <dimen name="app_title_size">70sp</dimen>
+    <dimen name="login_button_width">300dp</dimen>
+    <dimen name="app_title_size_little">28sp</dimen>
+    <dimen name="icon_user">75dp</dimen>
+    <dimen name="username_textSize">18sp</dimen>
+    <dimen name="email_textSize">15sp</dimen>
+    <dimen name="icon_participants">20dp</dimen>
+    <dimen name="thumbnail_restaurantPicture">75dp</dimen>
+    <dimen name="icon_user_little">50dp</dimen>
 </resources>

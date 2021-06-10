@@ -24,7 +24,7 @@
         app:layout_constraintTop_toTopOf="@id/constraintLayout_restaurant_infos"
         app:layout_constraintBottom_toTopOf="@id/constraintLayout_restaurant_infos"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="20dp"
+        android:layout_marginEnd="@dimen/fab_border_margin"
         app:backgroundTint="@android:color/white"
         app:tint="@android:color/holo_green_light"
         android:src="@drawable/ic_baseline_check_circle_50" />
@@ -36,12 +36,12 @@
         app:layout_constraintTop_toBottomOf="@id/imageView_restaurant_picture_banner"
         app:layout_constraintStart_toStartOf="parent"
         android:background="@color/primaryColorLight"
-        android:padding="15dp" >
+        android:padding="@dimen/constraintLayout_padding" >
 
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxWidth="250dp"
+            android:maxWidth="@dimen/textView_maxWidth"
             android:id="@+id/textView_restaurantName"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -56,9 +56,9 @@
             app:layout_constraintBottom_toBottomOf="@id/textView_restaurantName"
             app:layout_constraintTop_toTopOf="@id/textView_restaurantName"
             app:layout_constraintStart_toEndOf="@id/textView_restaurantName"
-            android:layout_marginStart="@dimen/margin_base"
-            android:layout_marginTop="@dimen/margin_base"
-            android:layout_marginEnd="@dimen/margin_base"
+            android:layout_marginStart="@dimen/margin_veryLittle"
+            android:layout_marginTop="@dimen/margin_veryLittle"
+            android:layout_marginEnd="@dimen/margin_veryLittle"
             style="@style/Widget.AppCompat.RatingBar.Small"
             android:numStars="3"
             android:rating="2"
@@ -68,7 +68,7 @@
         <com.google.android.material.textview.MaterialTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxWidth="250dp"
+            android:maxWidth="@dimen/textView_maxWidth"
             android:id="@+id/textView_restaurant_address"
             app:layout_constraintTop_toBottomOf="@id/textView_restaurantName"
             app:layout_constraintStart_toStartOf="@id/textView_restaurantName"
@@ -84,8 +84,8 @@
         android:id="@+id/imageButton_phone"
         app:layout_constraintTop_toBottomOf="@id/constraintLayout_restaurant_infos"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginStart="@dimen/margin_big"
+        android:layout_marginTop="@dimen/margin_little"
         android:background="@android:color/transparent"
         android:src="@drawable/ic_baseline_local_phone_30"/>
 
@@ -96,7 +96,7 @@
         app:layout_constraintTop_toBottomOf="@id/imageButton_phone"
         app:layout_constraintStart_toStartOf="@id/imageButton_phone"
         app:layout_constraintEnd_toEndOf="@id/imageButton_phone"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="@dimen/margin_little"
         style="@style/Go4Lunch.Title"
         android:textColor="@color/primaryColorLight"
         android:textStyle="bold"
@@ -104,8 +104,8 @@
         android:text="@string/imageButon_call" />
 
     <androidx.appcompat.widget.AppCompatImageButton
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/imageButton_like"
         app:layout_constraintTop_toTopOf="@id/imageButton_phone"
         app:layout_constraintBottom_toBottomOf="@id/imageButton_phone"
@@ -129,13 +129,13 @@
         android:text="@string/imageButton_like" />
 
     <androidx.appcompat.widget.AppCompatImageButton
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/imageButton_website"
         app:layout_constraintTop_toTopOf="@id/imageButton_phone"
         app:layout_constraintBottom_toBottomOf="@id/imageButton_phone"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="40dp"
+        android:layout_marginEnd="@dimen/margin_big"
         android:background="@android:color/transparent"
         android:src="@drawable/ic_baseline_public_30"/>
 
@@ -159,7 +159,7 @@
             android:id="@+id/horizontalLine_separator"
             app:layout_constraintTop_toBottomOf="@id/textView_phone"
             app:layout_constraintEnd_toStartOf="parent"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/margin_little"
             android:background="@color/separator_line" />
 
     <androidx.recyclerview.widget.RecyclerView

@@ -62,8 +62,8 @@
             android:layout_height="match_parent" >
 
             <com.google.android.material.imageview.ShapeableImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="@dimen/logo_navigationView_dimensions"
+                android:layout_height="@dimen/logo_navigationView_dimensions"
                 android:id="@+id/imageView_logo"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

@@ -4,12 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="10dp">
+    android:layout_margin="@dimen/margin_little">
 
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxWidth="250dp"
+        android:maxWidth="@dimen/textView_maxWidth"
         android:id="@+id/textView_restaurantName"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -17,12 +17,12 @@
         android:text="@string/restaurant_name_tools" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:layout_width="220dp"
+        android:layout_width="@dimen/textView_maxWidth"
         android:layout_height="wrap_content"
         android:id="@+id/textView_restaurantAddress"
         app:layout_constraintTop_toBottomOf="@id/textView_restaurantName"
         app:layout_constraintStart_toStartOf="@id/textView_restaurantName"
-        android:layout_marginTop="@dimen/margin_base"
+        android:layout_marginTop="@dimen/margin_veryLittle"
         style="@style/Go4Lunch.Paragraph"
         android:ellipsize="end"
         android:lines="1"
@@ -34,7 +34,7 @@
         android:id="@+id/textView_restaurantOpeningHours"
         app:layout_constraintTop_toBottomOf="@id/textView_restaurantAddress"
         app:layout_constraintStart_toStartOf="@id/textView_restaurantAddress"
-        android:layout_marginTop="@dimen/margin_base"
+        android:layout_marginTop="@dimen/margin_veryLittle"
         style="@style/Go4Lunch.Paragraph"
         android:textStyle="italic"
         android:text="@string/restaurant_openinghours_not_specified" />
@@ -45,14 +45,14 @@
         android:id="@+id/textView_restaurantDistance"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@id/imageView_restaurant_picture"
-        android:layout_marginTop="@dimen/margin_base"
-        android:layout_marginEnd="@dimen/margin_base"
+        android:layout_marginTop="@dimen/margin_veryLittle"
+        android:layout_marginEnd="@dimen/margin_veryLittle"
         style="@style/Go4Lunch.Paragraph"
         android:text="@string/restaurant_distance_tools" />
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="@dimen/icon_participants"
+        android:layout_height="@dimen/icon_participants"
         android:id="@+id/restaurant_imageView_ParticipantsNumber"
         app:layout_constraintTop_toTopOf="@id/textView_restaurantNumberOfParticipants"
         app:layout_constraintBottom_toBottomOf="@id/textView_restaurantNumberOfParticipants"
@@ -66,8 +66,8 @@
         android:id="@+id/textView_restaurantNumberOfParticipants"
         app:layout_constraintTop_toBottomOf="@id/textView_restaurantDistance"
         app:layout_constraintEnd_toStartOf="@id/imageView_restaurant_picture"
-        android:layout_marginTop="@dimen/margin_base"
-        android:layout_marginEnd="@dimen/margin_base"
+        android:layout_marginTop="@dimen/margin_veryLittle"
+        android:layout_marginEnd="@dimen/margin_veryLittle"
         style="@style/Go4Lunch.Paragraph"
         android:text="@string/restaurant_numberparticipants_tools" />
 
@@ -77,8 +77,8 @@
         android:id="@+id/ratingBar_restaurant"
         app:layout_constraintTop_toBottomOf="@id/textView_restaurantNumberOfParticipants"
         app:layout_constraintEnd_toStartOf="@id/imageView_restaurant_picture"
-        android:layout_marginTop="@dimen/margin_base"
-        android:layout_marginEnd="@dimen/margin_base"
+        android:layout_marginTop="@dimen/margin_veryLittle"
+        android:layout_marginEnd="@dimen/margin_veryLittle"
         style="@style/Widget.AppCompat.RatingBar.Small"
         android:numStars="3"
         android:rating="2"
@@ -87,8 +87,8 @@
         tools:targetApi="lollipop" />
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:layout_width="75dp"
-        android:layout_height="75dp"
+        android:layout_width="@dimen/thumbnail_restaurantPicture"
+        android:layout_height="@dimen/thumbnail_restaurantPicture"
         android:id="@+id/imageView_restaurant_picture"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
