@@ -55,4 +55,12 @@
     <string name="button_positive">Yes</string>
     <string name="title_choice_cancel">Cancel your choice</string>
     <string name="message_choice_cancel">Are you sure to cancel your choice ?</string>
+    <string name="title_likePlace">"Do you want to like "</string>
+    <string name="title_likeAPlace">Like confirmation</string>
+    <string name="message_likeAPlace">"Do you want to like "</string>
+    <string name="title_dislikeAPlace">Cancel your like</string>
+    <string name="message_disklikeAPlace">"Do you want to dislike "</string>
+    <string name="snackbar_dislikeAPlace">"You don\'t like "</string>
+    <string name="snackbar_disLikeAPlace_end">" anymore."</string>
+    <string name="snackbar_placeLiked">You like it now !</string>
 </resources>

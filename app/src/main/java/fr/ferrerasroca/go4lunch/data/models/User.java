@@ -2,6 +2,9 @@ package fr.ferrerasroca.go4lunch.data.models;
 
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * <p>A user is a collaborator working in our company.</p>
  */
@@ -15,6 +18,7 @@ public class User {
     @Nullable
     private String profilePictureUrl;
     private String placeIDChoice = null;
+    private List<String> likedPlaces = new ArrayList<>();
 
     /**
      * <p>Empty Firestore constructor.<br>
@@ -48,6 +52,7 @@ public class User {
     @Nullable
     public String getProfilePictureUrl() { return profilePictureUrl; }
     public String getPlaceIDChoice() { return placeIDChoice; }
+    public List<String> getLikedPlaces() { return likedPlaces; }
 
     // #######
     // SETTERS
@@ -60,4 +65,7 @@ public class User {
     public void setJob(String job) { this.job = job; }
     public void setProfilePictureUrl(@Nullable String profilePictureUrl) { this.profilePictureUrl = profilePictureUrl; }
     public void setPlaceIDChoice(String placeIDChoice) { this.placeIDChoice = placeIDChoice; }
+    public void addPlaceToLike(String placeIDToAdd) { if (!this.likedPlaces.contains(placeIDToAdd)) this.likedPlaces.add(placeIDToAdd); }
+    public void removeALikedPlace(String placeIDToRemove) { if (this.likedPlaces.contains(placeIDToRemove)) likedPlaces.remove(placeIDToRemove); }
+    public void setLikedPlaces(List<String> likedPlaces) { this.likedPlaces = likedPlaces; }
 }

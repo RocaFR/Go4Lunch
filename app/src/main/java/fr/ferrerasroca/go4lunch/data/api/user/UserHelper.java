@@ -7,6 +7,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.List;
+
 import fr.ferrerasroca.go4lunch.data.models.User;
 
 public class UserHelper {
@@ -14,6 +16,7 @@ public class UserHelper {
     public interface Listeners {
         void onRetrieved(User user);
         void onPlaceIDChoiceSetted();
+        void onLikedPlacesSetted();
     }
 
     private static final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -51,6 +54,10 @@ public class UserHelper {
 
     public static Task<Void> setPlaceIDChoice(String userUid, String placeIDChoice) {
         return getUserCollection().document(userUid).update("placeIDChoice", placeIDChoice);
+    }
+
+    public static Task<Void> setLikedPlaces(String userUid, List<String> likedPlaces) {
+        return getUserCollection().document(userUid).update("likedPlaces", likedPlaces);
     }
 
     public static Boolean isCurrentUserLogged() {

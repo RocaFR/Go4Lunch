@@ -19,4 +19,5 @@
     <color name="separator_line">#2F000000</color>
     <color name="placeIDChoice_checked">#8BC34A</color>
     <color name="placeIDChoice_uncheck">#338BC34A</color>
+    <color name="primaryColorTransparent">#33FF7F4E</color>
 </resources>

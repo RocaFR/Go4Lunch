@@ -56,6 +56,11 @@ public class UserViewModel extends ViewModel {
                 public void onPlaceIDChoiceSetted() {
 
                 }
+
+                @Override
+                public void onLikedPlacesSetted() {
+
+                }
             });
         }
     }
@@ -84,5 +89,9 @@ public class UserViewModel extends ViewModel {
 
     public void setPlaceIDChoice(String userUid, String placeIDChoice, UserHelper.Listeners listeners) {
         userRepository.setPlaceIDChoice(userUid, placeIDChoice, listeners);
+    }
+
+    public void setLikedPlaces(String userUid, List<String> placesLiked, UserHelper.Listeners listeners) {
+        userRepository.setLikedPlaces(userUid, placesLiked, listeners);
     }
 }

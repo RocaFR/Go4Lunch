@@ -64,6 +64,11 @@ public class RestaurantActivity extends AppCompatActivity {
         placesViewModel.retrievePlaceByID(placeID);
     }
 
+    private void retrievePlaceUsers(String placeID) {
+        userViewModel.getUsers().observe(this, this::configureRecyclerView);
+        userViewModel.retrieveUsersByPlaceID(placeID);
+    }
+
     private void configureViews(Place place) {
         currentPlace = place;
         viewBinding.textViewRestaurantName.setText(TextUtils.isEmpty(currentPlace.getName()) ? "" : currentPlace.getName());
@@ -71,7 +76,7 @@ public class RestaurantActivity extends AppCompatActivity {
         Glide.with(this).load(currentPlace.getPhotoUrl()).error(R.drawable.ic_baseline_broken_image_24).into(viewBinding.imageViewRestaurantPictureBanner);
         this.configureRating();
         this.getUser();
-        this.configurePlaceIDChoiceListener();
+        this.configureOnClickListeners();
     }
 
     private void configureRating() {
@@ -87,21 +92,14 @@ public class RestaurantActivity extends AppCompatActivity {
         userViewModel.getUserLiveData().observe(this, user -> {
             this.user = user;
             this.configureFABPlaceIDChoice(user);
+            this.configureImageButtonLike(user);
         });
         userViewModel.retrieveUser();
     }
 
-    private void configureFABPlaceIDChoice(User user) {
-        String placeIDChoice = user.getPlaceIDChoice();
-        if (placeIDChoice != null) {
-            Drawable drawable;
-            if (placeIDChoice.equals(placeID)) {
-                drawable = AppCompatResources.getDrawable(this, R.drawable.ic_baseline_check_circle_50);
-            } else {
-                drawable = AppCompatResources.getDrawable(this, R.drawable.ic_baseline_check_disable_circle_50);
-            }
-            viewBinding.fabUserChoice.setImageDrawable(drawable);
-        }
+    private void configureOnClickListeners() {
+        this.configurePlaceIDChoiceListener();
+        this.configureLikedPlacesListener();
     }
 
     private void configurePlaceIDChoiceListener() {
@@ -127,22 +125,6 @@ public class RestaurantActivity extends AppCompatActivity {
         });
     }
 
-    UserHelper.Listeners callbackCancel = new UserHelper.Listeners() {
-        @Override
-        public void onRetrieved(User user) {
-
-        }
-
-        @Override
-        public void onPlaceIDChoiceSetted() {
-            user.setPlaceIDChoice("");
-            configureFABPlaceIDChoice(user);
-
-            userViewModel.retrieveUsersByPlaceID(placeID);
-            configureRecyclerView(users);
-        }
-    };
-
     UserHelper.Listeners callback = new UserHelper.Listeners() {
         @Override
         public void onRetrieved(User user) {
@@ -159,12 +141,95 @@ public class RestaurantActivity extends AppCompatActivity {
 
             Snackbar.make(viewBinding.getRoot(), getString(R.string.restaurant_setted), BaseTransientBottomBar.LENGTH_LONG).show();
         }
+
+        @Override
+        public void onLikedPlacesSetted() {
+
+        }
     };
 
-    private void retrievePlaceUsers(String placeID) {
-        userViewModel.getUsers().observe(this, this::configureRecyclerView);
-        userViewModel.retrieveUsersByPlaceID(placeID);
+    UserHelper.Listeners callbackCancel = new UserHelper.Listeners() {
+        @Override
+        public void onRetrieved(User user) {
+
+        }
+
+        @Override
+        public void onPlaceIDChoiceSetted() {
+            user.setPlaceIDChoice("");
+            configureFABPlaceIDChoice(user);
+
+            userViewModel.retrieveUsersByPlaceID(placeID);
+            configureRecyclerView(users);
+        }
+
+        @Override
+        public void onLikedPlacesSetted() {
+
+        }
+    };
+
+    private void configureLikedPlacesListener() {
+        viewBinding.imageButtonLike.setOnClickListener(v -> {
+            if (this.user != null) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                if (!user.getLikedPlaces().contains(placeID)) {
+                    builder.setTitle(getString(R.string.title_likeAPlace))
+                            .setMessage(getString(R.string.message_likeAPlace) + currentPlace.getName() + getString(R.string.interrogation))
+                            .setNegativeButton(R.string.button_negative, null)
+                            .setPositiveButton(R.string.button_positive, (dialog, which) -> {
+                                user.addPlaceToLike(placeID);
+                                userViewModel.setLikedPlaces(user.getUid(), user.getLikedPlaces(), callbackLikedPlaces); })
+                            .show();
+                } else {
+                    builder.setTitle(getString(R.string.title_dislikeAPlace))
+                            .setMessage(getString(R.string.message_disklikeAPlace) + currentPlace.getName() + getString(R.string.interrogation))
+                            .setNegativeButton(R.string.button_negative, null)
+                            .setPositiveButton(R.string.button_positive, (dialog, which) -> {
+                                user.removeALikedPlace(placeID);
+                                userViewModel.setLikedPlaces(user.getUid(), user.getLikedPlaces(), callbackRemoveALikedPlaces); })
+                            .show();
+                }
+            }
+
+        });
     }
+
+    UserHelper.Listeners callbackLikedPlaces = new UserHelper.Listeners() {
+        @Override
+        public void onRetrieved(User user) {
+
+        }
+
+        @Override
+        public void onPlaceIDChoiceSetted() {
+
+        }
+
+        @Override
+        public void onLikedPlacesSetted() {
+            configureImageButtonLike(user);
+            Snackbar.make(viewBinding.getRoot(), getString(R.string.snackbar_placeLiked), BaseTransientBottomBar.LENGTH_LONG).show();
+        }
+    };
+
+    UserHelper.Listeners callbackRemoveALikedPlaces = new UserHelper.Listeners() {
+        @Override
+        public void onRetrieved(User user) {
+
+        }
+
+        @Override
+        public void onPlaceIDChoiceSetted() {
+
+        }
+
+        @Override
+        public void onLikedPlacesSetted() {
+            configureImageButtonLike(user);
+            Snackbar.make(viewBinding.getRoot(),getString(R.string.snackbar_dislikeAPlace) + currentPlace.getName() + getString(R.string.snackbar_disLikeAPlace_end), BaseTransientBottomBar.LENGTH_LONG).show();
+        }
+    };
 
     private void configureRecyclerView(List<User> users) {
         if (workmateAdapter == null) {
@@ -184,6 +249,29 @@ public class RestaurantActivity extends AppCompatActivity {
             this.users = users;
             workmateAdapter = new WorkmateAdapter(this.users);
             recyclerView.setAdapter(workmateAdapter);
+        }
+    }
+
+    private void configureImageButtonLike(User user) {
+        Drawable drawable;
+        if (user.getLikedPlaces().contains(placeID)) {
+            drawable = AppCompatResources.getDrawable(this, R.drawable.ic_baseline_star_30);
+        } else {
+            drawable = AppCompatResources.getDrawable(this, R.drawable.ic_baseline_star_unlike_30);
+        }
+        viewBinding.imageButtonLike.setImageDrawable(drawable);
+    }
+
+    private void configureFABPlaceIDChoice(User user) {
+        String placeIDChoice = user.getPlaceIDChoice();
+        if (placeIDChoice != null) {
+            Drawable drawable;
+            if (placeIDChoice.equals(placeID)) {
+                drawable = AppCompatResources.getDrawable(this, R.drawable.ic_baseline_check_circle_50);
+            } else {
+                drawable = AppCompatResources.getDrawable(this, R.drawable.ic_baseline_check_disable_circle_50);
+            }
+            viewBinding.fabUserChoice.setImageDrawable(drawable);
         }
     }
 }

@@ -110,7 +110,7 @@
         app:layout_constraintStart_toEndOf="@id/imageButton_phone"
         app:layout_constraintEnd_toStartOf="@id/imageButton_website"
         android:background="@android:color/transparent"
-        android:src="@drawable/ic_baseline_star_30"/>
+        android:src="@drawable/ic_baseline_star_unlike_30"/>
 
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="wrap_content"

@@ -3,12 +3,17 @@ package fr.ferrerasroca.go4lunch.data.repositories;
 import android.content.Intent;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,6 +93,15 @@ public class UserRepository {
     public void setPlaceIDChoice(String userUid, String placeIDChoice, UserHelper.Listeners listeners) {
         UserHelper.setPlaceIDChoice(userUid, placeIDChoice).addOnCompleteListener(task -> {
             listeners.onPlaceIDChoiceSetted();
+        });
+    }
+
+    public void setLikedPlaces(String userUid, List<String> placesLiked, UserHelper.Listeners listeners) {
+        UserHelper.setLikedPlaces(userUid, placesLiked).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull @NotNull Task<Void> task) {
+                listeners.onLikedPlacesSetted();
+            }
         });
     }
 }
