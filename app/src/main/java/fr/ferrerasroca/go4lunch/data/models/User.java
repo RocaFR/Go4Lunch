@@ -14,7 +14,7 @@ public class User {
     private String job;
     @Nullable
     private String profilePictureUrl;
-    private String placeIDChoice;
+    private String placeIDChoice = null;
 
     /**
      * <p>Empty Firestore constructor.<br>

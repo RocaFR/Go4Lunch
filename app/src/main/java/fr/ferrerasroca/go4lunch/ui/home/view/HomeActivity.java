@@ -101,7 +101,7 @@ public class HomeActivity extends AppCompatActivity {
         this.configureNavigationViewListeners();
         this.configureBottomNavigationViewListener();
         userViewModel.userLiveData.observe(this, this::displayUserDetails);
-        userViewModel.getUser();
+        userViewModel.retrieveUser();
     }
 
     private void configureNavigationViewListeners() {

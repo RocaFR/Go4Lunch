@@ -51,8 +51,8 @@ public class UserRepository {
         return UserHelper.isCurrentUserLogged();
     }
 
-    public void getUser(String uid, UserHelper.Listener listener) {
-        UserHelper.getUser(uid, listener);
+    public void getUser(String uid, UserHelper.Listeners listeners) {
+        UserHelper.getUser(uid, listeners);
     }
 
     public LiveData<List<User>> getUsers() {
@@ -83,5 +83,11 @@ public class UserRepository {
                 _usersMutableLiveData.postValue(users);
             }
         }).addOnFailureListener(e -> Log.e("TAG", "onFailure: " + e.getMessage()));
+    }
+
+    public void setPlaceIDChoice(String userUid, String placeIDChoice, UserHelper.Listeners listeners) {
+        UserHelper.setPlaceIDChoice(userUid, placeIDChoice).addOnCompleteListener(task -> {
+            listeners.onPlaceIDChoiceSetted();
+        });
     }
 }

@@ -17,4 +17,6 @@
     <color name="icon_background">#C91D12</color>
     <color name="login_background_background">#FFFFFF</color>
     <color name="separator_line">#2F000000</color>
+    <color name="placeIDChoice_checked">#8BC34A</color>
+    <color name="placeIDChoice_uncheck">#338BC34A</color>
 </resources>

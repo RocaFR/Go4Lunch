@@ -47,4 +47,12 @@
     <string name="imageButton_website">WEBSITE</string>
     <string name="fab_userChoice">User choice</string>
     <string name="textView_noWorkmates">No participants :(</string>
+    <string name="restaurant_setted">Enjoy it!</string>
+    <string name="title_choice_confirmation">Choice confirmation</string>
+    <string name="message_choice_confirmation">"Do you want to eat to "</string>
+    <string name="interrogation">?</string>
+    <string name="button_negative">Cancel</string>
+    <string name="button_positive">Yes</string>
+    <string name="title_choice_cancel">Cancel your choice</string>
+    <string name="message_choice_cancel">Are you sure to cancel your choice ?</string>
 </resources>

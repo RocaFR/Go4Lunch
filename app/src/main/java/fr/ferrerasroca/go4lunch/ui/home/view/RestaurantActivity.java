@@ -1,18 +1,25 @@
 package fr.ferrerasroca.go4lunch.ui.home.view;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.ferrerasroca.go4lunch.R;
+import fr.ferrerasroca.go4lunch.data.api.user.UserHelper;
 import fr.ferrerasroca.go4lunch.data.injections.Injection;
 import fr.ferrerasroca.go4lunch.data.models.User;
 import fr.ferrerasroca.go4lunch.data.models.places.Place;
@@ -30,6 +37,11 @@ public class RestaurantActivity extends AppCompatActivity {
     private PlacesViewModel placesViewModel;
     private UserViewModel userViewModel;
     private RecyclerView recyclerView;
+    private WorkmateAdapter workmateAdapter;
+    private List<User> users = new ArrayList<>();
+    private Place currentPlace;
+    private String placeID;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +52,7 @@ public class RestaurantActivity extends AppCompatActivity {
         placesViewModel = Injection.providePlacesViewModel(Injection.providePlacesViewModelFactory());
         userViewModel = Injection.provideUserViewModel(Injection.provideUserViewModelFactory());
 
-        String placeID = getIntent().getStringExtra(EXTRA_PLACE_ID);
+        placeID = getIntent().getStringExtra(EXTRA_PLACE_ID);
         this.retrievePlaceDetails(placeID);
         this.retrievePlaceUsers(placeID );
 
@@ -53,11 +65,101 @@ public class RestaurantActivity extends AppCompatActivity {
     }
 
     private void configureViews(Place place) {
-        viewBinding.textViewRestaurantName.setText(TextUtils.isEmpty(place.getName()) ? "" : place.getName());
-        viewBinding.textViewRestaurantAddress.setText(TextUtils.isEmpty(place.getVicinity()) ? "" : place.getVicinity());
-        Glide.with(this).load(place.getPhotoUrl()).error(R.drawable.ic_baseline_broken_image_24).into(viewBinding.imageViewRestaurantPictureBanner);
-        this.configureRating(place);
+        currentPlace = place;
+        viewBinding.textViewRestaurantName.setText(TextUtils.isEmpty(currentPlace.getName()) ? "" : currentPlace.getName());
+        viewBinding.textViewRestaurantAddress.setText(TextUtils.isEmpty(currentPlace.getVicinity()) ? "" : currentPlace.getVicinity());
+        Glide.with(this).load(currentPlace.getPhotoUrl()).error(R.drawable.ic_baseline_broken_image_24).into(viewBinding.imageViewRestaurantPictureBanner);
+        this.configureRating();
+        this.getUser();
+        this.configurePlaceIDChoiceListener();
     }
+
+    private void configureRating() {
+        if (currentPlace.isRated()) {
+            Float convertedRating = PlaceUtils.convertRating(5f, 3f, currentPlace.getRating());
+            viewBinding.ratingBarRestaurant.setRating(convertedRating);
+        } else {
+            viewBinding.ratingBarRestaurant.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void getUser() {
+        userViewModel.getUserLiveData().observe(this, user -> {
+            this.user = user;
+            this.configureFABPlaceIDChoice(user);
+        });
+        userViewModel.retrieveUser();
+    }
+
+    private void configureFABPlaceIDChoice(User user) {
+        String placeIDChoice = user.getPlaceIDChoice();
+        if (placeIDChoice != null) {
+            Drawable drawable;
+            if (placeIDChoice.equals(placeID)) {
+                drawable = AppCompatResources.getDrawable(this, R.drawable.ic_baseline_check_circle_50);
+            } else {
+                drawable = AppCompatResources.getDrawable(this, R.drawable.ic_baseline_check_disable_circle_50);
+            }
+            viewBinding.fabUserChoice.setImageDrawable(drawable);
+        }
+    }
+
+    private void configurePlaceIDChoiceListener() {
+        viewBinding.fabUserChoice.setOnClickListener(v -> {
+            if (this.user != null) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                if (user.getPlaceIDChoice() == null || !user.getPlaceIDChoice().equals(placeID)) {
+                    builder.setTitle(getString(R.string.title_choice_confirmation))
+                            .setMessage(getString(R.string.message_choice_confirmation) + currentPlace.getName() + getString(R.string.interrogation))
+                            .setNegativeButton(R.string.button_negative, null)
+                            .setPositiveButton(R.string.button_positive, (dialog, which) -> userViewModel.setPlaceIDChoice(user.getUid(), placeID, callback))
+                            .show();
+                } else {
+                    builder.setTitle(getString(R.string.title_choice_cancel))
+                            .setMessage(R.string.message_choice_cancel)
+                            .setNegativeButton(R.string.button_negative, null)
+                            .setPositiveButton(R.string.button_positive, (dialog, which) -> {
+                                user.setPlaceIDChoice(null);
+                                userViewModel.setPlaceIDChoice(user.getUid(), "", callbackCancel); })
+                            .show();
+                }
+            }
+        });
+    }
+
+    UserHelper.Listeners callbackCancel = new UserHelper.Listeners() {
+        @Override
+        public void onRetrieved(User user) {
+
+        }
+
+        @Override
+        public void onPlaceIDChoiceSetted() {
+            user.setPlaceIDChoice("");
+            configureFABPlaceIDChoice(user);
+
+            userViewModel.retrieveUsersByPlaceID(placeID);
+            configureRecyclerView(users);
+        }
+    };
+
+    UserHelper.Listeners callback = new UserHelper.Listeners() {
+        @Override
+        public void onRetrieved(User user) {
+
+        }
+
+        @Override
+        public void onPlaceIDChoiceSetted() {
+            user.setPlaceIDChoice(placeID);
+            configureFABPlaceIDChoice(user);
+
+            userViewModel.retrieveUsersByPlaceID(placeID);
+            configureRecyclerView(users);
+
+            Snackbar.make(viewBinding.getRoot(), getString(R.string.restaurant_setted), BaseTransientBottomBar.LENGTH_LONG).show();
+        }
+    };
 
     private void retrievePlaceUsers(String placeID) {
         userViewModel.getUsers().observe(this, this::configureRecyclerView);
@@ -65,25 +167,23 @@ public class RestaurantActivity extends AppCompatActivity {
     }
 
     private void configureRecyclerView(List<User> users) {
-        if (!users.isEmpty()) {
-            viewBinding.imageViewNoWorkmates.setVisibility(View.GONE);
+        if (workmateAdapter == null) {
+            if (!users.isEmpty()) {
+                this.users = users;
+                viewBinding.imageViewNoWorkmates.setVisibility(View.GONE);
 
-            recyclerView = findViewById(R.id.recyclerView_workmates);
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-            WorkmateAdapter workmateAdapter = new WorkmateAdapter(users);
-            recyclerView.setLayoutManager(layoutManager);
+                recyclerView = findViewById(R.id.recyclerView_workmates);
+                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+                workmateAdapter = new WorkmateAdapter(this.users);
+                recyclerView.setLayoutManager(layoutManager);
+                recyclerView.setAdapter(workmateAdapter);
+            } else {
+                viewBinding.imageViewNoWorkmates.setVisibility(View.VISIBLE);
+            }
+        } else {
+            this.users = users;
+            workmateAdapter = new WorkmateAdapter(this.users);
             recyclerView.setAdapter(workmateAdapter);
-        } else {
-            viewBinding.imageViewNoWorkmates.setVisibility(View.VISIBLE);
-        }
-    }
-
-    private void configureRating(Place place) {
-        if (place.isRated()) {
-            Float convertedRating = PlaceUtils.convertRating(5f, 3f, place.getRating());
-            viewBinding.ratingBarRestaurant.setRating(convertedRating);
-        } else {
-            viewBinding.ratingBarRestaurant.setVisibility(View.INVISIBLE);
         }
     }
 }

@@ -11,8 +11,9 @@ import fr.ferrerasroca.go4lunch.data.models.User;
 
 public class UserHelper {
 
-    public interface Listener {
+    public interface Listeners {
         void onRetrieved(User user);
+        void onPlaceIDChoiceSetted();
     }
 
     private static final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -30,9 +31,9 @@ public class UserHelper {
         return getUserCollection().document(userUid).get();
     }
 
-    public static Task<DocumentSnapshot> getUser(String userUid, Listener listener) {
+    public static Task<DocumentSnapshot> getUser(String userUid, Listeners listeners) {
         return getUserCollection().document(userUid).get()
-                .addOnCompleteListener(task -> listener.onRetrieved(task.getResult().toObject(User.class)));
+                .addOnCompleteListener(task -> listeners.onRetrieved(task.getResult().toObject(User.class)));
     }
 
     public static Task<QuerySnapshot> retrieveUsers() {
@@ -46,6 +47,10 @@ public class UserHelper {
                 .orderBy("username")
                 .whereEqualTo("placeIDChoice", placeID)
                 .get();
+    }
+
+    public static Task<Void> setPlaceIDChoice(String userUid, String placeIDChoice) {
+        return getUserCollection().document(userUid).update("placeIDChoice", placeIDChoice);
     }
 
     public static Boolean isCurrentUserLogged() {

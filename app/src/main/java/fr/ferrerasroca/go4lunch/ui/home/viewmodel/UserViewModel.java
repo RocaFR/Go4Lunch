@@ -12,6 +12,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 
+import fr.ferrerasroca.go4lunch.data.api.user.UserHelper;
 import fr.ferrerasroca.go4lunch.data.models.User;
 import fr.ferrerasroca.go4lunch.data.repositories.UserRepository;
 
@@ -43,10 +44,24 @@ public class UserViewModel extends ViewModel {
         return userRepository.isCurrentUserLogged();
     }
 
-    public void getUser() {
+    public void retrieveUser() {
         if (this.firebaseAuth.getCurrentUser() != null) {
-            userRepository.getUser(this.firebaseAuth.getCurrentUser().getUid(), _userMutableLiveData::postValue);
+            userRepository.getUser(this.firebaseAuth.getCurrentUser().getUid(), new UserHelper.Listeners() {
+                @Override
+                public void onRetrieved(User user) {
+                    _userMutableLiveData.postValue(user);
+                }
+
+                @Override
+                public void onPlaceIDChoiceSetted() {
+
+                }
+            });
         }
+    }
+
+    public LiveData<User> getUserLiveData() {
+        return this.userLiveData;
     }
 
     public void signOutUser() {
@@ -65,5 +80,9 @@ public class UserViewModel extends ViewModel {
 
     public LiveData<List<User>> getUsers() {
         return userRepository.getUsers();
+    }
+
+    public void setPlaceIDChoice(String userUid, String placeIDChoice, UserHelper.Listeners listeners) {
+        userRepository.setPlaceIDChoice(userUid, placeIDChoice, listeners);
     }
 }
