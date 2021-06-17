@@ -14,28 +14,21 @@ import org.jetbrains.annotations.NotNull;
 
 import fr.ferrerasroca.go4lunch.R;
 import fr.ferrerasroca.go4lunch.data.models.User;
-import fr.ferrerasroca.go4lunch.data.models.places.Place;
 
-public class WorkmateViewHolder extends RecyclerView.ViewHolder {
+public class WorkmateViewRestaurantHolder extends RecyclerView.ViewHolder {
 
     private final ShapeableImageView imageviewWorkmate;
     private final MaterialTextView textviewWorkmateChoice;
 
-    public WorkmateViewHolder(@NonNull @NotNull View itemView) {
+    public WorkmateViewRestaurantHolder(@NonNull @NotNull View itemView) {
         super(itemView);
 
         imageviewWorkmate = itemView.findViewById(R.id.imageView_workmate);
         textviewWorkmateChoice = itemView.findViewById(R.id.textView_workmateChoice);
     }
 
-    public void updateWorkmate(User user, Place place) {
+    public void updateWorkmate(User user) {
         Glide.with(itemView.getContext()).load(user.getProfilePictureUrl()).into(imageviewWorkmate);
-
-        if (place != null) {
-            textviewWorkmateChoice.setText(TextUtils.isEmpty(user.getUsername()) ? "" : user.getUsername() + " is eating at " + place.getName() + ".");
-        } else {
-            textviewWorkmateChoice.setText(TextUtils.isEmpty(user.getUsername()) ? "" : user.getUsername() + " not choose yet. ");
-        }
-
+        textviewWorkmateChoice.setText(TextUtils.isEmpty(user.getUsername()) ? "" : user.getUsername());
     }
 }

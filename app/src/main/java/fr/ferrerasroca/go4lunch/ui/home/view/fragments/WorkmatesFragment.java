@@ -21,12 +21,15 @@ import java.util.List;
 import fr.ferrerasroca.go4lunch.R;
 import fr.ferrerasroca.go4lunch.data.injections.Injection;
 import fr.ferrerasroca.go4lunch.data.models.User;
+import fr.ferrerasroca.go4lunch.data.models.places.Place;
 import fr.ferrerasroca.go4lunch.ui.home.view.adaptaters.WorkmateAdapter;
+import fr.ferrerasroca.go4lunch.ui.home.viewmodel.PlacesViewModel;
 import fr.ferrerasroca.go4lunch.ui.home.viewmodel.UserViewModel;
 
 public class WorkmatesFragment extends Fragment {
 
     private UserViewModel userViewModel;
+    private PlacesViewModel placesViewModel;
     private LinearProgressIndicator progressIndicator;
     private RecyclerView recyclerView;
 
@@ -41,6 +44,7 @@ public class WorkmatesFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         userViewModel = Injection.provideUserViewModel(Injection.provideUserViewModelFactory());
+        placesViewModel = Injection.providePlacesViewModel(Injection.providePlacesViewModelFactory());
     }
 
     @Override
@@ -68,7 +72,8 @@ public class WorkmatesFragment extends Fragment {
     private void getUsersFromFirestore() {
         userViewModel.getUsers().observe(getViewLifecycleOwner(), users -> {
             configureProgressbar(users);
-            configureRecyclerView(users);
+            placesViewModel.getPlacesChosenByUsers().observe(getViewLifecycleOwner(), places -> configureRecyclerView(users, places));
+            placesViewModel.retrievePlacesByUsers(users);
         });
         userViewModel.retrieveUsers();
     }
@@ -81,9 +86,9 @@ public class WorkmatesFragment extends Fragment {
         }
     }
 
-    private void configureRecyclerView(List<User> users) {
+    private void configureRecyclerView(List<User> users, List<Place> places) {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-        WorkmateAdapter workmateAdapter = new WorkmateAdapter(users);
+        WorkmateAdapter workmateAdapter = new WorkmateAdapter(users, places);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(new DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(workmateAdapter);

@@ -12,14 +12,17 @@ import java.util.List;
 
 import fr.ferrerasroca.go4lunch.R;
 import fr.ferrerasroca.go4lunch.data.models.User;
+import fr.ferrerasroca.go4lunch.data.models.places.Place;
 import fr.ferrerasroca.go4lunch.ui.home.view.viewholders.WorkmateViewHolder;
 
 public class WorkmateAdapter extends RecyclerView.Adapter<WorkmateViewHolder> {
 
     private final List<User> users;
+    private final List<Place> places;
 
-    public WorkmateAdapter(List<User> users) {
+    public WorkmateAdapter(List<User> users, List<Place> places) {
         this.users = users;
+        this.places = places;
     }
 
     @NonNull
@@ -31,7 +34,15 @@ public class WorkmateAdapter extends RecyclerView.Adapter<WorkmateViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull WorkmateViewHolder holder, int position) {
-        holder.updateWorkmate(users.get(position));
+        Place place = this.fetchTheChoosenPlace(places, users.get(position));
+        holder.updateWorkmate(users.get(position), place);
+    }
+
+    private Place fetchTheChoosenPlace(List<Place> places, User user) {
+        for (Place place: places) {
+            if (place.getPlaceId().equals(user.getPlaceIDChoice())) return place;
+        }
+        return null;
     }
 
     @Override

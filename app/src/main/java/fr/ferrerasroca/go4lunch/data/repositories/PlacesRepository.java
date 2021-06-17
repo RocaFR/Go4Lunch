@@ -8,10 +8,12 @@ import androidx.lifecycle.MutableLiveData;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.ferrerasroca.go4lunch.BuildConfig;
 import fr.ferrerasroca.go4lunch.data.api.places.PlacesCalls;
+import fr.ferrerasroca.go4lunch.data.models.User;
 import fr.ferrerasroca.go4lunch.data.models.places.Place;
 import fr.ferrerasroca.go4lunch.data.models.places.responses.NearbyPlacesResponse;
 import fr.ferrerasroca.go4lunch.data.models.places.responses.PlaceDetailResponse;
@@ -25,6 +27,8 @@ public class PlacesRepository {
     private final LiveData<List<Place>> placesLiveData = _placesMutableLiveData;
     private final MutableLiveData<Place> _placeMutableLiveData = new MutableLiveData<>();
     private final LiveData<Place> placeLiveData = _placeMutableLiveData;
+    private final MutableLiveData<List<Place>> _placesChosenByUsersMutableLiveData = new MutableLiveData<>();
+    private final LiveData<List<Place>> placesChosenByUsersLiveData = _placesChosenByUsersMutableLiveData;
 
     public PlacesRepository() {}
 
@@ -95,5 +99,42 @@ public class PlacesRepository {
 
     public LiveData<Place> getPlace() {
         return this.placeLiveData;
+    }
+
+    public void retrievePlacesByUsers(List<User> users) {
+        List<Place> usersPlacesChoice = new ArrayList<>();
+        for (int i = 0; i < users.size(); i++) {
+            int actualItem = i;
+            User user = users.get(i);
+            String placeIDChoice = user.getPlaceIDChoice();
+
+            if (placeIDChoice != null && !placeIDChoice.isEmpty()) {
+                PlacesCalls.getPlaceDetails(user.getPlaceIDChoice()).enqueue(new Callback<PlaceDetailResponse>() {
+                    @Override
+                    public void onResponse(@NotNull Call<PlaceDetailResponse> call, @NotNull Response<PlaceDetailResponse> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            Place place = response.body().getPlace();
+                            usersPlacesChoice.add(place);
+                            if (isLastUser(actualItem, users.size())) {
+                                _placesChosenByUsersMutableLiveData.postValue(usersPlacesChoice);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NotNull Call<PlaceDetailResponse> call, @NotNull Throwable t) {
+                        Log.e("TAG", "onFailure: " + t.getMessage());
+                    }
+                });
+            }
+        }
+    }
+
+    public LiveData<List<Place>> getPlacesChosenByUsers() {
+        return this.placesChosenByUsersLiveData;
+    }
+
+    private Boolean isLastUser(int userPosition, int usersSize) {
+        return userPosition == usersSize -1;
     }
 }

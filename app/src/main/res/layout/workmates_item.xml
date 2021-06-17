@@ -17,12 +17,13 @@
     <com.google.android.material.textview.MaterialTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:maxWidth="@dimen/textView_maxWidth_big"
         android:id="@+id/textView_workmateChoice"
         app:layout_constraintTop_toTopOf="@id/imageView_workmate"
         app:layout_constraintBottom_toBottomOf="@id/imageView_workmate"
         app:layout_constraintStart_toEndOf="@id/imageView_workmate"
         android:layout_margin="@dimen/margin_veryLittle"
         style="@style/Go4Lunch.Title"
-        tools:text="Sherlock is eating french (Le Zinc)" />
+        tools:text="Sherlock is eating french (Le Zinc) FDFDD FDFDFDFDF" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

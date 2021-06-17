@@ -24,7 +24,7 @@ import fr.ferrerasroca.go4lunch.data.injections.Injection;
 import fr.ferrerasroca.go4lunch.data.models.User;
 import fr.ferrerasroca.go4lunch.data.models.places.Place;
 import fr.ferrerasroca.go4lunch.databinding.ActivityRestaurantBinding;
-import fr.ferrerasroca.go4lunch.ui.home.view.adaptaters.WorkmateAdapter;
+import fr.ferrerasroca.go4lunch.ui.home.view.adaptaters.WorkmateRestaurantViewAdapter;
 import fr.ferrerasroca.go4lunch.ui.home.viewmodel.PlacesViewModel;
 import fr.ferrerasroca.go4lunch.ui.home.viewmodel.UserViewModel;
 import fr.ferrerasroca.go4lunch.utils.PlaceUtils;
@@ -37,7 +37,7 @@ public class RestaurantActivity extends AppCompatActivity {
     private PlacesViewModel placesViewModel;
     private UserViewModel userViewModel;
     private RecyclerView recyclerView;
-    private WorkmateAdapter workmateAdapter;
+    private WorkmateRestaurantViewAdapter workmateAdapter;
     private List<User> users = new ArrayList<>();
     private Place currentPlace;
     private String placeID;
@@ -239,7 +239,7 @@ public class RestaurantActivity extends AppCompatActivity {
 
                 recyclerView = findViewById(R.id.recyclerView_workmates);
                 RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-                workmateAdapter = new WorkmateAdapter(this.users);
+                workmateAdapter = new WorkmateRestaurantViewAdapter(this.users);
                 recyclerView.setLayoutManager(layoutManager);
                 recyclerView.setAdapter(workmateAdapter);
             } else {
@@ -247,7 +247,7 @@ public class RestaurantActivity extends AppCompatActivity {
             }
         } else {
             this.users = users;
-            workmateAdapter = new WorkmateAdapter(this.users);
+            workmateAdapter = new WorkmateRestaurantViewAdapter(this.users);
             recyclerView.setAdapter(workmateAdapter);
         }
     }

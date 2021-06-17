@@ -19,4 +19,5 @@
     <dimen name="icon_participants">20dp</dimen>
     <dimen name="thumbnail_restaurantPicture">75dp</dimen>
     <dimen name="icon_user_little">50dp</dimen>
+    <dimen name="textView_maxWidth_big">300dp</dimen>
 </resources>
