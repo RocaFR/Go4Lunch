@@ -2,7 +2,6 @@ package fr.ferrerasroca.go4lunch.ui.home.view.viewholders;
 
 import android.annotation.SuppressLint;
 import android.graphics.Typeface;
-import android.location.Location;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
@@ -16,7 +15,11 @@ import com.google.android.material.imageview.ShapeableImageView;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+import java.util.Map;
+
 import fr.ferrerasroca.go4lunch.R;
+import fr.ferrerasroca.go4lunch.data.models.User;
 import fr.ferrerasroca.go4lunch.data.models.places.Place;
 import fr.ferrerasroca.go4lunch.utils.PlaceUtils;
 
@@ -43,7 +46,7 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
     }
 
     @SuppressLint("SetTextI18n")
-    public void updateRestaurantWithPlace(Place place, Location userLocation) {
+    public void updateRestaurantWithPlace(Place place, Map<String, List<User>> usersForPlaces) {
         textviewName.setText(TextUtils.isEmpty(place.getName()) ? "" : place.getName());
         textviewAddress.setText(TextUtils.isEmpty(place.getVicinity()) ? "" : place.getVicinity());
         Glide.with(itemView.getContext()).load(place.getPhotoUrl()).error(R.drawable.ic_baseline_broken_image_24).into(imageviewPicture);
@@ -52,7 +55,11 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
         this.configureOpeningHours(place);
         this.configureRating(place);
 
-        //textviewNumberOfParticipants.setText(TextUtils.isEmpty(place.getName()) ? "" : place.getName());
+        List<User> users = usersForPlaces.get(place.getPlaceId());
+        if (users != null) {
+            String numberOfParticipants = Integer.toString(users.size());
+            textviewNumberOfParticipants.setText("(" + numberOfParticipants + ")");
+        }
     }
 
     private void configureOpeningHours(Place place) {

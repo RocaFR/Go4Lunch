@@ -1,6 +1,7 @@
 package fr.ferrerasroca.go4lunch.ui.home.view.fragments;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,14 +26,17 @@ import com.google.android.gms.maps.model.LatLng;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Map;
 
 import fr.ferrerasroca.go4lunch.R;
 import fr.ferrerasroca.go4lunch.data.injections.Injection;
+import fr.ferrerasroca.go4lunch.data.models.User;
 import fr.ferrerasroca.go4lunch.data.models.places.Place;
 import fr.ferrerasroca.go4lunch.ui.home.view.GoogleMapsComponent;
 import fr.ferrerasroca.go4lunch.ui.home.view.RestaurantActivity;
 import fr.ferrerasroca.go4lunch.ui.home.view.adaptaters.RestaurantAdapter;
 import fr.ferrerasroca.go4lunch.ui.home.viewmodel.PlacesViewModel;
+import fr.ferrerasroca.go4lunch.ui.home.viewmodel.UserViewModel;
 import fr.ferrerasroca.go4lunch.utils.ItemClickSupport;
 import fr.ferrerasroca.go4lunch.utils.LocationUtils;
 import fr.ferrerasroca.go4lunch.utils.NetworkUtils;
@@ -45,6 +49,7 @@ import static fr.ferrerasroca.go4lunch.ui.home.view.HomeActivity.EXTRA_PLACE_ID;
 public class ListViewFragment extends Fragment {
 
     private PlacesViewModel placesViewModel;
+    private UserViewModel userViewModel;
     private GoogleMapsComponent googleMapsComponent;
     private TextView textviewNoRestaurant;
     private ProgressBar progressBar;
@@ -61,6 +66,13 @@ public class ListViewFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         placesViewModel = Injection.providePlacesViewModel(Injection.providePlacesViewModelFactory());
+        userViewModel = Injection.provideUserViewModel(Injection.provideUserViewModelFactory());
+
+        this.getActualContext();
+    }
+
+    private Context getActualContext() {
+        return getContext();
     }
 
     @Override
@@ -95,13 +107,13 @@ public class ListViewFragment extends Fragment {
 
     @AfterPermissionGranted(RC_LOCATION_PERM)
     private void requestLocationPermission() {
-        if (!EasyPermissions.hasPermissions(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)) {
+        if (!EasyPermissions.hasPermissions(getActualContext(), Manifest.permission.ACCESS_FINE_LOCATION)) {
             EasyPermissions.requestPermissions(this, getString(R.string.app_name) + getString(R.string.permission_location_request), RC_LOCATION_PERM, Manifest.permission.ACCESS_FINE_LOCATION);
         } else {
-            if (LocationUtils.isLocationEnabled(getContext())) {
-                googleMapsComponent.getLocation(getContext(), callback);
+            if (LocationUtils.isLocationEnabled(getActualContext())) {
+                googleMapsComponent.getLocation(getActualContext(), callback);
             } else {
-                Toast.makeText(getContext(), getString(R.string.location_disabled), Toast.LENGTH_LONG).show();
+                Toast.makeText(getActualContext(), getString(R.string.location_disabled), Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -121,7 +133,7 @@ public class ListViewFragment extends Fragment {
 
     private void getPlaces() {
         placesViewModel.getPlaces().observe(getViewLifecycleOwner(), placesObserver);
-        if (NetworkUtils.isNetworkAvailable(getContext())) {
+        if (NetworkUtils.isNetworkAvailable(getActualContext())) {
             placesViewModel.retrieveNearbyPlaces(googleMapsComponent.getLastLocation());
         }
     }
@@ -132,18 +144,23 @@ public class ListViewFragment extends Fragment {
             if (!places.isEmpty()) {
                 textviewNoRestaurant.setVisibility(View.GONE);
                 progressBar.setVisibility(View.GONE);
-                configureRecyclerview(places);
+                userViewModel.getUsersForPlacesLiveData().observe(getViewLifecycleOwner(), stringListMap ->  {
+                    if (!stringListMap.isEmpty()) {
+                        configureRecyclerview(places, stringListMap);
+                    }
+                });
+                userViewModel.retrieveUsersForPlaces(places);
             } else {
                 textviewNoRestaurant.setVisibility(View.VISIBLE);
             }
         }
     };
 
-    private void configureRecyclerview(List<Place> places) {
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-        RestaurantAdapter restaurantAdapter = new RestaurantAdapter(places, googleMapsComponent.getLastLocation());
+    private void configureRecyclerview(List<Place> places, Map<String, List<User>> usersForPlaces) {
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActualContext());
+        RestaurantAdapter restaurantAdapter = new RestaurantAdapter(places, usersForPlaces);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActualContext(), DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(restaurantAdapter);
         configureOnClickRecyclerView(places);
     }
@@ -151,7 +168,7 @@ public class ListViewFragment extends Fragment {
     private void configureOnClickRecyclerView(List<Place> places) {
         ItemClickSupport.addTo(recyclerView, R.layout.restaurant_item)
                 .setOnItemClickListener((recyclerView, position, v) -> {
-                    Intent intent = new Intent(getContext(), RestaurantActivity.class);
+                    Intent intent = new Intent(getActualContext(), RestaurantActivity.class);
                     intent.putExtra(EXTRA_PLACE_ID, places.get(position).getPlaceId());
                     startActivity(intent);
                 });

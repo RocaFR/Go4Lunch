@@ -11,9 +11,11 @@ import androidx.lifecycle.ViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
+import java.util.Map;
 
 import fr.ferrerasroca.go4lunch.data.api.user.UserHelper;
 import fr.ferrerasroca.go4lunch.data.models.User;
+import fr.ferrerasroca.go4lunch.data.models.places.Place;
 import fr.ferrerasroca.go4lunch.data.repositories.UserRepository;
 
 public class UserViewModel extends ViewModel {
@@ -94,4 +96,13 @@ public class UserViewModel extends ViewModel {
     public void setLikedPlaces(String userUid, List<String> placesLiked, UserHelper.Listeners listeners) {
         userRepository.setLikedPlaces(userUid, placesLiked, listeners);
     }
+
+    public void retrieveUsersForPlaces(List<Place> places) {
+        userRepository.retrieveUsersForPlaces(places);
+    }
+
+    public LiveData<Map<String, List<User>>> getUsersForPlacesLiveData() {
+        return userRepository.getUsersForPlacesLiveData();
+    }
+
 }

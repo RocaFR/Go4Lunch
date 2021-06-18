@@ -1,6 +1,5 @@
 package fr.ferrerasroca.go4lunch.ui.home.view.adaptaters;
 
-import android.location.Location;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -10,19 +9,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Map;
 
 import fr.ferrerasroca.go4lunch.R;
+import fr.ferrerasroca.go4lunch.data.models.User;
 import fr.ferrerasroca.go4lunch.data.models.places.Place;
 import fr.ferrerasroca.go4lunch.ui.home.view.viewholders.RestaurantViewHolder;
 
 public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantViewHolder> {
 
     private final List<Place> places;
-    private final Location userLocation;
+    private final Map<String, List<User>> usersForPlaces;
 
-    public RestaurantAdapter(List<Place> places, Location userLocation) {
+    public RestaurantAdapter(List<Place> places, Map<String, List<User>> usersForPlaces) {
         this.places = places;
-        this.userLocation = userLocation;
+        this.usersForPlaces = usersForPlaces;
     }
 
     @NonNull
@@ -34,7 +35,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull @NotNull RestaurantViewHolder holder, int position) {
-        holder.updateRestaurantWithPlace(places.get(position), userLocation);
+        holder.updateRestaurantWithPlace(places.get(position), usersForPlaces);
     }
 
     @Override
