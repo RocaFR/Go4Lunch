@@ -69,7 +69,7 @@
         android:layout_marginTop="@dimen/margin_veryLittle"
         android:layout_marginEnd="@dimen/margin_veryLittle"
         style="@style/Go4Lunch.Paragraph"
-        android:text="@string/restaurant_numberparticipants_tools" />
+        tools:text="@string/restaurant_numberparticipants_tools" />
 
     <androidx.appcompat.widget.AppCompatRatingBar
         android:layout_width="wrap_content"

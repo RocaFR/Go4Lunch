@@ -19,6 +19,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.jetbrains.annotations.NotNull;
@@ -99,12 +100,13 @@ public class GoogleMapsComponent implements OnMapReadyCallback, GoogleMap.OnMyLo
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
-    public void addMarker(LatLng latLng , String title, String snippet, Boolean isDraggable) {
-        currentGoogleMap.addMarker(new MarkerOptions()
+    public void addMarker(LatLng latLng , String title, String snippet,  String placeID,Boolean isDraggable) {
+        Marker marker = currentGoogleMap.addMarker(new MarkerOptions()
                 .title(title)
                 .position(latLng)
                 .snippet(snippet)
                 .draggable(isDraggable));
+        marker.setTag(placeID);
     }
 
     public Location getLastLocation() {
@@ -121,5 +123,9 @@ public class GoogleMapsComponent implements OnMapReadyCallback, GoogleMap.OnMyLo
 
     public void stopLocationUpdates(LocationCallback locationCallback) {
         providerClient.removeLocationUpdates(locationCallback);
+    }
+
+    public void setOnMarkerClickListener(GoogleMap.OnMarkerClickListener onMarkerClickListener) {
+        currentGoogleMap.setOnMarkerClickListener(onMarkerClickListener);
     }
 }

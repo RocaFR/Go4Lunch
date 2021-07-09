@@ -1,7 +1,9 @@
 package fr.ferrerasroca.go4lunch.ui.home.view.fragments;
 
 import android.Manifest;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +16,9 @@ import androidx.lifecycle.Observer;
 
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -24,6 +28,8 @@ import fr.ferrerasroca.go4lunch.R;
 import fr.ferrerasroca.go4lunch.data.injections.Injection;
 import fr.ferrerasroca.go4lunch.data.models.places.Place;
 import fr.ferrerasroca.go4lunch.ui.home.view.GoogleMapsComponent;
+import fr.ferrerasroca.go4lunch.ui.home.view.HomeActivity;
+import fr.ferrerasroca.go4lunch.ui.home.view.RestaurantActivity;
 import fr.ferrerasroca.go4lunch.ui.home.viewmodel.PlacesViewModel;
 import fr.ferrerasroca.go4lunch.utils.LocationUtils;
 import fr.ferrerasroca.go4lunch.utils.NetworkUtils;
@@ -32,7 +38,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 import static fr.ferrerasroca.go4lunch.ui.home.view.GoogleMapsComponent.RC_LOCATION_PERM;
 
-public class MapViewFragment extends Fragment {
+public class MapViewFragment extends Fragment{
 
     private GoogleMapsComponent googleMapsComponent;
     private PlacesViewModel placesViewModel;
@@ -103,10 +109,13 @@ public class MapViewFragment extends Fragment {
                 Double lng = place.getGeometry().getLocation().getLng();
                 LatLng latLng = new LatLng(lat, lng);
 
-                googleMapsComponent.addMarker(latLng, place.getName(), place.getVicinity(), false);
+                googleMapsComponent.addMarker(latLng, place.getName(), place.getVicinity(), place.getPlaceId(),false);
             }
+            googleMapsComponent.setOnMarkerClickListener(onMarkerClickListener);
         }
     };
+
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull @NotNull String[] permissions, @NonNull @NotNull int[] grantResults) {
@@ -159,4 +168,16 @@ public class MapViewFragment extends Fragment {
         super.onDestroy();
         googleMapsComponent.getMapView().onDestroy();
     }
+
+    GoogleMap.OnMarkerClickListener onMarkerClickListener = new GoogleMap.OnMarkerClickListener() {
+        @Override
+        public boolean onMarkerClick(@NonNull @NotNull Marker marker) {
+            String placeID = (String) marker.getTag();
+
+            Intent intent = new Intent(getContext(), RestaurantActivity.class);
+            intent.putExtra(HomeActivity.EXTRA_PLACE_ID, placeID);
+            startActivity(intent);
+            return false;
+        }
+    };
 }
