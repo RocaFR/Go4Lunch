@@ -17,6 +17,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -100,12 +102,15 @@ public class GoogleMapsComponent implements OnMapReadyCallback, GoogleMap.OnMyLo
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
-    public void addMarker(LatLng latLng , String title, String snippet,  String placeID,Boolean isDraggable) {
+    public void addMarker(LatLng latLng , String title, String snippet,  String placeID, boolean isThereParticipants) {
+        BitmapDescriptor iconNoParticipants = BitmapDescriptorFactory.fromResource(R.drawable.restaurant_empty);
+        BitmapDescriptor iconParticipants = BitmapDescriptorFactory.fromResource(R.drawable.restaurant_full);
+
         Marker marker = currentGoogleMap.addMarker(new MarkerOptions()
                 .title(title)
                 .position(latLng)
                 .snippet(snippet)
-                .draggable(isDraggable));
+                .icon(isThereParticipants ? iconParticipants : iconNoParticipants));
         marker.setTag(placeID);
     }
 
@@ -127,5 +132,9 @@ public class GoogleMapsComponent implements OnMapReadyCallback, GoogleMap.OnMyLo
 
     public void setOnMarkerClickListener(GoogleMap.OnMarkerClickListener onMarkerClickListener) {
         currentGoogleMap.setOnMarkerClickListener(onMarkerClickListener);
+    }
+
+    public void setOnInfoWindowListener(GoogleMap.OnInfoWindowClickListener onInfoWindowListener) {
+        currentGoogleMap.setOnInfoWindowClickListener(onInfoWindowListener);
     }
 }
