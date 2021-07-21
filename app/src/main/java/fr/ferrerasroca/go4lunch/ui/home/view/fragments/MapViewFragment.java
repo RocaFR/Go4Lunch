@@ -98,7 +98,7 @@ public class MapViewFragment extends Fragment {
             googleMapsComponent.setLastLocation(locationResult.getLastLocation());
             LatLng latLng = new LatLng(googleMapsComponent.getLastLocation().getLatitude(), googleMapsComponent.getLastLocation().getLongitude());
             googleMapsComponent.moveGoogleMapCamera(latLng);
-
+            googleMapsComponent.getCurrentGoogleMap().setMyLocationEnabled(true);
             getPlaces();
         }
     };

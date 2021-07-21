@@ -39,7 +39,8 @@ public class GoogleMapsComponent implements OnMapReadyCallback, GoogleMap.OnMyLo
     public static final long LOCATION_INTERVAL = 300000;
     public static final int RC_LOCATION_PERM = 2903;
 
-    public GoogleMapsComponent() { }
+    public GoogleMapsComponent() {
+    }
 
     public void configureGoogleMaps(View view) {
         this.mapView = view.findViewById(R.id.mapView);
@@ -102,7 +103,7 @@ public class GoogleMapsComponent implements OnMapReadyCallback, GoogleMap.OnMyLo
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     }
 
-    public void addMarker(LatLng latLng , String title, String snippet,  String placeID, boolean isThereParticipants) {
+    public void addMarker(LatLng latLng, String title, String snippet, String placeID, boolean isThereParticipants) {
         BitmapDescriptor iconNoParticipants = BitmapDescriptorFactory.fromResource(R.drawable.restaurant_empty);
         BitmapDescriptor iconParticipants = BitmapDescriptorFactory.fromResource(R.drawable.restaurant_full);
 
@@ -111,7 +112,9 @@ public class GoogleMapsComponent implements OnMapReadyCallback, GoogleMap.OnMyLo
                 .position(latLng)
                 .snippet(snippet)
                 .icon(isThereParticipants ? iconParticipants : iconNoParticipants));
-        if (marker != null) { marker.setTag(placeID); }
+        if (marker != null) {
+            marker.setTag(placeID);
+        }
     }
 
     public Location getLastLocation() {
@@ -133,4 +136,6 @@ public class GoogleMapsComponent implements OnMapReadyCallback, GoogleMap.OnMyLo
     public void setOnInfoWindowListener(GoogleMap.OnInfoWindowClickListener onInfoWindowListener) {
         currentGoogleMap.setOnInfoWindowClickListener(onInfoWindowListener);
     }
+
+    public GoogleMap getCurrentGoogleMap() { return currentGoogleMap; }
 }
