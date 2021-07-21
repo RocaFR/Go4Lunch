@@ -111,7 +111,7 @@ public class GoogleMapsComponent implements OnMapReadyCallback, GoogleMap.OnMyLo
                 .position(latLng)
                 .snippet(snippet)
                 .icon(isThereParticipants ? iconParticipants : iconNoParticipants));
-        marker.setTag(placeID);
+        if (marker != null) { marker.setTag(placeID); }
     }
 
     public Location getLastLocation() {
@@ -128,10 +128,6 @@ public class GoogleMapsComponent implements OnMapReadyCallback, GoogleMap.OnMyLo
 
     public void stopLocationUpdates(LocationCallback locationCallback) {
         providerClient.removeLocationUpdates(locationCallback);
-    }
-
-    public void setOnMarkerClickListener(GoogleMap.OnMarkerClickListener onMarkerClickListener) {
-        currentGoogleMap.setOnMarkerClickListener(onMarkerClickListener);
     }
 
     public void setOnInfoWindowListener(GoogleMap.OnInfoWindowClickListener onInfoWindowListener) {
