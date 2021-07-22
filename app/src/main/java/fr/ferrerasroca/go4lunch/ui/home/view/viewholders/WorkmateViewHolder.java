@@ -32,9 +32,9 @@ public class WorkmateViewHolder extends RecyclerView.ViewHolder {
         Glide.with(itemView.getContext()).load(user.getProfilePictureUrl()).into(imageviewWorkmate);
 
         if (place != null) {
-            textviewWorkmateChoice.setText(TextUtils.isEmpty(user.getUsername()) ? "" : user.getUsername() + " is eating at " + place.getName() + ".");
+            textviewWorkmateChoice.setText(TextUtils.isEmpty(user.getUsername()) ? "" : user.getUsername() + itemView.getContext().getString(R.string.workmate_is_eating) + place.getName() + ".");
         } else {
-            textviewWorkmateChoice.setText(TextUtils.isEmpty(user.getUsername()) ? "" : user.getUsername() + " not choose yet. ");
+            textviewWorkmateChoice.setText(TextUtils.isEmpty(user.getUsername()) ? "" : user.getUsername() + itemView.getContext().getString(R.string.workmate_not_eating) + ".");
         }
 
     }

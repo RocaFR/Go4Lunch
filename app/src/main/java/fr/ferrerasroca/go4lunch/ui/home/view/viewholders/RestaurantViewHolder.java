@@ -64,7 +64,7 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
 
     private void configureOpeningHours(Place place) {
         if (place.getOpeningHours() != null ) {
-            textviewOpeningHours.setText(place.getOpeningHours().getOpenNow() ? "Open" : "Close");
+            textviewOpeningHours.setText(place.getOpeningHours().getOpenNow() ? itemView.getContext().getString(R.string.restaurant_open) : itemView.getContext().getString(R.string.restaurant_close));
             if (place.getOpeningHours().getOpenNow()) textviewOpeningHours.setTypeface(textviewOpeningHours.getTypeface(), Typeface.BOLD);
         }
     }
