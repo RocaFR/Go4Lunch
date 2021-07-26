@@ -1,0 +1,19 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory app:title="@string/settings_category_notification">
+
+        <SwitchPreferenceCompat
+            app:key="notification"
+            app:title="@string/settings_notification_switch_title"
+            android:defaultValue="true" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="About Go4Lunch">
+
+            <Preference
+                android:summary="@string/settings_about" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -111,14 +111,16 @@ public class HomeActivity extends AppCompatActivity {
                     Toast.makeText(this, "Your lunch", Toast.LENGTH_LONG).show();
                     break;
                 case R.id.menu_nav_drawer_settings:
-                    Toast.makeText(this, "Settings", Toast.LENGTH_LONG).show();
+                    Intent settingsIntent = new Intent(this, SettingsActivity.class);
+                    startActivity(settingsIntent);
                     break;
                 case R.id.menu_nav_drawer_logout:
                     userViewModel.signOutUser();
-                    Intent intent = new Intent(this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
+                    Intent MainActivityIntent = new Intent(this, MainActivity.class);
+                    startActivity(MainActivityIntent);
                     break;
+                default:
+                    finish();
             }
             activityBinding.drawerLayout.closeDrawer(GravityCompat.START);
             return true;

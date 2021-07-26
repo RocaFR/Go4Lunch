@@ -57,4 +57,9 @@
     <string name="workmate_not_eating">" n'a pas encore choisi"</string>
     <string name="restaurant_open">Ouvert</string>
     <string name="restaurant_close">Fermé</string>
+
+    <!-- Sync Preferences -->
+    <string name="settings_category_notification">Notification</string>
+    <string name="settings_notification_switch_title">Activer la notification quotidienne</string>
+    <string name="settings_about">Conçu par vos collègues, Go4Lunch veut vous aider à déjeuner plus rapidement et facilement !</string>
 </resources>
