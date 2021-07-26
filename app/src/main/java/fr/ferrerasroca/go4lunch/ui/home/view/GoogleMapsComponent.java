@@ -54,7 +54,6 @@ public class GoogleMapsComponent implements OnMapReadyCallback, GoogleMap.OnMyLo
         googleMap.getUiSettings().setTiltGesturesEnabled(true);
 
         googleMap.setOnMyLocationButtonClickListener(this);
-        googleMap.setOnMyLocationButtonClickListener(this);
 
         currentGoogleMap = googleMap;
 
@@ -104,8 +103,8 @@ public class GoogleMapsComponent implements OnMapReadyCallback, GoogleMap.OnMyLo
     }
 
     public void addMarker(LatLng latLng, String title, String snippet, String placeID, boolean isThereParticipants) {
-        BitmapDescriptor iconNoParticipants = BitmapDescriptorFactory.fromResource(R.drawable.restaurant_empty);
         BitmapDescriptor iconParticipants = BitmapDescriptorFactory.fromResource(R.drawable.restaurant_full);
+        BitmapDescriptor iconNoParticipants = BitmapDescriptorFactory.fromResource(R.drawable.restaurant_empty);
 
         Marker marker = currentGoogleMap.addMarker(new MarkerOptions()
                 .title(title)

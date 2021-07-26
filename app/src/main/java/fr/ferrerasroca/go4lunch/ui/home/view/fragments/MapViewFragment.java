@@ -146,6 +146,13 @@ public class MapViewFragment extends Fragment {
         }
     };
 
+    GoogleMap.OnMarkerClickListener onMarkerClickListener = new GoogleMap.OnMarkerClickListener() {
+        @Override
+        public boolean onMarkerClick(@NonNull @NotNull Marker marker) {
+            return false;
+        }
+    };
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull @NotNull String[] permissions, @NonNull @NotNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);

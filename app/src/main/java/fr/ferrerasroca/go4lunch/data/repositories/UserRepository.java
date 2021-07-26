@@ -96,6 +96,7 @@ public class UserRepository {
             placesIDs.add(place.getPlaceId());
         }
 
+        //todo supprimer un livedata et ajouter un attribut à la classe Place qui contient une liste d'users
         Map<String, List<User>> usersForPlaces = new Hashtable<>();
         for (int i = 0; i < placesIDs.size(); i++) {
             int actualItem = i;
@@ -115,7 +116,6 @@ public class UserRepository {
                 }
             });
         }
-        _usersForPlacesMutableLiveData.postValue(usersForPlaces);
     }
 
     public LiveData<Map<String, List<User>>> getUsersForPlacesLiveData() {
