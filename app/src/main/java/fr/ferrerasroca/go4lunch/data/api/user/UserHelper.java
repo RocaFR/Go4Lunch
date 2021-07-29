@@ -14,14 +14,15 @@ import fr.ferrerasroca.go4lunch.data.models.User;
 public class UserHelper {
 
     public interface Listeners {
+
         void onRetrieved(User user);
         void onPlaceIDChoiceSetted();
         void onLikedPlacesSetted();
     }
 
     private static final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-    private static final String COLLECTION_NAME = "users";
 
+    private static final String COLLECTION_NAME = "users";
     private static CollectionReference getUserCollection() {
         return FirebaseFirestore.getInstance().collection(COLLECTION_NAME);
     }

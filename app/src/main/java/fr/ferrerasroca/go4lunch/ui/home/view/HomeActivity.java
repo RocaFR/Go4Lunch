@@ -2,6 +2,7 @@ package fr.ferrerasroca.go4lunch.ui.home.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,11 +16,11 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 
+import fr.ferrerasroca.go4lunch.MainActivity;
 import fr.ferrerasroca.go4lunch.R;
 import fr.ferrerasroca.go4lunch.data.injections.Injection;
 import fr.ferrerasroca.go4lunch.data.models.User;
 import fr.ferrerasroca.go4lunch.databinding.ActivityHomeBinding;
-import fr.ferrerasroca.go4lunch.MainActivity;
 import fr.ferrerasroca.go4lunch.ui.home.view.fragments.ListViewFragment;
 import fr.ferrerasroca.go4lunch.ui.home.view.fragments.MapViewFragment;
 import fr.ferrerasroca.go4lunch.ui.home.view.fragments.WorkmatesFragment;
@@ -62,7 +63,15 @@ public class HomeActivity extends AppCompatActivity {
                 .load(user.getProfilePictureUrl())
                 .centerCrop()
                 .into(this.imageViewUserProfilePicture);
+        this.configureNavigationViewListeners(user.getPlaceIDChoice());
+    }
 
+    private void configureYourRestaurantButton(String placeIDChoice) {
+        if (placeIDChoice != null) {
+            if (!placeIDChoice.isEmpty()) {
+
+            }
+        }
     }
 
     private void configureToolbar() {
@@ -98,17 +107,16 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void configureListeners() {
-        this.configureNavigationViewListeners();
         this.configureBottomNavigationViewListener();
-        userViewModel.userLiveData.observe(this, this::displayUserDetails);
+        userViewModel.getUserLiveData().observe(this, this::displayUserDetails);
         userViewModel.retrieveUser();
     }
 
-    private void configureNavigationViewListeners() {
+    private void configureNavigationViewListeners(String placeIDChoice) {
         activityBinding.navigationView.setNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.menu_nav_drawer_your_lunch:
-                    Toast.makeText(this, "Your lunch", Toast.LENGTH_LONG).show();
+                    this.launchOrNotYourRestaurant(placeIDChoice);
                     break;
                 case R.id.menu_nav_drawer_settings:
                     Intent settingsIntent = new Intent(this, SettingsActivity.class);
@@ -125,6 +133,20 @@ public class HomeActivity extends AppCompatActivity {
             activityBinding.drawerLayout.closeDrawer(GravityCompat.START);
             return true;
         });
+    }
+
+    private void launchOrNotYourRestaurant(String placeIDChoice) {
+        if (placeIDChoice != null) {
+            if (!placeIDChoice.isEmpty()) {
+                Intent intent = new Intent(getApplicationContext(), RestaurantActivity.class);
+                intent.putExtra(HomeActivity.EXTRA_PLACE_ID, placeIDChoice);
+                startActivity(intent);
+            } else {
+                Toast.makeText(getApplicationContext(), "T'a rien choisi ma gueule", Toast.LENGTH_LONG).show();
+            }
+        } else {
+            Toast.makeText(getApplicationContext(), "T'a rien choisi ma gueule", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void configureBottomNavigationViewListener() {
@@ -149,5 +171,23 @@ public class HomeActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_home_host, fragment)
                 .commit();
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        Log.e("TAG", "onPostResume: ");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.e("TAG", "onResume: ");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.e("TAG", "onPause: ");
     }
 }
