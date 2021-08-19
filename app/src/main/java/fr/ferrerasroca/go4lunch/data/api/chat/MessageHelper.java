@@ -17,7 +17,7 @@ public class MessageHelper {
     }
 
     public static Query getAllMessages() {
-        return getChatCollection().orderBy("date").limit(50);
+        return getChatCollection().orderBy("date");
     }
 
     public static Task<DocumentReference> createMessage(Message message) {
