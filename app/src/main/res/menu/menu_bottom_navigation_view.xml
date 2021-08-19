@@ -16,4 +16,11 @@
         android:enabled="true"
         android:icon="@drawable/ic_group_black_36dp"
         android:title="@string/menu_bottomNavigationView_workmates"/>
+
+    <item
+        android:id="@+id/menu_fragment_chat"
+        android:enabled="true"
+
+        android:icon="@drawable/ic_baseline_chat_36"
+        android:title="@string/menu_bottomNavigationView_chat"/>
 </menu>

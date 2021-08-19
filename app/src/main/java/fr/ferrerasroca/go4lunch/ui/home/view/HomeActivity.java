@@ -21,6 +21,7 @@ import fr.ferrerasroca.go4lunch.R;
 import fr.ferrerasroca.go4lunch.data.injections.Injection;
 import fr.ferrerasroca.go4lunch.data.models.User;
 import fr.ferrerasroca.go4lunch.databinding.ActivityHomeBinding;
+import fr.ferrerasroca.go4lunch.ui.home.view.fragments.ChatFragment;
 import fr.ferrerasroca.go4lunch.ui.home.view.fragments.ListViewFragment;
 import fr.ferrerasroca.go4lunch.ui.home.view.fragments.MapViewFragment;
 import fr.ferrerasroca.go4lunch.ui.home.view.fragments.WorkmatesFragment;
@@ -45,7 +46,6 @@ public class HomeActivity extends AppCompatActivity {
         this.configureNavigationHeaderViews();
         this.configureToolbar();
         this.configureDrawerLayout();
-        this.configureListeners();
     }
 
     private void configureNavigationHeaderViews() {
@@ -161,6 +161,9 @@ public class HomeActivity extends AppCompatActivity {
                 case R.id.menu_fragment_workmates:
                     this.loadFragment(WorkmatesFragment.newInstance());
                     return true;
+                case R.id.menu_fragment_chat:
+                    this.loadFragment(ChatFragment.newInstance());
+                    return true;
                 default:
                     return true;
             }
@@ -182,6 +185,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        this.configureListeners();
         Log.e("TAG", "onResume: ");
     }
 

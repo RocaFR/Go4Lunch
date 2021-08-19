@@ -72,4 +72,11 @@
     <string name="settings_category_notification">Notification</string>
     <string name="settings_notification_switch_title">Enable daily notification</string>
     <string name="settings_about">Designed by your coworkers, Go4Lunch wants to help you to lunch quickly and easily!</string>
+
+    <!-- Chat -->
+    <string name="menu_bottomNavigationView_chat">Chat</string>
+    <string name="chat_message">Message</string>
+    <string name="chat_messag_hint">Type your message</string>
+    <string name="chat_contentDescription">Image into the message.</string>
+    <string name="sendername_hour_separator">-</string>
 </resources>

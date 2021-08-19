@@ -61,11 +61,9 @@ dependencies {
     api 'com.google.android.material:material:1.4.0-beta01'
 
     // Google Play services
-    implementation 'com.google.android.gms:play-services-auth:19.0.0'
+    implementation 'com.google.android.gms:play-services-auth:19.2.0'
     // Firebase Auth
     implementation 'com.google.firebase:firebase-auth:21.0.1'
-    // Firebase Firestore
-    implementation 'com.google.firebase:firebase-firestore:23.0.0'
     // Facebook login
     implementation 'com.facebook.android:facebook-login:4.42.0'
 
@@ -95,4 +93,13 @@ dependencies {
 
     // Settings Activity
     implementation 'androidx.preference:preference:1.1.1'
+
+    // Firebase Storage
+    implementation 'com.google.firebase:firebase-storage:20.0.0'
+    // Firebase Messaging
+    implementation 'com.google.firebase:firebase-messaging:22.0.0'
+    // Firebase Firestore
+    implementation 'com.google.firebase:firebase-firestore:23.0.3'
+    // FirebaseUI
+    implementation 'com.firebaseui:firebase-ui-firestore:6.1.0'
 }

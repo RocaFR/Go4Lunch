@@ -138,6 +138,7 @@ public class RestaurantActivity extends AppCompatActivity {
 
             userViewModel.retrieveUsersByPlaceID(placeID);
             configureRecyclerView(users);
+            configureRecyclerView(users);
 
             Snackbar.make(viewBinding.getRoot(), getString(R.string.restaurant_setted), BaseTransientBottomBar.LENGTH_LONG).show();
         }

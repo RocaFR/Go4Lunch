@@ -62,4 +62,9 @@
     <string name="settings_category_notification">Notification</string>
     <string name="settings_notification_switch_title">Activer la notification quotidienne</string>
     <string name="settings_about">Conçu par vos collègues, Go4Lunch veut vous aider à déjeuner plus rapidement et facilement !</string>
+
+    <!-- Chat -->
+    <string name="menu_bottomNavigationView_chat">Chat</string>
+    <string name="chat_message">Message</string>
+    <string name="chat_messag_hint">Écrivez votre message…</string>
 </resources>
