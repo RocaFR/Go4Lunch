@@ -39,8 +39,11 @@ public class WorkmateAdapter extends RecyclerView.Adapter<WorkmateViewHolder> {
     }
 
     private Place fetchTheChoosenPlace(List<Place> places, User user) {
+        String placeIDChoice = user.getPlaceIDChoice();
         for (Place place: places) {
-            if (place.getPlaceId().equals(user.getPlaceIDChoice())) return place;
+            if (placeIDChoice != null) {
+                if (place.getPlaceId().equals(placeIDChoice)) return place;
+            }
         }
         return null;
     }
