@@ -27,16 +27,6 @@
         android:textSize="18sp"
         android:text="@string/chat_message"/>
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageButton_addImage"
-        app:layout_constraintStart_toStartOf="@id/button_sendMessage"
-        app:layout_constraintBottom_toTopOf="@id/button_sendMessage"
-        android:layout_marginBottom="10dp"
-        android:src="@drawable/ic_baseline_add_circle_outline_36"
-        android:background="@android:color/transparent" />
-
     <EditText
         android:layout_width="0dp"
         android:layout_height="wrap_content"

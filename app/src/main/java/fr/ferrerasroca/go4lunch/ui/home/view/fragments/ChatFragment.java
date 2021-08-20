@@ -90,15 +90,15 @@ public class ChatFragment extends Fragment {
         this.imageButtonSendMessage.setOnClickListener(v -> {
             if (this.editTextMessageToSend.getText().toString().length() > 0) {
                 String message = this.editTextMessageToSend.getText().toString();
-                chatViewModel.createMessage(user, new Date(), message, callback);
+                chatViewModel.getMessageState().observe(getViewLifecycleOwner(), this::onChanged);
+                chatViewModel.createMessage(user, new Date(), message);
             }
         });
     }
 
-    ChatViewModel.Callback callback = new ChatViewModel.Callback() {
-        @Override
-        public void afterMessageCreated() {
-            editTextMessageToSend.setText("");
+    private void onChanged(Boolean aBoolean) {
+        if (aBoolean) {
+            this.editTextMessageToSend.setText("");
         }
-    };
+    }
 }
