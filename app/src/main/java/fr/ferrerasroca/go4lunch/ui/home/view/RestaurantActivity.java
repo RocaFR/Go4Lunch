@@ -85,7 +85,7 @@ public class RestaurantActivity extends AppCompatActivity {
 
     private void getUser() {
         userViewModel.getUser().observe(this, user -> {
-            //this.user = user;
+            this.user = user;
             this.configureFABPlaceIDChoice(user);
             this.configureImageButtonLike(user);
         });
