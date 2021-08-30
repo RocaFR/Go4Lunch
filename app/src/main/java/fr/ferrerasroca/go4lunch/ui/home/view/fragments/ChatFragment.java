@@ -44,6 +44,17 @@ public class ChatFragment extends Fragment {
 
         userViewModel = Injection.provideUserViewModel(Injection.provideUserViewModelFactory());
         chatViewModel = Injection.provideChatViewModel(Injection.provideChatViewModelFactory());
+
+        this.configureViewModelCalls();
+    }
+
+    private void configureViewModelCalls() {
+        userViewModel.getUser().observe(getViewLifecycleOwner(), user -> {
+            configureRecyclerView(user);
+            configureChatActionsListeners(user);
+        });
+        userViewModel.retrieveUser();
+        chatViewModel.getMessageState().observe(getViewLifecycleOwner(), this::onChanged);
     }
 
     @Override
@@ -52,7 +63,6 @@ public class ChatFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
 
         this.configureViews(view);
-        this.retrieveUser();
 
         return view;
     }
@@ -61,14 +71,6 @@ public class ChatFragment extends Fragment {
         this.editTextMessageToSend = view.findViewById(R.id.editText_messageToSend);
         this.imageButtonSendMessage = view.findViewById(R.id.button_sendMessage);
         this.recyclerView = view.findViewById(R.id.recyclerView_chat_messages);
-    }
-
-    private void retrieveUser() {
-        userViewModel.getUser().observe(getViewLifecycleOwner(), user -> {
-            configureRecyclerView(user);
-            configureChatActionsListeners(user);
-        });
-        userViewModel.retrieveUser();
     }
 
     private void configureRecyclerView(User user) {
@@ -90,7 +92,6 @@ public class ChatFragment extends Fragment {
         this.imageButtonSendMessage.setOnClickListener(v -> {
             if (this.editTextMessageToSend.getText().toString().length() > 0) {
                 String message = this.editTextMessageToSend.getText().toString();
-                chatViewModel.getMessageState().observe(getViewLifecycleOwner(), this::onChanged);
                 chatViewModel.createMessage(user, new Date(), message);
             }
         });

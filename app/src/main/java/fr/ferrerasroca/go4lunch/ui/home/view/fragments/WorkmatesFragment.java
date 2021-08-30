@@ -53,8 +53,17 @@ public class WorkmatesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_workmates, container, false);
 
         this.configureViews(view);
+        this.configureViewModelCalls();
 
         return  view;
+    }
+
+    private void configureViewModelCalls() {
+        userViewModel.getUsers().observe(getViewLifecycleOwner(), users -> {
+            configureProgressbar(users);
+            placesViewModel.getPlacesChosenByUsers().observe(getViewLifecycleOwner(), places -> configureRecyclerView(users, places));
+            placesViewModel.retrievePlacesByUsers(users);
+        });
     }
 
     private void configureViews(View view) {
@@ -66,15 +75,6 @@ public class WorkmatesFragment extends Fragment {
     public void onViewCreated(@NonNull @NotNull View view, @Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        this.getUsersFromFirestore();
-    }
-
-    private void getUsersFromFirestore() {
-        userViewModel.getUsers().observe(getViewLifecycleOwner(), users -> {
-            configureProgressbar(users);
-            placesViewModel.getPlacesChosenByUsers().observe(getViewLifecycleOwner(), places -> configureRecyclerView(users, places));
-            placesViewModel.retrievePlacesByUsers(users);
-        });
         userViewModel.retrieveUsers(null);
     }
 

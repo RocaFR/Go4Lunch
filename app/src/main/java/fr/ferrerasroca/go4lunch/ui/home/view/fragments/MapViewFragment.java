@@ -69,6 +69,28 @@ public class MapViewFragment extends Fragment {
 
         placesViewModel = Injection.providePlacesViewModel(Injection.providePlacesViewModelFactory());
         userViewModel = Injection.provideUserViewModel(Injection.provideUserViewModelFactory());
+
+        this.configureViewModelCalls();
+    }
+
+    private void configureViewModelCalls() {
+        userViewModel.getPlacesWithParticipants().observe(getViewLifecycleOwner(), new Observer<List<Place>>() {
+            @Override
+            public void onChanged(List<Place> places) {
+                for (Place place : places) {
+                    Double lat = place.getGeometry().getLocation().getLat();
+                    Double lng = place.getGeometry().getLocation().getLng();
+                    LatLng latLng = new LatLng(lat, lng);
+
+                    if (!place.getUsersParticipants().isEmpty()) {
+                        googleMapsComponent.addMarker(latLng, place.getName(), place.getVicinity(), place.getPlaceId(), true);
+                    } else {
+                        googleMapsComponent.addMarker(latLng, place.getName(), place.getVicinity(), place.getPlaceId(), false);
+                    }
+                }
+            }
+        });
+        placesViewModel.getPlaces().observe(getViewLifecycleOwner(), placesObserver);
     }
 
     private void configureGoogleMaps(View view) {
@@ -98,36 +120,16 @@ public class MapViewFragment extends Fragment {
             LatLng latLng = new LatLng(googleMapsComponent.getLastLocation().getLatitude(), googleMapsComponent.getLastLocation().getLongitude());
             googleMapsComponent.moveGoogleMapCamera(latLng);
             googleMapsComponent.getCurrentGoogleMap().setMyLocationEnabled(true);
-            getPlaces();
+
+            if (NetworkUtils.isNetworkAvailable(getContext())) {
+                placesViewModel.retrieveNearbyPlaces(googleMapsComponent.getLastLocation());
+            }
         }
     };
-
-    private void getPlaces() {
-        placesViewModel.getPlaces().observe(getViewLifecycleOwner(), placesObserver);
-        if (NetworkUtils.isNetworkAvailable(getContext())) {
-            placesViewModel.retrieveNearbyPlaces(googleMapsComponent.getLastLocation());
-        }
-    }
 
     final Observer<List<Place>> placesObserver = new Observer<List<Place>>() {
         @Override
         public void onChanged(List<Place> places) {
-            userViewModel.getPlacesWithParticipants().observe(getViewLifecycleOwner(), new Observer<List<Place>>() {
-                @Override
-                public void onChanged(List<Place> places) {
-                    for (Place place : places) {
-                        Double lat = place.getGeometry().getLocation().getLat();
-                        Double lng = place.getGeometry().getLocation().getLng();
-                        LatLng latLng = new LatLng(lat, lng);
-
-                        if (!place.getUsersParticipants().isEmpty()) {
-                            googleMapsComponent.addMarker(latLng, place.getName(), place.getVicinity(), place.getPlaceId(), true);
-                        } else {
-                            googleMapsComponent.addMarker(latLng, place.getName(), place.getVicinity(), place.getPlaceId(), false);
-                        }
-                    }
-                }
-            });
             userViewModel.retrieveParticipantsForPlaces(places);
             googleMapsComponent.setOnInfoWindowListener(onInfoWindowClickListener);
         }
