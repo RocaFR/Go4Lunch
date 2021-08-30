@@ -26,11 +26,9 @@ import com.google.android.gms.maps.model.LatLng;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.Map;
 
 import fr.ferrerasroca.go4lunch.R;
 import fr.ferrerasroca.go4lunch.data.injections.Injection;
-import fr.ferrerasroca.go4lunch.data.models.User;
 import fr.ferrerasroca.go4lunch.data.models.places.Place;
 import fr.ferrerasroca.go4lunch.ui.home.view.GoogleMapsComponent;
 import fr.ferrerasroca.go4lunch.ui.home.view.RestaurantActivity;
@@ -144,21 +142,22 @@ public class ListViewFragment extends Fragment {
             if (!places.isEmpty()) {
                 textviewNoRestaurant.setVisibility(View.GONE);
                 progressBar.setVisibility(View.GONE);
-                userViewModel.getUsersForPlacesLiveData().observe(getViewLifecycleOwner(), stringListMap ->  {
-                    if (!stringListMap.isEmpty()) {
-                        configureRecyclerview(places, stringListMap);
+                userViewModel.getPlacesWithParticipants().observe(getViewLifecycleOwner(), new Observer<List<Place>>() {
+                    @Override
+                    public void onChanged(List<Place> places) {
+                        configureRecyclerview(places);
                     }
                 });
-                userViewModel.retrieveUsersForPlaces(places);
+                userViewModel.retrieveParticipantsForPlaces(places);
             } else {
                 textviewNoRestaurant.setVisibility(View.VISIBLE);
             }
         }
     };
 
-    private void configureRecyclerview(List<Place> places, Map<String, List<User>> usersForPlaces) {
+    private void configureRecyclerview(List<Place> places) {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActualContext());
-        RestaurantAdapter restaurantAdapter = new RestaurantAdapter(places, usersForPlaces);
+        RestaurantAdapter restaurantAdapter = new RestaurantAdapter(places);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.addItemDecoration(new DividerItemDecoration(getActualContext(), DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(restaurantAdapter);

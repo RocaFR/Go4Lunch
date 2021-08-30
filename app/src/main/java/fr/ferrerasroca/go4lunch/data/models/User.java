@@ -10,6 +10,8 @@ import java.util.List;
  */
 public class User {
 
+    public static final String PLACE_ID_INITIAL_VALUE = "";
+
     private String uid;
     private String username;
     private String email;
@@ -17,7 +19,7 @@ public class User {
     private String job;
     @Nullable
     private String profilePictureUrl;
-    private String placeIDChoice = null;
+    private String placeIDChoice = PLACE_ID_INITIAL_VALUE;
     private List<String> likedPlaces = new ArrayList<>();
 
     /**

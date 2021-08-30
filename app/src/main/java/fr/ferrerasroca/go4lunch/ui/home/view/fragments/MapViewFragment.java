@@ -3,7 +3,6 @@ package fr.ferrerasroca.go4lunch.ui.home.view.fragments;
 import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -113,16 +112,15 @@ public class MapViewFragment extends Fragment {
     final Observer<List<Place>> placesObserver = new Observer<List<Place>>() {
         @Override
         public void onChanged(List<Place> places) {
-            userViewModel.getUsersForPlacesLiveData().observe(getViewLifecycleOwner(), new Observer<Map<String, List<User>>>() {
+            userViewModel.getPlacesWithParticipants().observe(getViewLifecycleOwner(), new Observer<List<Place>>() {
                 @Override
-                public void onChanged(Map<String, List<User>> stringListMap) {
+                public void onChanged(List<Place> places) {
                     for (Place place : places) {
                         Double lat = place.getGeometry().getLocation().getLat();
                         Double lng = place.getGeometry().getLocation().getLng();
                         LatLng latLng = new LatLng(lat, lng);
 
-                        List<User> users = stringListMap.get(place.getPlaceId());
-                        if (users != null && !users.isEmpty()) {
+                        if (!place.getUsersParticipants().isEmpty()) {
                             googleMapsComponent.addMarker(latLng, place.getName(), place.getVicinity(), place.getPlaceId(), true);
                         } else {
                             googleMapsComponent.addMarker(latLng, place.getName(), place.getVicinity(), place.getPlaceId(), false);
@@ -130,7 +128,7 @@ public class MapViewFragment extends Fragment {
                     }
                 }
             });
-            userViewModel.retrieveUsersForPlaces(places);
+            userViewModel.retrieveParticipantsForPlaces(places);
             googleMapsComponent.setOnInfoWindowListener(onInfoWindowClickListener);
         }
     };

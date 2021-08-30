@@ -102,4 +102,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore:23.0.3'
     // FirebaseUI
     implementation 'com.firebaseui:firebase-ui-firestore:6.1.0'
+    // Firebase Messaging
+    implementation 'com.google.firebase:firebase-messaging'
 }

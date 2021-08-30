@@ -16,7 +16,7 @@
         android:theme="@style/Go4Lunch">
         <activity
             android:name=".ui.home.view.SettingsActivity"
-            android:label="@string/title_activity_settings"></activity>
+            android:label="@string/title_activity_settings" />
         <activity android:name=".ui.home.view.RestaurantActivity" />
         <activity android:name=".ui.home.view.HomeActivity" />
         <activity android:name=".ui.auth.AuthenticationActivity" />
@@ -56,7 +56,7 @@
 
         <uses-library
             android:name="org.apache.http.legacy"
-            android:required="false" />
+            android:required="false" /> 
     </application>
 
 </manifest>

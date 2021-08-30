@@ -11,19 +11,27 @@ import androidx.lifecycle.ViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
-import java.util.Map;
 
-import fr.ferrerasroca.go4lunch.data.api.user.UserHelper;
 import fr.ferrerasroca.go4lunch.data.models.User;
 import fr.ferrerasroca.go4lunch.data.models.places.Place;
 import fr.ferrerasroca.go4lunch.data.repositories.UserRepository;
 
 public class UserViewModel extends ViewModel {
 
+    public interface Callbacks {
+        void onPlaceIDChoiceSetted(String placeID);
+        void onLikedPlacesSetted();
+    }
+
     private final UserRepository userRepository;
+    private final FirebaseAuth firebaseAuth;
+
     private final MutableLiveData<User> _userMutableLiveData = new MutableLiveData<>();
     public LiveData<User> userLiveData = _userMutableLiveData;
-    private final FirebaseAuth firebaseAuth;
+    private final MutableLiveData<List<Place>> _mutableLiveDataPlacesWithParticipants = new MutableLiveData<>();
+    private final LiveData<List<Place>> liveDataPlacesWithParticipants = _mutableLiveDataPlacesWithParticipants;
+    private final MutableLiveData<List<User>> _mutableLiveDataUsers = new MutableLiveData<>();
+    private final LiveData<List<User>> liveDataUsers = _mutableLiveDataUsers;
 
     public UserViewModel(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -48,26 +56,22 @@ public class UserViewModel extends ViewModel {
 
     public void retrieveUser() {
         if (this.firebaseAuth.getCurrentUser() != null) {
-            userRepository.getUser(this.firebaseAuth.getCurrentUser().getUid(), new UserHelper.Listeners() {
+            userRepository.getUser(this.firebaseAuth.getCurrentUser().getUid(), new UserRepository.Callbacks() {
+                @Override
+                public void usersForPlacesRetrieved(List<Place> placesWithParticipants) { }
+
                 @Override
                 public void onRetrieved(User user) {
                     _userMutableLiveData.postValue(user);
                 }
 
                 @Override
-                public void onPlaceIDChoiceSetted() {
-
-                }
-
-                @Override
-                public void onLikedPlacesSetted() {
-
-                }
+                public void usersRetrieved(List<User> usersRetrieved) { }
             });
         }
     }
 
-    public LiveData<User> getUserLiveData() {
+    public LiveData<User> getUser() {
         return this.userLiveData;
     }
 
@@ -77,32 +81,64 @@ public class UserViewModel extends ViewModel {
         }
     }
 
-    public void retrieveUsers() {
-        userRepository.retrieveUsers();
-    }
+    public void retrieveUsers(@Nullable String placeID) {
+        userRepository.retrieveUsers(placeID, new UserRepository.Callbacks() {
+            @Override
+            public void usersForPlacesRetrieved(List<Place> placesWithParticipants) { }
 
-    public void retrieveUsersByPlaceID(String placeID) {
-        userRepository.retrieveUsersByPlaceID(placeID);
+            @Override
+            public void onRetrieved(User user) { }
+
+            @Override
+            public void usersRetrieved(List<User> usersRetrieved) {
+                _mutableLiveDataUsers.postValue(usersRetrieved);
+            }
+        });
     }
 
     public LiveData<List<User>> getUsers() {
-        return userRepository.getUsers();
+        return liveDataUsers;
     }
 
-    public void setPlaceIDChoice(String userUid, String placeIDChoice, UserHelper.Listeners listeners) {
-        userRepository.setPlaceIDChoice(userUid, placeIDChoice, listeners);
+    public void retrieveParticipantsForPlaces(List<Place> places) {
+        userRepository.retrieveParticipantsForPlaces(places, new UserRepository.Callbacks() {
+            @Override
+            public void usersForPlacesRetrieved(List<Place> placesWithParticipants) {
+                _mutableLiveDataPlacesWithParticipants.postValue(placesWithParticipants);
+            }
+
+            @Override
+            public void onRetrieved(User user) { }
+
+            @Override
+            public void usersRetrieved(List<User> usersRetrieved) { }
+        });
     }
 
-    public void setLikedPlaces(String userUid, List<String> placesLiked, UserHelper.Listeners listeners) {
-        userRepository.setLikedPlaces(userUid, placesLiked, listeners);
+    public LiveData<List<Place>> getPlacesWithParticipants() {
+        return liveDataPlacesWithParticipants;
     }
 
-    public void retrieveUsersForPlaces(List<Place> places) {
-        userRepository.retrieveUsersForPlaces(places);
+    public void setPlaceIDChoiceAndReturnParticipants(String userUID, String placeIDChoice) {
+        userRepository.setPlaceIDChoice(userUID, placeIDChoice, new Callbacks() {
+            @Override
+            public void onPlaceIDChoiceSetted(String placeID) {
+
+            }
+
+            @Override
+            public void onLikedPlacesSetted() {
+
+            }
+        });
     }
 
-    public LiveData<Map<String, List<User>>> getUsersForPlacesLiveData() {
-        return userRepository.getUsersForPlacesLiveData();
+    public void setPlaceIDChoice(String userUid, String placeIDChoice, Callbacks callbacks) {
+        userRepository.setPlaceIDChoice(userUid, placeIDChoice, callbacks);
+    }
+
+    public void setLikedPlaces(String userUid, List<String> placesLiked, Callbacks callbacks) {
+        userRepository.setLikedPlaces(userUid, placesLiked, callbacks);
     }
 
 }

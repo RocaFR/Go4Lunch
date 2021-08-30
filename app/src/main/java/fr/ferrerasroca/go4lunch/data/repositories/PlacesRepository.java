@@ -3,9 +3,6 @@ package fr.ferrerasroca.go4lunch.data.repositories;
 import android.location.Location;
 import android.util.Log;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -23,16 +20,15 @@ import retrofit2.Response;
 
 public class PlacesRepository {
 
-    private final MutableLiveData<List<Place>> _placesMutableLiveData = new MutableLiveData<>();
-    private final LiveData<List<Place>> placesLiveData = _placesMutableLiveData;
-    private final MutableLiveData<Place> _placeMutableLiveData = new MutableLiveData<>();
-    private final LiveData<Place> placeLiveData = _placeMutableLiveData;
-    private final MutableLiveData<List<Place>> _placesChosenByUsersMutableLiveData = new MutableLiveData<>();
-    private final LiveData<List<Place>> placesChosenByUsersLiveData = _placesChosenByUsersMutableLiveData;
+    public interface Callbacks {
+        void onNearbyPlacesRetrieved(List<Place> places);
+        void onPlaceDetailsRetrieved(Place place);
+        void onPlacesChosenByUsersRetrieved(List<Place> places);
+    }
 
     public PlacesRepository() {}
 
-    public void retrieveNearbyPlaces(Location location) {
+    public void retrieveNearbyPlaces(Location location, Callbacks callbacks) { //todo THIS ONE
         PlacesCalls.getNearbyPlaces(location).enqueue(new Callback<NearbyPlacesResponse>() {
             @Override
             public void onResponse(@NotNull Call<NearbyPlacesResponse> call, @NotNull Response<NearbyPlacesResponse> response) {
@@ -45,10 +41,10 @@ public class PlacesRepository {
                                 String photoUrl = place.getPhotos().get(0).getPhotoReference();
                                 place.setPhotoUrl("https://maps.googleapis.com/maps/api/place/photo?key=" + BuildConfig.GOOGLE_API_KEY + "&photoreference=" + photoUrl + "&maxwidth=500");
                             }
-                            String distance = calculDistanceBetweenUserAndRestaurant(place, location);
+                            String distance = calculateDistanceBetweenUserAndRestaurant(place, location);
                             place.setDistanceFromUser(distance);
                         }
-                        _placesMutableLiveData.postValue(places);
+                        callbacks.onNearbyPlacesRetrieved(places);
                     }
                 }
             }
@@ -59,7 +55,7 @@ public class PlacesRepository {
         });
     }
 
-    private String calculDistanceBetweenUserAndRestaurant(Place place, Location userLocation) {
+    private String calculateDistanceBetweenUserAndRestaurant(Place place, Location userLocation) {
         double startLatitude = userLocation.getLatitude();
         double startLongitude = userLocation.getLongitude();
         double endLatitude = place.getGeometry().getLocation().getLat();
@@ -72,11 +68,7 @@ public class PlacesRepository {
         return Integer.toString(intDistance);
     }
 
-    public LiveData<List<Place>> getPlaces() {
-        return placesLiveData;
-    }
-
-    public void retrievePlaceDetails(String placeID) {
+    public void retrievePlaceDetails(String placeID, Callbacks callbacks) {
         PlacesCalls.getPlaceDetails(placeID).enqueue(new Callback<PlaceDetailResponse>() {
             @Override
             public void onResponse(@NotNull Call<PlaceDetailResponse> call, @NotNull Response<PlaceDetailResponse> response) {
@@ -86,7 +78,7 @@ public class PlacesRepository {
                         String photoReference = place.getPhotos().get(0).getPhotoReference();
                         place.setPhotoUrl("https://maps.googleapis.com/maps/api/place/photo?key=" + BuildConfig.GOOGLE_API_KEY + "&photoreference=" + photoReference + "&maxwidth=500");
                     }
-                    _placeMutableLiveData.postValue(place);
+                    callbacks.onPlaceDetailsRetrieved(place);
                 }
             }
 
@@ -97,11 +89,7 @@ public class PlacesRepository {
         });
     }
 
-    public LiveData<Place> getPlace() {
-        return this.placeLiveData;
-    }
-
-    public void retrievePlacesByUsers(List<User> users) {
+    public void retrievePlacesByUsers(List<User> users, Callbacks callbacks) {
         List<Place> usersPlacesChoice = new ArrayList<>();
         for (int i = 0; i < users.size(); i++) {
             int actualItem = i;
@@ -116,7 +104,7 @@ public class PlacesRepository {
                             Place place = response.body().getPlace();
                             usersPlacesChoice.add(place);
                             if (isLastUser(actualItem, users.size())) {
-                                _placesChosenByUsersMutableLiveData.postValue(usersPlacesChoice);
+                                callbacks.onPlacesChosenByUsersRetrieved(usersPlacesChoice);
                             }
                         }
                     }
@@ -128,10 +116,6 @@ public class PlacesRepository {
                 });
             }
         }
-    }
-
-    public LiveData<List<Place>> getPlacesChosenByUsers() {
-        return this.placesChosenByUsersLiveData;
     }
 
     private Boolean isLastUser(int userPosition, int usersSize) {

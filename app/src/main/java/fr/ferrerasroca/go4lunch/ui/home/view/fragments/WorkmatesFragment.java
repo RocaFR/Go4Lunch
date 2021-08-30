@@ -75,7 +75,7 @@ public class WorkmatesFragment extends Fragment {
             placesViewModel.getPlacesChosenByUsers().observe(getViewLifecycleOwner(), places -> configureRecyclerView(users, places));
             placesViewModel.retrievePlacesByUsers(users);
         });
-        userViewModel.retrieveUsers();
+        userViewModel.retrieveUsers(null);
     }
 
     private void configureProgressbar(List<User> users) {

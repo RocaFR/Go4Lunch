@@ -6,6 +6,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.ferrerasroca.go4lunch.data.models.User;
+
 public class Place {
 
     @SerializedName("business_status")
@@ -58,6 +60,7 @@ public class Place {
     private Boolean permanentlyClosed;
     private String photoUrl = null;
     private String distanceFromUser = null;
+    private List<User> usersParticipants = new ArrayList<>();
 
     public String getBusinessStatus() {
         return businessStatus;
@@ -203,7 +206,9 @@ public class Place {
         return distanceFromUser;
     }
 
-    public void setDistanceFromUser(String distanceFromUser) {
-        this.distanceFromUser = distanceFromUser;
-    }
+    public void setDistanceFromUser(String distanceFromUser) { this.distanceFromUser = distanceFromUser; }
+
+    public List<User> getUsersParticipants() { return usersParticipants; }
+
+    public void setUsersParticipants(List<User> usersParticipants) { this.usersParticipants = usersParticipants; }
 }

@@ -3,49 +3,78 @@ package fr.ferrerasroca.go4lunch.ui.home.viewmodel;
 import android.location.Location;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import fr.ferrerasroca.go4lunch.data.api.places.PlacesCalls;
 import fr.ferrerasroca.go4lunch.data.models.User;
 import fr.ferrerasroca.go4lunch.data.models.places.Place;
-import fr.ferrerasroca.go4lunch.data.models.places.responses.PlaceDetailResponse;
 import fr.ferrerasroca.go4lunch.data.repositories.PlacesRepository;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class PlacesViewModel extends ViewModel {
 
     private final PlacesRepository placesRepository;
+
+    private final MutableLiveData<List<Place>> _placesMutableLiveData = new MutableLiveData<>();
+    private final LiveData<List<Place>> places = _placesMutableLiveData;
+    private final MutableLiveData<Place> _placeMutableLiveData = new MutableLiveData<>();
+    private final LiveData<Place> place = _placeMutableLiveData;
+    private final MutableLiveData<List<Place>> _placesChosenByUsersMutableLiveData = new MutableLiveData<>();
+    private final LiveData<List<Place>> placesChosenByUsers = _placesChosenByUsersMutableLiveData;
 
     public PlacesViewModel(PlacesRepository placesRepository) {
         this.placesRepository = placesRepository;
     }
 
     public void retrieveNearbyPlaces(Location location) {
-        placesRepository.retrieveNearbyPlaces(location);
+        placesRepository.retrieveNearbyPlaces(location, new PlacesRepository.Callbacks() {
+            @Override
+            public void onNearbyPlacesRetrieved(List<Place> places) {
+                _placesMutableLiveData.postValue(places);
+            }
+
+            @Override
+            public void onPlaceDetailsRetrieved(Place place) { }
+
+            @Override
+            public void onPlacesChosenByUsersRetrieved(List<Place> places) { }
+        });
     }
 
-    public LiveData<List<Place>> getPlaces() {
-        return placesRepository.getPlaces();
-    }
+    public LiveData<List<Place>> getPlaces() { return places; }
 
     public void retrievePlaceByID(String placeID) {
-        placesRepository.retrievePlaceDetails(placeID);
+        placesRepository.retrievePlaceDetails(placeID, new PlacesRepository.Callbacks() {
+            @Override
+            public void onNearbyPlacesRetrieved(List<Place> places) { }
+
+            @Override
+            public void onPlaceDetailsRetrieved(Place place) {
+                _placeMutableLiveData.postValue(place);
+            }
+
+            @Override
+            public void onPlacesChosenByUsersRetrieved(List<Place> places) { }
+        });
     }
 
-    public LiveData<Place> getPlace() {
-        return placesRepository.getPlace();
-    }
+    public LiveData<Place> getPlace() { return place; }
 
     public void retrievePlacesByUsers(List<User> users) {
-        placesRepository.retrievePlacesByUsers(users);
+        placesRepository.retrievePlacesByUsers(users, new PlacesRepository.Callbacks() {
+            @Override
+            public void onNearbyPlacesRetrieved(List<Place> places) { }
+
+            @Override
+            public void onPlaceDetailsRetrieved(Place place) { }
+
+            @Override
+            public void onPlacesChosenByUsersRetrieved(List<Place> places) {
+                _placesChosenByUsersMutableLiveData.postValue(places);
+            }
+        });
     }
 
-    public LiveData<List<Place>> getPlacesChosenByUsers() {
-        return placesRepository.getPlacesChosenByUsers();
-    }
+    public LiveData<List<Place>> getPlacesChosenByUsers() { return placesChosenByUsers; }
 }

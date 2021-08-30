@@ -15,11 +15,9 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import fr.ferrerasroca.go4lunch.R;
-import fr.ferrerasroca.go4lunch.data.api.user.UserHelper;
 import fr.ferrerasroca.go4lunch.data.injections.Injection;
 import fr.ferrerasroca.go4lunch.data.models.User;
 import fr.ferrerasroca.go4lunch.data.models.places.Place;
@@ -34,14 +32,14 @@ import static fr.ferrerasroca.go4lunch.ui.home.view.HomeActivity.EXTRA_PLACE_ID;
 public class RestaurantActivity extends AppCompatActivity {
 
     private ActivityRestaurantBinding viewBinding;
-    private PlacesViewModel placesViewModel;
-    private UserViewModel userViewModel;
     private RecyclerView recyclerView;
     private WorkmateRestaurantViewAdapter workmateAdapter;
-    private List<User> users = new ArrayList<>();
-    private Place currentPlace;
-    private String placeID;
+    private PlacesViewModel placesViewModel;
+    private UserViewModel userViewModel;
+
+    //todo below need to be remove
     private User user;
+    private String actualPlaceID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,39 +47,36 @@ public class RestaurantActivity extends AppCompatActivity {
 
         viewBinding = ActivityRestaurantBinding.inflate(getLayoutInflater());
 
+        actualPlaceID = getIntent().getStringExtra(EXTRA_PLACE_ID);
+
         placesViewModel = Injection.providePlacesViewModel(Injection.providePlacesViewModelFactory());
         userViewModel = Injection.provideUserViewModel(Injection.provideUserViewModelFactory());
 
-        placeID = getIntent().getStringExtra(EXTRA_PLACE_ID);
-        this.retrievePlaceDetails(placeID);
-        this.retrievePlaceUsers(placeID );
+
+        this.configureViewModelCalls();
 
         setContentView(viewBinding.getRoot());
     }
 
-    private void retrievePlaceDetails(String placeID) {
+    private void configureViewModelCalls() {
         placesViewModel.getPlace().observe(this, this::configureViews);
-        placesViewModel.retrievePlaceByID(placeID);
-    }
-
-    private void retrievePlaceUsers(String placeID) {
+        placesViewModel.retrievePlaceByID(actualPlaceID);
         userViewModel.getUsers().observe(this, this::configureRecyclerView);
-        userViewModel.retrieveUsersByPlaceID(placeID);
+        userViewModel.retrieveUsers(actualPlaceID);
     }
 
     private void configureViews(Place place) {
-        currentPlace = place;
-        viewBinding.textViewRestaurantName.setText(TextUtils.isEmpty(currentPlace.getName()) ? "" : currentPlace.getName());
-        viewBinding.textViewRestaurantAddress.setText(TextUtils.isEmpty(currentPlace.getVicinity()) ? "" : currentPlace.getVicinity());
-        Glide.with(this).load(currentPlace.getPhotoUrl()).error(R.drawable.ic_baseline_broken_image_24).into(viewBinding.imageViewRestaurantPictureBanner);
-        this.configureRating();
+        viewBinding.textViewRestaurantName.setText(TextUtils.isEmpty(place.getName()) ? "" : place.getName());
+        viewBinding.textViewRestaurantAddress.setText(TextUtils.isEmpty(place.getVicinity()) ? "" : place.getVicinity());
+        Glide.with(this).load(place.getPhotoUrl()).error(R.drawable.ic_baseline_broken_image_24).into(viewBinding.imageViewRestaurantPictureBanner);
+        this.configureRating(place);
         this.getUser();
-        this.configureOnClickListeners();
+        this.configureOnClickListeners(place);
     }
 
-    private void configureRating() {
-        if (currentPlace.isRated()) {
-            Float convertedRating = PlaceUtils.convertRating(5f, 3f, currentPlace.getRating());
+    private void configureRating(Place place) {
+        if (place.isRated()) {
+            Float convertedRating = PlaceUtils.convertRating(5f, 3f, place.getRating());
             viewBinding.ratingBarRestaurant.setRating(convertedRating);
         } else {
             viewBinding.ratingBarRestaurant.setVisibility(View.INVISIBLE);
@@ -89,28 +84,28 @@ public class RestaurantActivity extends AppCompatActivity {
     }
 
     private void getUser() {
-        userViewModel.getUserLiveData().observe(this, user -> {
-            this.user = user;
+        userViewModel.getUser().observe(this, user -> {
+            //this.user = user;
             this.configureFABPlaceIDChoice(user);
             this.configureImageButtonLike(user);
         });
         userViewModel.retrieveUser();
     }
 
-    private void configureOnClickListeners() {
-        this.configurePlaceIDChoiceListener();
-        this.configureLikedPlacesListener();
+    private void configureOnClickListeners(Place place) {
+        this.configurePlaceIDChoiceListener(place);
+        this.configureLikedPlacesListener(place);
     }
 
-    private void configurePlaceIDChoiceListener() {
+    private void configurePlaceIDChoiceListener(Place place) {
         viewBinding.fabUserChoice.setOnClickListener(v -> {
             if (this.user != null) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                if (user.getPlaceIDChoice() == null || !user.getPlaceIDChoice().equals(placeID)) {
+                if (user.getPlaceIDChoice() == null || !user.getPlaceIDChoice().equals(actualPlaceID)) {
                     builder.setTitle(getString(R.string.title_choice_confirmation))
-                            .setMessage(getString(R.string.message_choice_confirmation) + currentPlace.getName() + getString(R.string.interrogation))
+                            .setMessage(getString(R.string.message_choice_confirmation) + place.getName() + getString(R.string.interrogation))
                             .setNegativeButton(R.string.button_negative, null)
-                            .setPositiveButton(R.string.button_positive, (dialog, which) -> userViewModel.setPlaceIDChoice(user.getUid(), placeID, callback))
+                            .setPositiveButton(R.string.button_positive, (dialog, which) -> userViewModel.setPlaceIDChoice(user.getUid(), actualPlaceID, callback))
                             .show();
                 } else {
                     builder.setTitle(getString(R.string.title_choice_cancel))
@@ -118,76 +113,48 @@ public class RestaurantActivity extends AppCompatActivity {
                             .setNegativeButton(R.string.button_negative, null)
                             .setPositiveButton(R.string.button_positive, (dialog, which) -> {
                                 user.setPlaceIDChoice(null);
-                                userViewModel.setPlaceIDChoice(user.getUid(), "", callbackCancel); })
+                                userViewModel.setPlaceIDChoice(user.getUid(), User.PLACE_ID_INITIAL_VALUE, callback); })
                             .show();
                 }
             }
         });
     }
 
-    UserHelper.Listeners callback = new UserHelper.Listeners() {
+    UserViewModel.Callbacks callback = new UserViewModel.Callbacks() {
         @Override
-        public void onRetrieved(User user) {
-
-        }
-
-        @Override
-        public void onPlaceIDChoiceSetted() {
+        public void onPlaceIDChoiceSetted(String placeID) {
             user.setPlaceIDChoice(placeID);
             configureFABPlaceIDChoice(user);
 
-            userViewModel.retrieveUsersByPlaceID(placeID);
-            configureRecyclerView(users);
-            configureRecyclerView(users);
+            userViewModel.retrieveUsers(actualPlaceID);
 
-            Snackbar.make(viewBinding.getRoot(), getString(R.string.restaurant_setted), BaseTransientBottomBar.LENGTH_LONG).show();
+            if (!placeID.isEmpty()) {
+                Snackbar.make(viewBinding.getRoot(), getString(R.string.restaurant_setted), BaseTransientBottomBar.LENGTH_LONG).show();
+            }
         }
 
         @Override
-        public void onLikedPlacesSetted() {
-
-        }
+        public void onLikedPlacesSetted() { }
     };
 
-    UserHelper.Listeners callbackCancel = new UserHelper.Listeners() {
-        @Override
-        public void onRetrieved(User user) {
-
-        }
-
-        @Override
-        public void onPlaceIDChoiceSetted() {
-            user.setPlaceIDChoice("");
-            configureFABPlaceIDChoice(user);
-
-            userViewModel.retrieveUsersByPlaceID(placeID);
-            configureRecyclerView(users);
-        }
-
-        @Override
-        public void onLikedPlacesSetted() {
-
-        }
-    };
-
-    private void configureLikedPlacesListener() {
+    private void configureLikedPlacesListener(Place place) {
         viewBinding.imageButtonLike.setOnClickListener(v -> {
             if (this.user != null) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                if (!user.getLikedPlaces().contains(placeID)) {
+                if (!user.getLikedPlaces().contains(actualPlaceID)) {
                     builder.setTitle(getString(R.string.title_likeAPlace))
-                            .setMessage(getString(R.string.message_likeAPlace) + currentPlace.getName() + getString(R.string.interrogation))
+                            .setMessage(getString(R.string.message_likeAPlace) + place.getName() + getString(R.string.interrogation))
                             .setNegativeButton(R.string.button_negative, null)
                             .setPositiveButton(R.string.button_positive, (dialog, which) -> {
-                                user.addPlaceToLike(placeID);
+                                user.addPlaceToLike(actualPlaceID);
                                 userViewModel.setLikedPlaces(user.getUid(), user.getLikedPlaces(), callbackLikedPlaces); })
                             .show();
                 } else {
                     builder.setTitle(getString(R.string.title_dislikeAPlace))
-                            .setMessage(getString(R.string.message_disklikeAPlace) + currentPlace.getName() + getString(R.string.interrogation))
+                            .setMessage(getString(R.string.message_disklikeAPlace) + place.getName() + getString(R.string.interrogation))
                             .setNegativeButton(R.string.button_negative, null)
                             .setPositiveButton(R.string.button_positive, (dialog, which) -> {
-                                user.removeALikedPlace(placeID);
+                                user.removeALikedPlace(actualPlaceID);
                                 userViewModel.setLikedPlaces(user.getUid(), user.getLikedPlaces(), callbackRemoveALikedPlaces); })
                             .show();
                 }
@@ -196,16 +163,9 @@ public class RestaurantActivity extends AppCompatActivity {
         });
     }
 
-    UserHelper.Listeners callbackLikedPlaces = new UserHelper.Listeners() {
+    UserViewModel.Callbacks callbackLikedPlaces = new UserViewModel.Callbacks() {
         @Override
-        public void onRetrieved(User user) {
-
-        }
-
-        @Override
-        public void onPlaceIDChoiceSetted() {
-
-        }
+        public void onPlaceIDChoiceSetted(String placeID) { }
 
         @Override
         public void onLikedPlacesSetted() {
@@ -214,48 +174,42 @@ public class RestaurantActivity extends AppCompatActivity {
         }
     };
 
-    UserHelper.Listeners callbackRemoveALikedPlaces = new UserHelper.Listeners() {
+    UserViewModel.Callbacks callbackRemoveALikedPlaces = new UserViewModel.Callbacks() {
         @Override
-        public void onRetrieved(User user) {
-
-        }
-
-        @Override
-        public void onPlaceIDChoiceSetted() {
-
-        }
+        public void onPlaceIDChoiceSetted(String placeID) { }
 
         @Override
         public void onLikedPlacesSetted() {
             configureImageButtonLike(user);
-            Snackbar.make(viewBinding.getRoot(),getString(R.string.snackbar_dislikeAPlace) + currentPlace.getName() + getString(R.string.snackbar_disLikeAPlace_end), BaseTransientBottomBar.LENGTH_LONG).show();
+            Snackbar.make(viewBinding.getRoot(),
+                    getString(R.string.snackbar_dislikeAPlace),
+                    BaseTransientBottomBar.LENGTH_LONG).show();
         }
     };
 
     private void configureRecyclerView(List<User> users) {
         if (workmateAdapter == null) {
             if (!users.isEmpty()) {
-                this.users = users;
+                //this.users = users;
                 viewBinding.imageViewNoWorkmates.setVisibility(View.GONE);
 
                 recyclerView = findViewById(R.id.recyclerView_workmates);
                 RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-                workmateAdapter = new WorkmateRestaurantViewAdapter(this.users);
+                workmateAdapter = new WorkmateRestaurantViewAdapter(users);
                 recyclerView.setLayoutManager(layoutManager);
                 recyclerView.setAdapter(workmateAdapter);
             } else {
                 viewBinding.imageViewNoWorkmates.setVisibility(View.VISIBLE);
             }
         } else {
-            this.users = users;
-            workmateAdapter = new WorkmateRestaurantViewAdapter(this.users);
+            workmateAdapter = new WorkmateRestaurantViewAdapter(users);
             recyclerView.setAdapter(workmateAdapter);
         }
     }
 
     private void configureImageButtonLike(User user) {
         Drawable drawable;
-        if (user.getLikedPlaces().contains(placeID)) {
+        if (user.getLikedPlaces().contains(actualPlaceID)) {
             drawable = AppCompatResources.getDrawable(this, R.drawable.ic_baseline_star_30);
         } else {
             drawable = AppCompatResources.getDrawable(this, R.drawable.ic_baseline_star_unlike_30);
@@ -267,7 +221,7 @@ public class RestaurantActivity extends AppCompatActivity {
         String placeIDChoice = user.getPlaceIDChoice();
         if (placeIDChoice != null) {
             Drawable drawable;
-            if (placeIDChoice.equals(placeID)) {
+            if (placeIDChoice.equals(actualPlaceID)) {
                 drawable = AppCompatResources.getDrawable(this, R.drawable.ic_baseline_check_circle_50);
             } else {
                 drawable = AppCompatResources.getDrawable(this, R.drawable.ic_baseline_check_disable_circle_50);

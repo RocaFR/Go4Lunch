@@ -50,8 +50,7 @@
     <string name="message_likeAPlace">"Souhaitez-vous liker "</string>
     <string name="title_dislikeAPlace">Annulation de votre like</string>
     <string name="message_disklikeAPlace">"Vous n'aimez plus "</string>
-    <string name="snackbar_dislikeAPlace">"Vous n\'aimez plus "</string>
-    <string name="snackbar_disLikeAPlace_end">" dorénavant."</string>
+    <string name="snackbar_dislikeAPlace">"Vous n\'aimez plus ce restaurant dorénavant."</string>
     <string name="snackbar_placeLiked">Vous likez à présent !</string>
     <string name="workmate_is_eating">" mange à "</string>
     <string name="workmate_not_eating">" n'a pas encore choisi"</string>

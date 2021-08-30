@@ -10,15 +10,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.List;
 
 import fr.ferrerasroca.go4lunch.data.models.User;
+import fr.ferrerasroca.go4lunch.data.repositories.UserRepository;
 
 public class UserHelper {
-
-    public interface Listeners {
-
-        void onRetrieved(User user);
-        void onPlaceIDChoiceSetted();
-        void onLikedPlacesSetted();
-    }
 
     private static final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
@@ -35,9 +29,9 @@ public class UserHelper {
         return getUserCollection().document(userUid).get();
     }
 
-    public static Task<DocumentSnapshot> getUser(String userUid, Listeners listeners) {
+    public static Task<DocumentSnapshot> getUser(String userUid, UserRepository.Callbacks callbacks) {
         return getUserCollection().document(userUid).get()
-                .addOnCompleteListener(task -> listeners.onRetrieved(task.getResult().toObject(User.class)));
+                .addOnCompleteListener(task -> callbacks.onRetrieved(task.getResult().toObject(User.class)));
     }
 
     public static Task<QuerySnapshot> retrieveUsers() {

@@ -64,7 +64,7 @@ public class ChatFragment extends Fragment {
     }
 
     private void retrieveUser() {
-        userViewModel.getUserLiveData().observe(getViewLifecycleOwner(), user -> {
+        userViewModel.getUser().observe(getViewLifecycleOwner(), user -> {
             configureRecyclerView(user);
             configureChatActionsListeners(user);
         });
