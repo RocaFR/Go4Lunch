@@ -16,12 +16,9 @@ android {
         versionName "1.0"
         multiDexEnabled true
 
-        def googleApiKey = "AIzaSyA7Bz7oYJDd0eiWUbdaPgNOxSwyMZI-kJk"
-        def googleApiKeyBuildConfig = "\"" + googleApiKey + "\""
-
-        buildConfigField("String", "GOOGLE_API_KEY", googleApiKeyBuildConfig)
-        resValue("string", "GOOGLE_API_KEY", googleApiKey)
-        manifestPlaceholders["GOOGLE_API_KEY"] = googleApiKey
+        buildConfigField("String", "GOOGLE_API_KEY", Go4LunchAPIKey)
+        resValue("string", "GOOGLE_API_KEY", Go4LunchAPIKey)
+        manifestPlaceholders["GOOGLE_API_KEY"] = Go4LunchAPIKey
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -53,6 +50,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.preference:preference:1.1.1'
+    implementation "androidx.core:core:1.6.0"
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
@@ -104,4 +102,7 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-firestore:6.1.0'
     // Firebase Messaging
     implementation 'com.google.firebase:firebase-messaging'
+
+    // WorkManaer
+    implementation "androidx.work:work-runtime:2.6.0-rc01"
 }
