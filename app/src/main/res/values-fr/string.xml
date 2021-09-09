@@ -66,4 +66,10 @@
     <string name="menu_bottomNavigationView_chat">Chat</string>
     <string name="chat_message">Message</string>
     <string name="chat_messag_hint">Écrivez votre message…</string>
+    <string name="chat_contentDescription">Image dans un message.</string>
+
+    <!-- Notification -->
+    <string name="sendername_hour_separator">-</string>
+    <string name="daily_notification_channel_name">Rappel quotidien</string>
+    <string name="daily_notification_description">"Rappel quotidien, quand c\'est l'heure de manger !"</string>
 </resources>

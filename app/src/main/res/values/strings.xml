@@ -78,4 +78,6 @@
     <string name="chat_messag_hint">Type your message</string>
     <string name="chat_contentDescription">Image into the message.</string>
     <string name="sendername_hour_separator">-</string>
+    <string name="daily_notification_channel_name">Daily reminder</string>
+    <string name="daily_notification_description">Daily reminder, when it\'s time to lunch !</string>
 </resources>
