@@ -29,9 +29,9 @@ public class UserHelper {
         return getUserCollection().document(userUid).get();
     }
 
-    public static Task<DocumentSnapshot> getUser(String userUid, UserRepository.Callbacks callbacks) {
+    public static Task<DocumentSnapshot> getUser(String userUid, UserRepository.UserRetrievedListener listener) {
         return getUserCollection().document(userUid).get()
-                .addOnCompleteListener(task -> callbacks.onRetrieved(task.getResult().toObject(User.class)));
+                .addOnCompleteListener(task -> listener.onUserRetrieved(task.getResult().toObject(User.class)));
     }
 
     public static Task<QuerySnapshot> retrieveUsers() {

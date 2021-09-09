@@ -28,47 +28,29 @@ public class PlacesViewModel extends ViewModel {
     }
 
     public void retrieveNearbyPlaces(Location location) {
-        placesRepository.retrieveNearbyPlaces(location, new PlacesRepository.Callbacks() {
+        placesRepository.retrieveNearbyPlaces(location, new PlacesRepository.NearbyPlacesRetrievedListener() {
             @Override
             public void onNearbyPlacesRetrieved(List<Place> places) {
                 _placesMutableLiveData.postValue(places);
             }
-
-            @Override
-            public void onPlaceDetailsRetrieved(Place place) { }
-
-            @Override
-            public void onPlacesChosenByUsersRetrieved(List<Place> places) { }
         });
     }
 
     public LiveData<List<Place>> getPlaces() { return places; }
 
     public void retrievePlaceByID(String placeID) {
-        placesRepository.retrievePlaceDetails(placeID, new PlacesRepository.Callbacks() {
-            @Override
-            public void onNearbyPlacesRetrieved(List<Place> places) { }
-
+        placesRepository.retrievePlaceDetails(placeID, new PlacesRepository.PlaceDetailsRetrievedListener() {
             @Override
             public void onPlaceDetailsRetrieved(Place place) {
                 _placeMutableLiveData.postValue(place);
             }
-
-            @Override
-            public void onPlacesChosenByUsersRetrieved(List<Place> places) { }
         });
     }
 
     public LiveData<Place> getPlace() { return place; }
 
     public void retrievePlacesByUsers(List<User> users) {
-        placesRepository.retrievePlacesByUsers(users, new PlacesRepository.Callbacks() {
-            @Override
-            public void onNearbyPlacesRetrieved(List<Place> places) { }
-
-            @Override
-            public void onPlaceDetailsRetrieved(Place place) { }
-
+        placesRepository.retrievePlacesByUsers(users, new PlacesRepository.PlacesChosenByUsersRetrievedListener() {
             @Override
             public void onPlacesChosenByUsersRetrieved(List<Place> places) {
                 _placesChosenByUsersMutableLiveData.postValue(places);

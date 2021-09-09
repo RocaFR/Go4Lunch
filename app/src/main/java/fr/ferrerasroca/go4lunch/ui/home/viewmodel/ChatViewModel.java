@@ -28,7 +28,7 @@ public class ChatViewModel extends ViewModel {
         chatRepository.createMessage(message, onMessageCreated);
     }
 
-    private final ChatRepository.Callback onMessageCreated = () -> this._mutableLiveDataMessageState.postValue(true);
+    private final ChatRepository.MessageCreatedListener onMessageCreated = () -> this._mutableLiveDataMessageState.postValue(true);
 
     public LiveData<Boolean> getMessageState() {
         return this.liveDataMessageState;

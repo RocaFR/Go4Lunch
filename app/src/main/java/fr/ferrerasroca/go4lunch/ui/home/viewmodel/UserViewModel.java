@@ -56,18 +56,7 @@ public class UserViewModel extends ViewModel {
 
     public void retrieveUser() {
         if (this.firebaseAuth.getCurrentUser() != null) {
-            userRepository.getUser(this.firebaseAuth.getCurrentUser().getUid(), new UserRepository.Callbacks() {
-                @Override
-                public void usersForPlacesRetrieved(List<Place> placesWithParticipants) { }
-
-                @Override
-                public void onRetrieved(User user) {
-                    _userMutableLiveData.postValue(user);
-                }
-
-                @Override
-                public void usersRetrieved(List<User> usersRetrieved) { }
-            });
+            userRepository.getUser(this.firebaseAuth.getCurrentUser().getUid(), _userMutableLiveData::postValue);
         }
     }
 
@@ -82,18 +71,7 @@ public class UserViewModel extends ViewModel {
     }
 
     public void retrieveUsers(@Nullable String placeID) {
-        userRepository.retrieveUsers(placeID, new UserRepository.Callbacks() {
-            @Override
-            public void usersForPlacesRetrieved(List<Place> placesWithParticipants) { }
-
-            @Override
-            public void onRetrieved(User user) { }
-
-            @Override
-            public void usersRetrieved(List<User> usersRetrieved) {
-                _mutableLiveDataUsers.postValue(usersRetrieved);
-            }
-        });
+        userRepository.retrieveUsers(placeID, _mutableLiveDataUsers::postValue);
     }
 
     public LiveData<List<User>> getUsers() {
@@ -101,18 +79,7 @@ public class UserViewModel extends ViewModel {
     }
 
     public void retrieveParticipantsForPlaces(List<Place> places) {
-        userRepository.retrieveParticipantsForPlaces(places, new UserRepository.Callbacks() {
-            @Override
-            public void usersForPlacesRetrieved(List<Place> placesWithParticipants) {
-                _mutableLiveDataPlacesWithParticipants.postValue(placesWithParticipants);
-            }
-
-            @Override
-            public void onRetrieved(User user) { }
-
-            @Override
-            public void usersRetrieved(List<User> usersRetrieved) { }
-        });
+        userRepository.retrieveParticipantsForPlaces(places, _mutableLiveDataPlacesWithParticipants::postValue);
     }
 
     public LiveData<List<Place>> getPlacesWithParticipants() {

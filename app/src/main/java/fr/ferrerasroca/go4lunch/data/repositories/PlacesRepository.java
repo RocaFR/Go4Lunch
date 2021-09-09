@@ -20,15 +20,21 @@ import retrofit2.Response;
 
 public class PlacesRepository {
 
-    public interface Callbacks {
+    public interface NearbyPlacesRetrievedListener {
         void onNearbyPlacesRetrieved(List<Place> places);
+    }
+
+    public interface PlaceDetailsRetrievedListener {
         void onPlaceDetailsRetrieved(Place place);
+    }
+
+    public interface PlacesChosenByUsersRetrievedListener {
         void onPlacesChosenByUsersRetrieved(List<Place> places);
     }
 
     public PlacesRepository() {}
 
-    public void retrieveNearbyPlaces(Location location, Callbacks callbacks) { //todo THIS ONE
+    public void retrieveNearbyPlaces(Location location, NearbyPlacesRetrievedListener listener) { //todo THIS ONE
         PlacesCalls.getNearbyPlaces(location).enqueue(new Callback<NearbyPlacesResponse>() {
             @Override
             public void onResponse(@NotNull Call<NearbyPlacesResponse> call, @NotNull Response<NearbyPlacesResponse> response) {
@@ -44,7 +50,7 @@ public class PlacesRepository {
                             String distance = calculateDistanceBetweenUserAndRestaurant(place, location);
                             place.setDistanceFromUser(distance);
                         }
-                        callbacks.onNearbyPlacesRetrieved(places);
+                        listener.onNearbyPlacesRetrieved(places);
                     }
                 }
             }
@@ -68,7 +74,7 @@ public class PlacesRepository {
         return Integer.toString(intDistance);
     }
 
-    public void retrievePlaceDetails(String placeID, Callbacks callbacks) {
+    public void retrievePlaceDetails(String placeID, PlaceDetailsRetrievedListener listener) {
         PlacesCalls.getPlaceDetails(placeID).enqueue(new Callback<PlaceDetailResponse>() {
             @Override
             public void onResponse(@NotNull Call<PlaceDetailResponse> call, @NotNull Response<PlaceDetailResponse> response) {
@@ -78,7 +84,7 @@ public class PlacesRepository {
                         String photoReference = place.getPhotos().get(0).getPhotoReference();
                         place.setPhotoUrl("https://maps.googleapis.com/maps/api/place/photo?key=" + BuildConfig.GOOGLE_API_KEY + "&photoreference=" + photoReference + "&maxwidth=500");
                     }
-                    callbacks.onPlaceDetailsRetrieved(place);
+                    listener.onPlaceDetailsRetrieved(place);
                 }
             }
 
@@ -89,7 +95,7 @@ public class PlacesRepository {
         });
     }
 
-    public void retrievePlacesByUsers(List<User> users, Callbacks callbacks) {
+    public void retrievePlacesByUsers(List<User> users, PlacesChosenByUsersRetrievedListener listener) {
         List<Place> usersPlacesChoice = new ArrayList<>();
         for (int i = 0; i < users.size(); i++) {
             int actualItem = i;
@@ -104,7 +110,7 @@ public class PlacesRepository {
                             Place place = response.body().getPlace();
                             usersPlacesChoice.add(place);
                             if (isLastUser(actualItem, users.size())) {
-                                callbacks.onPlacesChosenByUsersRetrieved(usersPlacesChoice);
+                                listener.onPlacesChosenByUsersRetrieved(usersPlacesChoice);
                             }
                         }
                     }

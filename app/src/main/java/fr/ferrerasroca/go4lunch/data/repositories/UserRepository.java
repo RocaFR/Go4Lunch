@@ -17,11 +17,20 @@ import fr.ferrerasroca.go4lunch.ui.home.viewmodel.UserViewModel;
 
 public class UserRepository {
 
-    public interface Callbacks {
-        void usersForPlacesRetrieved(List<Place> placesWithParticipants);
-        void onRetrieved(User user);
-        void usersRetrieved(List<User> usersRetrieved);
+    /**
+     * Listeners to control asynchronous tasks.
+     */
 
+    public interface UsersForPlacesListener {
+        void onUsersForPlacesRetrieved(List<Place> placesWithParticipants);
+    }
+
+    public interface UserRetrievedListener {
+        void onUserRetrieved(User user);
+    }
+
+    public interface UsersRetrievedListener {
+        void onUsersRetrieved(List<User> usersRetrieved);
     }
 
     public static final int RC_GOOGLE_SIGN_IN = 2901;
@@ -53,29 +62,29 @@ public class UserRepository {
         return UserHelper.isCurrentUserLogged();
     }
 
-    public void getUser(String uid, Callbacks callbacks) {
-        UserHelper.getUser(uid, callbacks);
+    public void getUser(String uid, UserRetrievedListener listener) {
+        UserHelper.getUser(uid, listener);
     }
 
-    public void retrieveUsers(@Nullable String placeID, Callbacks callbacks) {
+    public void retrieveUsers(@Nullable String placeID, UsersRetrievedListener listener) {
         if (placeID != null) {
             UserHelper.retrieveUsersByPlaceID(placeID).addOnCompleteListener(task -> {
                 if (task.isSuccessful() && task.getResult() != null) {
                     List<User> users = task.getResult().toObjects(User.class);
-                    callbacks.usersRetrieved(users);
+                    listener.onUsersRetrieved(users);
                 }
             }).addOnFailureListener(e -> Log.e("TAG", "onFailure: " + e.getMessage()));
         } else {
             UserHelper.retrieveUsers().addOnCompleteListener(task -> {
                 if (task.isSuccessful() && task.getResult() != null) {
                     List<User> users = task.getResult().toObjects(User.class);
-                    callbacks.usersRetrieved(users);
+                    listener.onUsersRetrieved(users);
                 }
             }).addOnFailureListener(e -> Log.e("TAG", "onFailure: " + e.getMessage()));
         }
     }
 
-    public void retrieveParticipantsForPlaces(List<Place> places, Callbacks callbacks) {
+    public void retrieveParticipantsForPlaces(List<Place> places, UsersForPlacesListener listener) {
         for (int i = 0; i < places.size(); i++) {
             int actualItem = i;
             String currentPlaceId = places.get(actualItem).getPlaceId();
@@ -85,7 +94,7 @@ public class UserRepository {
                     List<User> users = task.getResult().toObjects(User.class);
                     places.get(actualItem).setUsersParticipants(users);
                     if (actualItem == places.size() - 1) {
-                        callbacks.usersForPlacesRetrieved(places);
+                        listener.onUsersForPlacesRetrieved(places);
                     }
                 }
             });

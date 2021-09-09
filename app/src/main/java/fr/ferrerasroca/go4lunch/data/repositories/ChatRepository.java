@@ -9,12 +9,12 @@ import fr.ferrerasroca.go4lunch.data.models.Message;
 
 public class ChatRepository {
 
-    public interface Callback {
+    public interface MessageCreatedListener {
         void onMessageCreated();
     }
 
-    public void createMessage(Message message, Callback callbackCreatedMessage) {
-        MessageHelper.createMessage(message).addOnCompleteListener(task -> callbackCreatedMessage.onMessageCreated());
+    public void createMessage(Message message, MessageCreatedListener listener) {
+        MessageHelper.createMessage(message).addOnCompleteListener(task -> listener.onMessageCreated());
     }
 
     public FirestoreRecyclerOptions<Message> generateOptionsForFirestore(LifecycleOwner lifecycleOwner) {
