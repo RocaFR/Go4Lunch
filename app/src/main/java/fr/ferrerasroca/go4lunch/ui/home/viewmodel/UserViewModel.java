@@ -8,8 +8,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.google.firebase.auth.FirebaseAuth;
-
 import java.util.List;
 
 import fr.ferrerasroca.go4lunch.data.models.User;
@@ -18,13 +16,15 @@ import fr.ferrerasroca.go4lunch.data.repositories.UserRepository;
 
 public class UserViewModel extends ViewModel {
 
-    public interface Callbacks {
+    public interface PlaceIDChoiceSettedListener {
         void onPlaceIDChoiceSetted(String placeID);
+    }
+
+    public interface LikedPlacesSetted {
         void onLikedPlacesSetted();
     }
 
     private final UserRepository userRepository;
-    private final FirebaseAuth firebaseAuth;
 
     private final MutableLiveData<User> _userMutableLiveData = new MutableLiveData<>();
     public LiveData<User> userLiveData = _userMutableLiveData;
@@ -35,7 +35,6 @@ public class UserViewModel extends ViewModel {
 
     public UserViewModel(UserRepository userRepository) {
         this.userRepository = userRepository;
-        firebaseAuth = FirebaseAuth.getInstance();
     }
 
     public void launchFacebookSignInActivity(Fragment fragment) {
@@ -55,9 +54,7 @@ public class UserViewModel extends ViewModel {
     }
 
     public void retrieveUser() {
-        if (this.firebaseAuth.getCurrentUser() != null) {
-            userRepository.getUser(this.firebaseAuth.getCurrentUser().getUid(), _userMutableLiveData::postValue);
-        }
+        userRepository.retrieveUser(_userMutableLiveData::postValue);
     }
 
     public LiveData<User> getUser() {
@@ -65,9 +62,7 @@ public class UserViewModel extends ViewModel {
     }
 
     public void signOutUser() {
-        if (this.firebaseAuth.getCurrentUser() != null) {
-            this.firebaseAuth.signOut();
-        }
+        userRepository.signOutCurrentUser();
     }
 
     public void retrieveUsers(@Nullable String placeID) {
@@ -86,26 +81,12 @@ public class UserViewModel extends ViewModel {
         return liveDataPlacesWithParticipants;
     }
 
-    public void setPlaceIDChoiceAndReturnParticipants(String userUID, String placeIDChoice) {
-        userRepository.setPlaceIDChoice(userUID, placeIDChoice, new Callbacks() {
-            @Override
-            public void onPlaceIDChoiceSetted(String placeID) {
-
-            }
-
-            @Override
-            public void onLikedPlacesSetted() {
-
-            }
-        });
+    public void setPlaceIDChoice(String userUid, String placeIDChoice, PlaceIDChoiceSettedListener listener) {
+        userRepository.setPlaceIDChoice(userUid, placeIDChoice, listener);
     }
 
-    public void setPlaceIDChoice(String userUid, String placeIDChoice, Callbacks callbacks) {
-        userRepository.setPlaceIDChoice(userUid, placeIDChoice, callbacks);
-    }
-
-    public void setLikedPlaces(String userUid, List<String> placesLiked, Callbacks callbacks) {
-        userRepository.setLikedPlaces(userUid, placesLiked, callbacks);
+    public void setLikedPlaces(String userUid, List<String> placesLiked, LikedPlacesSetted listener) {
+        userRepository.setLikedPlaces(userUid, placesLiked, listener);
     }
 
 }

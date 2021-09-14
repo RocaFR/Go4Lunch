@@ -15,7 +15,7 @@ public interface PlacesService {
     @GET("details/json?")
     Call<PlaceDetailResponse> getPlaceDetails(@Query("place_id") String placeID , @Query("key") String apiKey);
 
-    public static final Retrofit retrofit = new Retrofit.Builder()
+    Retrofit retrofit = new Retrofit.Builder()
             .baseUrl("https://maps.googleapis.com/maps/api/place/")
             .addConverterFactory(GsonConverterFactory.create())
             .build();

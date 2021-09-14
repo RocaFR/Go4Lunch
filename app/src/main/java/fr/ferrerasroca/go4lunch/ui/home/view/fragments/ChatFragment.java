@@ -44,8 +44,6 @@ public class ChatFragment extends Fragment {
 
         userViewModel = Injection.provideUserViewModel(Injection.provideUserViewModelFactory());
         chatViewModel = Injection.provideChatViewModel(Injection.provideChatViewModelFactory());
-
-        this.configureViewModelCalls();
     }
 
     private void configureViewModelCalls() {
@@ -63,6 +61,7 @@ public class ChatFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
 
         this.configureViews(view);
+        this.configureViewModelCalls();
 
         return view;
     }

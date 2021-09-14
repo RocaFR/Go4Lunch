@@ -62,8 +62,13 @@ public class UserRepository {
         return UserHelper.isCurrentUserLogged();
     }
 
-    public void getUser(String uid, UserRetrievedListener listener) {
-        UserHelper.getUser(uid, listener);
+    public void retrieveUser(UserRetrievedListener listener) {
+        if (UserHelper.isCurrentUserLogged())
+        UserHelper.getUser(listener);
+    }
+
+    public void signOutCurrentUser() {
+        UserHelper.signOutCurrentUser();
     }
 
     public void retrieveUsers(@Nullable String placeID, UsersRetrievedListener listener) {
@@ -101,11 +106,11 @@ public class UserRepository {
         }
     }
 
-    public void setPlaceIDChoice(String userUid, String placeIDChoice, UserViewModel.Callbacks callbacks) { //todo
-        UserHelper.setPlaceIDChoice(userUid, placeIDChoice).addOnCompleteListener(task -> callbacks.onPlaceIDChoiceSetted(placeIDChoice));
+    public void setPlaceIDChoice(String userUid, String placeIDChoice, UserViewModel.PlaceIDChoiceSettedListener listener) {
+        UserHelper.setPlaceIDChoice(userUid, placeIDChoice).addOnCompleteListener(task -> listener.onPlaceIDChoiceSetted(placeIDChoice));
     }
 
-    public void setLikedPlaces(String userUid, List<String> placesLiked, UserViewModel.Callbacks callbacks) { //todo
-        UserHelper.setLikedPlaces(userUid, placesLiked).addOnCompleteListener(task -> callbacks.onLikedPlacesSetted());
+    public void setLikedPlaces(String userUid, List<String> placesLiked, UserViewModel.LikedPlacesSetted listener) {
+        UserHelper.setLikedPlaces(userUid, placesLiked).addOnCompleteListener(task -> listener.onLikedPlacesSetted());
     }
 }

@@ -9,9 +9,7 @@ import fr.ferrerasroca.go4lunch.ui.home.viewmodel.UserViewModel;
 
 public class Injection {
 
-    public static UserRepository provideUserRepository() {
-        return new UserRepository();
-    }
+    public static UserRepository provideUserRepository() { return new UserRepository(); }
     public static PlacesRepository providePlacesRepository() {
         return new PlacesRepository();
     }

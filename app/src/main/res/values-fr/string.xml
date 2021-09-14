@@ -72,4 +72,7 @@
     <string name="sendername_hour_separator">-</string>
     <string name="daily_notification_channel_name">Rappel quotidien</string>
     <string name="daily_notification_description">"Rappel quotidien, quand c\'est l'heure de manger !"</string>
+    <string name="notification_description">"Aujourd'hui vous mangez avec : "</string>
+    <string name="daily_notification_begin_content">"Hey "</string>
+    <string name="comma_space">", "</string>
 </resources>

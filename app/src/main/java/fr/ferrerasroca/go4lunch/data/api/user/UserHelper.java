@@ -29,8 +29,8 @@ public class UserHelper {
         return getUserCollection().document(userUid).get();
     }
 
-    public static Task<DocumentSnapshot> getUser(String userUid, UserRepository.UserRetrievedListener listener) {
-        return getUserCollection().document(userUid).get()
+    public static Task<DocumentSnapshot> getUser(UserRepository.UserRetrievedListener listener) {
+        return getUserCollection().document(firebaseAuth.getCurrentUser().getUid()).get()
                 .addOnCompleteListener(task -> listener.onUserRetrieved(task.getResult().toObject(User.class)));
     }
 
@@ -53,6 +53,12 @@ public class UserHelper {
 
     public static Task<Void> setLikedPlaces(String userUid, List<String> likedPlaces) {
         return getUserCollection().document(userUid).update("likedPlaces", likedPlaces);
+    }
+
+    public static void signOutCurrentUser() {
+        if (isCurrentUserLogged()) {
+            firebaseAuth.signOut();
+        }
     }
 
     public static Boolean isCurrentUserLogged() {

@@ -1,5 +1,7 @@
 package fr.ferrerasroca.go4lunch.data.injections;
 
+import android.app.Application;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -21,7 +23,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
 
     public ViewModelFactory(UserRepository userRepository) { this.userRepository = userRepository; }
     public ViewModelFactory(PlacesRepository placesRepository) { this.placesRepository = placesRepository; }
-    public ViewModelFactory(ChatRepository chatRepository) { this.chatRepository = chatRepository; }
+    public ViewModelFactory(ChatRepository chatRepository) {this.chatRepository = chatRepository; }
 
     @NonNull
     @NotNull

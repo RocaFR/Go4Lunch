@@ -120,7 +120,7 @@ public class RestaurantActivity extends AppCompatActivity {
         });
     }
 
-    UserViewModel.Callbacks callback = new UserViewModel.Callbacks() {
+    UserViewModel.PlaceIDChoiceSettedListener callback = new UserViewModel.PlaceIDChoiceSettedListener() {
         @Override
         public void onPlaceIDChoiceSetted(String placeID) {
             user.setPlaceIDChoice(placeID);
@@ -132,9 +132,6 @@ public class RestaurantActivity extends AppCompatActivity {
                 Snackbar.make(viewBinding.getRoot(), getString(R.string.restaurant_setted), BaseTransientBottomBar.LENGTH_LONG).show();
             }
         }
-
-        @Override
-        public void onLikedPlacesSetted() { }
     };
 
     private void configureLikedPlacesListener(Place place) {
@@ -163,10 +160,7 @@ public class RestaurantActivity extends AppCompatActivity {
         });
     }
 
-    UserViewModel.Callbacks callbackLikedPlaces = new UserViewModel.Callbacks() {
-        @Override
-        public void onPlaceIDChoiceSetted(String placeID) { }
-
+    UserViewModel.LikedPlacesSetted callbackLikedPlaces = new UserViewModel.LikedPlacesSetted() {
         @Override
         public void onLikedPlacesSetted() {
             configureImageButtonLike(user);
@@ -174,10 +168,7 @@ public class RestaurantActivity extends AppCompatActivity {
         }
     };
 
-    UserViewModel.Callbacks callbackRemoveALikedPlaces = new UserViewModel.Callbacks() {
-        @Override
-        public void onPlaceIDChoiceSetted(String placeID) { }
-
+    UserViewModel.LikedPlacesSetted callbackRemoveALikedPlaces = new UserViewModel.LikedPlacesSetted() {
         @Override
         public void onLikedPlacesSetted() {
             configureImageButtonLike(user);

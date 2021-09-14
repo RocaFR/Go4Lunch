@@ -27,6 +27,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <receiver
+            android:name="fr.ferrerasroca.go4lunch.ui.notification.NotificationAlarm" >
+        </receiver>
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -56,7 +59,7 @@
 
         <uses-library
             android:name="org.apache.http.legacy"
-            android:required="false" /> 
+            android:required="false" />
     </application>
 
 </manifest>

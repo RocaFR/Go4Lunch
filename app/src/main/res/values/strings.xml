@@ -80,4 +80,7 @@
     <string name="sendername_hour_separator">-</string>
     <string name="daily_notification_channel_name">Daily reminder</string>
     <string name="daily_notification_description">Daily reminder, when it\'s time to lunch !</string>
+    <string name="notification_description">"Today you are eating with : "</string>
+    <string name="daily_notification_begin_content">"Hey "</string>
+    <string name="comma_space">", "</string>
 </resources>
