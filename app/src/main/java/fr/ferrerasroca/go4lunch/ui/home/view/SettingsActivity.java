@@ -13,6 +13,7 @@ import fr.ferrerasroca.go4lunch.R;
 import fr.ferrerasroca.go4lunch.data.injections.Injection;
 import fr.ferrerasroca.go4lunch.ui.home.viewmodel.UserViewModel;
 import fr.ferrerasroca.go4lunch.ui.notification.DailyNotificationManager;
+import fr.ferrerasroca.go4lunch.ui.notification.DailyNotificationWorkManager;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -46,11 +47,10 @@ public class SettingsActivity extends AppCompatActivity {
                     userViewModel.setSettingsDailyNotification(user.getUid(), isChecked, new UserViewModel.DailyNotificationChoiceListener() {
                         @Override
                         public void onDailyNotificationChoiceSetted(Boolean dailyNotificationChoice) {
-                            DailyNotificationManager dailyNotificationManager = new DailyNotificationManager(getApplicationContext());
                             if (dailyNotificationChoice) {
-                                dailyNotificationManager.configureAlarmManager();
+                                new DailyNotificationManager(getApplicationContext()).configureAlarmManager();
                             } else {
-                                dailyNotificationManager.cancelEnqueuedWork();
+                                new DailyNotificationWorkManager(getApplicationContext()).cancelEnqueuedWork();
                             }
                         }
                     });

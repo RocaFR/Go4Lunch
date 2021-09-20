@@ -11,6 +11,7 @@ import fr.ferrerasroca.go4lunch.ui.auth.AuthenticationActivity;
 import fr.ferrerasroca.go4lunch.ui.home.view.HomeActivity;
 import fr.ferrerasroca.go4lunch.ui.home.viewmodel.UserViewModel;
 import fr.ferrerasroca.go4lunch.ui.notification.DailyNotificationManager;
+import fr.ferrerasroca.go4lunch.ui.notification.DailyNotificationWorkManager;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,15 +28,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void configureLiveDataActions() {
-        DailyNotificationManager dailyNotificationManager = new DailyNotificationManager(this);
-
         userViewModel.getUser().observe(this, user -> {
             Boolean isDailyNotificationEnabled = user.getSettingsDailyNotification();
 
             if (isDailyNotificationEnabled) {
-                dailyNotificationManager.configureAlarmManager();
+                new DailyNotificationManager(this).configureAlarmManager();
             } else {
-                dailyNotificationManager.cancelEnqueuedWork();
+                new DailyNotificationWorkManager(this).cancelEnqueuedWork();
             }
         });
         userViewModel.retrieveUser();

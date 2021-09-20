@@ -8,7 +8,6 @@ public class NotificationAlarm extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        DailyNotificationManager dailyNotificationManager = new DailyNotificationManager(context);
-        dailyNotificationManager.configureAndEnqueueWork();
+       new DailyNotificationWorkManager(context).configureAndEnqueueWork();
     }
 }
