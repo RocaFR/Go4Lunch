@@ -21,6 +21,7 @@ public class User {
     private String profilePictureUrl;
     private String placeIDChoice = PLACE_ID_INITIAL_VALUE;
     private List<String> likedPlaces = new ArrayList<>();
+    private Boolean settingsDailyNotification = true;
 
     /**
      * <p>Empty Firestore constructor.<br>
@@ -55,6 +56,7 @@ public class User {
     public String getProfilePictureUrl() { return profilePictureUrl; }
     public String getPlaceIDChoice() { return placeIDChoice; }
     public List<String> getLikedPlaces() { return likedPlaces; }
+    public Boolean getSettingsDailyNotification() { return settingsDailyNotification; }
 
     // #######
     // SETTERS
@@ -70,4 +72,5 @@ public class User {
     public void addPlaceToLike(String placeIDToAdd) { if (!this.likedPlaces.contains(placeIDToAdd)) this.likedPlaces.add(placeIDToAdd); }
     public void removeALikedPlace(String placeIDToRemove) { if (this.likedPlaces.contains(placeIDToRemove)) likedPlaces.remove(placeIDToRemove); }
     public void setLikedPlaces(List<String> likedPlaces) { this.likedPlaces = likedPlaces; }
+    public void setSettingsDailyNotification(Boolean settingsDailyNotification) { this.settingsDailyNotification = settingsDailyNotification; }
 }

@@ -75,4 +75,7 @@
     <string name="notification_description">"Aujourd'hui vous mangez avec : "</string>
     <string name="daily_notification_begin_content">"Hey "</string>
     <string name="comma_space">", "</string>
+    <string name="about_go4lunch">About Go4Lunch</string>
+
+
 </resources>

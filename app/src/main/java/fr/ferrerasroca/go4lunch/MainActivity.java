@@ -1,21 +1,16 @@
 package fr.ferrerasroca.go4lunch;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.Calendar;
-
 import fr.ferrerasroca.go4lunch.data.injections.Injection;
 import fr.ferrerasroca.go4lunch.ui.auth.AuthenticationActivity;
 import fr.ferrerasroca.go4lunch.ui.home.view.HomeActivity;
 import fr.ferrerasroca.go4lunch.ui.home.viewmodel.UserViewModel;
-import fr.ferrerasroca.go4lunch.ui.notification.NotificationAlarm;
+import fr.ferrerasroca.go4lunch.ui.notification.DailyNotificationManager;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,27 +22,24 @@ public class MainActivity extends AppCompatActivity {
 
         userViewModel = Injection.provideUserViewModel(Injection.provideUserViewModelFactory());
 
-        this.scheduleNotification();
-        this.launchAuthenticationActivityOrHomeActivity();
+
+        this.configureLiveDataActions();
     }
 
-    private void scheduleNotification() {
-        Calendar calendar = configureAndGetCalendar();
+    private void configureLiveDataActions() {
+        DailyNotificationManager dailyNotificationManager = new DailyNotificationManager(this);
 
-        Intent intent = new Intent(getApplication(), NotificationAlarm.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
+        userViewModel.getUser().observe(this, user -> {
+            Boolean isDailyNotificationEnabled = user.getSettingsDailyNotification();
 
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-    }
-
-    private Calendar configureAndGetCalendar() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 11);
-        calendar.set(Calendar.MINUTE, 45);
-
-        return calendar;
+            if (isDailyNotificationEnabled) {
+                dailyNotificationManager.configureAlarmManager();
+            } else {
+                dailyNotificationManager.cancelEnqueuedWork();
+            }
+        });
+        userViewModel.retrieveUser();
+        launchAuthenticationActivityOrHomeActivity();
     }
 
     private void launchAuthenticationActivityOrHomeActivity() {

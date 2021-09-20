@@ -110,7 +110,11 @@ public class UserRepository {
         UserHelper.setPlaceIDChoice(userUid, placeIDChoice).addOnCompleteListener(task -> listener.onPlaceIDChoiceSetted(placeIDChoice));
     }
 
-    public void setLikedPlaces(String userUid, List<String> placesLiked, UserViewModel.LikedPlacesSetted listener) {
+    public void setLikedPlaces(String userUid, List<String> placesLiked, UserViewModel.LikedPlacesSettedListener listener) {
         UserHelper.setLikedPlaces(userUid, placesLiked).addOnCompleteListener(task -> listener.onLikedPlacesSetted());
+    }
+
+    public void setSettingsDailyNotification(String userUid, Boolean dailyNotificationChoice, UserViewModel.DailyNotificationChoiceListener listener) {
+        UserHelper.setSettingsDailyNotification(userUid, dailyNotificationChoice).addOnCompleteListener(task -> listener.onDailyNotificationChoiceSetted(dailyNotificationChoice));
     }
 }

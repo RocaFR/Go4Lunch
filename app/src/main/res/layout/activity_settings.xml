@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.home.view.SettingsActivity">
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressbar_settings"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:indeterminate="true" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView_settingsName"
+            android:theme="@style/Go4Lunch.Title"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="@dimen/margin_little"
+            android:layout_marginStart="@dimen/margin_little"
+            android:text="@string/settings_category_notification"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView_notificationDescription"
+            app:layout_constraintTop_toBottomOf="@id/textView_settingsName"
+            app:layout_constraintStart_toStartOf="@id/textView_settingsName"
+            android:text="@string/daily_notification_description"/>
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/switchCompat_notification"
+            app:layout_constraintTop_toBottomOf="@id/textView_notificationDescription"
+            app:layout_constraintStart_toStartOf="@id/textView_notificationDescription"
+            android:layout_marginTop="@dimen/margin_little"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView_aboutTitle"
+            android:theme="@style/Go4Lunch.Title"
+            android:layout_marginTop="@dimen/margin_big"
+            app:layout_constraintTop_toBottomOf="@id/switchCompat_notification"
+            app:layout_constraintStart_toStartOf="@id/switchCompat_notification"
+            android:text="@string/about_go4lunch" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView_aboutSettings"
+            app:layout_constraintTop_toBottomOf="@id/textView_aboutTitle"
+            app:layout_constraintStart_toStartOf="@id/switchCompat_notification"
+            android:text="@string/settings_about" />
+
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

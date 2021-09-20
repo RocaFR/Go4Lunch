@@ -16,12 +16,12 @@ public class PlacesCalls {
         String longitude = Double.toString(location.getLongitude());
         String stringLocation = latitude + "," + longitude;
 
-        return placesService.getNearbyPlaces(stringLocation, BuildConfig.GOOGLE_API_KEY);
+        return placesService.getNearbyPlaces(stringLocation, BuildConfig.MAPS_API_KEY);
     }
 
     public static Call<PlaceDetailResponse> getPlaceDetails(String placeID) {
         PlacesService placesService = PlacesService.retrofit.create(PlacesService.class);
 
-        return placesService.getPlaceDetails(placeID, BuildConfig.GOOGLE_API_KEY);
+        return placesService.getPlaceDetails(placeID, BuildConfig.MAPS_API_KEY);
     }
 }

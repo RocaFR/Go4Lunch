@@ -13,7 +13,6 @@
 
             <Preference
                 android:summary="@string/settings_about" />
-
     </PreferenceCategory>
 
 </PreferenceScreen>

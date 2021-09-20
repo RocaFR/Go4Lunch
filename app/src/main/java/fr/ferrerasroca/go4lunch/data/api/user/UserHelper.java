@@ -55,6 +55,10 @@ public class UserHelper {
         return getUserCollection().document(userUid).update("likedPlaces", likedPlaces);
     }
 
+    public static Task<Void> setSettingsDailyNotification(String userUid, Boolean dailyNotificationChoice) {
+        return getUserCollection().document(userUid).update("settingsDailyNotification", dailyNotificationChoice);
+    }
+
     public static void signOutCurrentUser() {
         if (isCurrentUserLogged()) {
             firebaseAuth.signOut();

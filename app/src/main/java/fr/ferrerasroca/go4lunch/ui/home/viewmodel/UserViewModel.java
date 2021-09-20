@@ -20,8 +20,12 @@ public class UserViewModel extends ViewModel {
         void onPlaceIDChoiceSetted(String placeID);
     }
 
-    public interface LikedPlacesSetted {
+    public interface LikedPlacesSettedListener {
         void onLikedPlacesSetted();
+    }
+
+    public interface DailyNotificationChoiceListener {
+        void onDailyNotificationChoiceSetted(Boolean dailyNotificationChoice);
     }
 
     private final UserRepository userRepository;
@@ -85,8 +89,12 @@ public class UserViewModel extends ViewModel {
         userRepository.setPlaceIDChoice(userUid, placeIDChoice, listener);
     }
 
-    public void setLikedPlaces(String userUid, List<String> placesLiked, LikedPlacesSetted listener) {
+    public void setLikedPlaces(String userUid, List<String> placesLiked, LikedPlacesSettedListener listener) {
         userRepository.setLikedPlaces(userUid, placesLiked, listener);
+    }
+
+    public void setSettingsDailyNotification(String userUid, Boolean dailyNotificationChoice, DailyNotificationChoiceListener listener) {
+        userRepository.setSettingsDailyNotification(userUid, dailyNotificationChoice, listener);
     }
 
 }

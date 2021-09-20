@@ -14,9 +14,7 @@
         android:roundIcon="@mipmap/icon_round"
         android:supportsRtl="true"
         android:theme="@style/Go4Lunch">
-        <activity
-            android:name=".ui.home.view.SettingsActivity"
-            android:label="@string/title_activity_settings" />
+        <activity android:name=".ui.home.view.SettingsActivity"></activity>
         <activity android:name=".ui.home.view.RestaurantActivity" />
         <activity android:name=".ui.home.view.HomeActivity" />
         <activity android:name=".ui.auth.AuthenticationActivity" />
@@ -27,9 +25,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver
-            android:name="fr.ferrerasroca.go4lunch.ui.notification.NotificationAlarm" >
-        </receiver>
+
+        <receiver android:name=".ui.notification.NotificationAlarm"></receiver>
+
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
@@ -55,7 +53,7 @@
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="${GOOGLE_API_KEY}" />
+            android:value="${MAPS_API_KEY}" />
 
         <uses-library
             android:name="org.apache.http.legacy"

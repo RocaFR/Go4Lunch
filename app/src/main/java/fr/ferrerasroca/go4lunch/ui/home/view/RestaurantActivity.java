@@ -160,7 +160,7 @@ public class RestaurantActivity extends AppCompatActivity {
         });
     }
 
-    UserViewModel.LikedPlacesSetted callbackLikedPlaces = new UserViewModel.LikedPlacesSetted() {
+    UserViewModel.LikedPlacesSettedListener callbackLikedPlaces = new UserViewModel.LikedPlacesSettedListener() {
         @Override
         public void onLikedPlacesSetted() {
             configureImageButtonLike(user);
@@ -168,7 +168,7 @@ public class RestaurantActivity extends AppCompatActivity {
         }
     };
 
-    UserViewModel.LikedPlacesSetted callbackRemoveALikedPlaces = new UserViewModel.LikedPlacesSetted() {
+    UserViewModel.LikedPlacesSettedListener callbackRemoveALikedPlaces = new UserViewModel.LikedPlacesSettedListener() {
         @Override
         public void onLikedPlacesSetted() {
             configureImageButtonLike(user);

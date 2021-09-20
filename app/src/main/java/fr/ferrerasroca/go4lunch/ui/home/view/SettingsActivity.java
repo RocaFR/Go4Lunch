@@ -1,35 +1,62 @@
 package fr.ferrerasroca.go4lunch.ui.home.view;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.CompoundButton;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.preference.PreferenceFragmentCompat;
+
+import com.google.android.material.progressindicator.LinearProgressIndicator;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import fr.ferrerasroca.go4lunch.R;
+import fr.ferrerasroca.go4lunch.data.injections.Injection;
+import fr.ferrerasroca.go4lunch.ui.home.viewmodel.UserViewModel;
+import fr.ferrerasroca.go4lunch.ui.notification.DailyNotificationManager;
 
 public class SettingsActivity extends AppCompatActivity {
+
+    private SwitchMaterial switchMaterial;
+    private LinearProgressIndicator progressIndicator;
+    private UserViewModel userViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.settings_activity);
-        if (savedInstanceState == null) {
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.settings, new SettingsFragment())
-                    .commit();
-        }
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        setContentView(R.layout.activity_settings);
+
+        userViewModel = Injection.provideUserViewModel(Injection.provideUserViewModelFactory());
+
+        this.configureViews();
+        this.configureLiveDataActions();
     }
 
-    public static class SettingsFragment extends PreferenceFragmentCompat {
-        @Override
-        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-            setPreferencesFromResource(R.xml.root_preferences, rootKey);
-        }
+    private void configureViews() {
+        switchMaterial = findViewById(R.id.switchCompat_notification);
+        progressIndicator = findViewById(R.id.progressbar_settings);
+    }
+
+    private void configureLiveDataActions() {
+        userViewModel.getUser().observe(this, user -> {
+            progressIndicator.setVisibility(View.GONE);
+            switchMaterial.setChecked(user.getSettingsDailyNotification());
+            switchMaterial.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    userViewModel.setSettingsDailyNotification(user.getUid(), isChecked, new UserViewModel.DailyNotificationChoiceListener() {
+                        @Override
+                        public void onDailyNotificationChoiceSetted(Boolean dailyNotificationChoice) {
+                            DailyNotificationManager dailyNotificationManager = new DailyNotificationManager(getApplicationContext());
+                            if (dailyNotificationChoice) {
+                                dailyNotificationManager.configureAlarmManager();
+                            } else {
+                                dailyNotificationManager.cancelEnqueuedWork();
+                            }
+                        }
+                    });
+                }
+            });
+        });
+        userViewModel.retrieveUser();
     }
 }

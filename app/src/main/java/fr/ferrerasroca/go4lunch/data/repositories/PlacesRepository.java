@@ -45,7 +45,7 @@ public class PlacesRepository {
                         for (Place place : places) {
                             if (!place.getPhotos().isEmpty()) {
                                 String photoUrl = place.getPhotos().get(0).getPhotoReference();
-                                place.setPhotoUrl("https://maps.googleapis.com/maps/api/place/photo?key=" + BuildConfig.GOOGLE_API_KEY + "&photoreference=" + photoUrl + "&maxwidth=500");
+                                place.setPhotoUrl("https://maps.googleapis.com/maps/api/place/photo?key=" + BuildConfig.MAPS_API_KEY + "&photoreference=" + photoUrl + "&maxwidth=500");
                             }
                             String distance = calculateDistanceBetweenUserAndRestaurant(place, location);
                             place.setDistanceFromUser(distance);
@@ -82,7 +82,7 @@ public class PlacesRepository {
                     Place place = response.body().getPlace();
                     if (!place.getPhotos().isEmpty()) {
                         String photoReference = place.getPhotos().get(0).getPhotoReference();
-                        place.setPhotoUrl("https://maps.googleapis.com/maps/api/place/photo?key=" + BuildConfig.GOOGLE_API_KEY + "&photoreference=" + photoReference + "&maxwidth=500");
+                        place.setPhotoUrl("https://maps.googleapis.com/maps/api/place/photo?key=" + BuildConfig.MAPS_API_KEY + "&photoreference=" + photoReference + "&maxwidth=500");
                     }
                     listener.onPlaceDetailsRetrieved(place);
                 }
