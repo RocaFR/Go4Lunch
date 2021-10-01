@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        userViewModel = Injection.provideUserViewModel(Injection.provideUserViewModelFactory());
+        userViewModel = Injection.provideUserViewModel(Injection.provideIUserViewModelFactory());
 
 
         this.configureLiveDataActions();

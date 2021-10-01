@@ -23,7 +23,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import fr.ferrerasroca.go4lunch.R;
 import fr.ferrerasroca.go4lunch.data.api.user.UserHelper;
 import fr.ferrerasroca.go4lunch.data.models.User;
-import fr.ferrerasroca.go4lunch.data.repositories.UserRepository;
+import fr.ferrerasroca.go4lunch.data.repositories.AuthenticationRepositoryImpl;
 import fr.ferrerasroca.go4lunch.ui.auth.AuthenticationActivity;
 import fr.ferrerasroca.go4lunch.ui.home.view.HomeActivity;
 
@@ -39,7 +39,7 @@ public class GoogleIdentifiantApi  {
 
         GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(fragment.getActivity(), googleSignInOptions);
         Intent signInIntent = googleSignInClient.getSignInIntent();
-        fragment.startActivityForResult(signInIntent, UserRepository.RC_GOOGLE_SIGN_IN);
+        fragment.startActivityForResult(signInIntent, AuthenticationRepositoryImpl.RC_GOOGLE_SIGN_IN);
     }
 
     public void createUserIfSuccess(int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data, Fragment fragment) {

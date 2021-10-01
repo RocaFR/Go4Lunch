@@ -22,11 +22,9 @@ import com.google.android.gms.maps.model.Marker;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.Map;
 
 import fr.ferrerasroca.go4lunch.R;
 import fr.ferrerasroca.go4lunch.data.injections.Injection;
-import fr.ferrerasroca.go4lunch.data.models.User;
 import fr.ferrerasroca.go4lunch.data.models.places.Place;
 import fr.ferrerasroca.go4lunch.ui.home.view.GoogleMapsComponent;
 import fr.ferrerasroca.go4lunch.ui.home.view.HomeActivity;
@@ -68,7 +66,7 @@ public class MapViewFragment extends Fragment {
         googleMapsComponent.getMapView().onCreate(savedInstanceState);
 
         placesViewModel = Injection.providePlacesViewModel(Injection.providePlacesViewModelFactory());
-        userViewModel = Injection.provideUserViewModel(Injection.provideUserViewModelFactory());
+        userViewModel = Injection.provideUserViewModel(Injection.provideIUserViewModelFactory());
 
         this.configureViewModelCalls();
     }

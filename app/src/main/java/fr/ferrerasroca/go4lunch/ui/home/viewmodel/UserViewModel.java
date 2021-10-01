@@ -1,9 +1,6 @@
 package fr.ferrerasroca.go4lunch.ui.home.viewmodel;
 
-import android.content.Intent;
-
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -28,73 +25,57 @@ public class UserViewModel extends ViewModel {
         void onDailyNotificationChoiceSetted(Boolean dailyNotificationChoice);
     }
 
-    private final UserRepository userRepository;
+    private final UserRepository userRepositoryImpl;
 
     private final MutableLiveData<User> _userMutableLiveData = new MutableLiveData<>();
-    public LiveData<User> userLiveData = _userMutableLiveData;
     private final MutableLiveData<List<Place>> _mutableLiveDataPlacesWithParticipants = new MutableLiveData<>();
-    private final LiveData<List<Place>> liveDataPlacesWithParticipants = _mutableLiveDataPlacesWithParticipants;
     private final MutableLiveData<List<User>> _mutableLiveDataUsers = new MutableLiveData<>();
-    private final LiveData<List<User>> liveDataUsers = _mutableLiveDataUsers;
 
-    public UserViewModel(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    public void launchFacebookSignInActivity(Fragment fragment) {
-        userRepository.launchFacebookSignInActivity(fragment);
-    }
-
-    public void launchGoogleSignInActivity(Fragment fragment) {
-        userRepository.launchGoogleSignInActivity(fragment);
-    }
-
-    public void createUserIfSuccess(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data, Fragment fragment) {
-        userRepository.createUserIfSuccess(requestCode, resultCode, data, fragment);
+    public UserViewModel(UserRepository userRepositoryImpl) {
+        this.userRepositoryImpl = userRepositoryImpl;
     }
 
     public Boolean isCurrentUserLogged() {
-        return userRepository.isCurrentUserLogged();
+        return userRepositoryImpl.isCurrentUserLogged();
     }
 
     public void retrieveUser() {
-        userRepository.retrieveUser(_userMutableLiveData::postValue);
+        userRepositoryImpl.retrieveUser(_userMutableLiveData::postValue);
     }
 
     public LiveData<User> getUser() {
-        return this.userLiveData;
+        return this._userMutableLiveData;
     }
 
     public void signOutUser() {
-        userRepository.signOutCurrentUser();
+        userRepositoryImpl.signOutCurrentUser();
     }
 
     public void retrieveUsers(@Nullable String placeID) {
-        userRepository.retrieveUsers(placeID, _mutableLiveDataUsers::postValue);
+        userRepositoryImpl.retrieveUsers(placeID, _mutableLiveDataUsers::postValue);
     }
 
     public LiveData<List<User>> getUsers() {
-        return liveDataUsers;
+        return _mutableLiveDataUsers;
     }
 
     public void retrieveParticipantsForPlaces(List<Place> places) {
-        userRepository.retrieveParticipantsForPlaces(places, _mutableLiveDataPlacesWithParticipants::postValue);
+        userRepositoryImpl.retrieveParticipantsForPlaces(places, _mutableLiveDataPlacesWithParticipants::postValue);
     }
 
     public LiveData<List<Place>> getPlacesWithParticipants() {
-        return liveDataPlacesWithParticipants;
+        return _mutableLiveDataPlacesWithParticipants;
     }
 
     public void setPlaceIDChoice(String userUid, String placeIDChoice, PlaceIDChoiceSettedListener listener) {
-        userRepository.setPlaceIDChoice(userUid, placeIDChoice, listener);
+        userRepositoryImpl.setPlaceIDChoice(userUid, placeIDChoice, listener);
     }
 
     public void setLikedPlaces(String userUid, List<String> placesLiked, LikedPlacesSettedListener listener) {
-        userRepository.setLikedPlaces(userUid, placesLiked, listener);
+        userRepositoryImpl.setLikedPlaces(userUid, placesLiked, listener);
     }
 
     public void setSettingsDailyNotification(String userUid, Boolean dailyNotificationChoice, DailyNotificationChoiceListener listener) {
-        userRepository.setSettingsDailyNotification(userUid, dailyNotificationChoice, listener);
+        userRepositoryImpl.setSettingsDailyNotification(userUid, dailyNotificationChoice, listener);
     }
-
 }

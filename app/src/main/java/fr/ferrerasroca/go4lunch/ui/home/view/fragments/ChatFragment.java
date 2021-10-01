@@ -42,7 +42,7 @@ public class ChatFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        userViewModel = Injection.provideUserViewModel(Injection.provideUserViewModelFactory());
+        userViewModel = Injection.provideUserViewModel(Injection.provideIUserViewModelFactory());
         chatViewModel = Injection.provideChatViewModel(Injection.provideChatViewModelFactory());
     }
 

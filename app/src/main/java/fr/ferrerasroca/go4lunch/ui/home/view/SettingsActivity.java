@@ -26,7 +26,7 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        userViewModel = Injection.provideUserViewModel(Injection.provideUserViewModelFactory());
+        userViewModel = Injection.provideUserViewModel(Injection.provideIUserViewModelFactory());
 
         this.configureViews();
         this.configureLiveDataActions();

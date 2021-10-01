@@ -14,49 +14,31 @@ import fr.ferrerasroca.go4lunch.data.repositories.PlacesRepository;
 
 public class PlacesViewModel extends ViewModel {
 
-    private final PlacesRepository placesRepository;
+    private final PlacesRepository placesRepositoryImpl;
 
     private final MutableLiveData<List<Place>> _placesMutableLiveData = new MutableLiveData<>();
-    private final LiveData<List<Place>> places = _placesMutableLiveData;
     private final MutableLiveData<Place> _placeMutableLiveData = new MutableLiveData<>();
-    private final LiveData<Place> place = _placeMutableLiveData;
     private final MutableLiveData<List<Place>> _placesChosenByUsersMutableLiveData = new MutableLiveData<>();
-    private final LiveData<List<Place>> placesChosenByUsers = _placesChosenByUsersMutableLiveData;
 
     public PlacesViewModel(PlacesRepository placesRepository) {
-        this.placesRepository = placesRepository;
+        this.placesRepositoryImpl = placesRepository;
     }
 
     public void retrieveNearbyPlaces(Location location) {
-        placesRepository.retrieveNearbyPlaces(location, new PlacesRepository.NearbyPlacesRetrievedListener() {
-            @Override
-            public void onNearbyPlacesRetrieved(List<Place> places) {
-                _placesMutableLiveData.postValue(places);
-            }
-        });
+        placesRepositoryImpl.retrieveNearbyPlaces(location, _placesMutableLiveData::postValue);
     }
 
-    public LiveData<List<Place>> getPlaces() { return places; }
+    public LiveData<List<Place>> getPlaces() { return _placesMutableLiveData; }
 
     public void retrievePlaceByID(String placeID) {
-        placesRepository.retrievePlaceDetails(placeID, new PlacesRepository.PlaceDetailsRetrievedListener() {
-            @Override
-            public void onPlaceDetailsRetrieved(Place place) {
-                _placeMutableLiveData.postValue(place);
-            }
-        });
+        placesRepositoryImpl.retrievePlaceDetails(placeID, _placeMutableLiveData::postValue);
     }
 
-    public LiveData<Place> getPlace() { return place; }
+    public LiveData<Place> getPlace() { return _placeMutableLiveData; }
 
     public void retrievePlacesByUsers(List<User> users) {
-        placesRepository.retrievePlacesByUsers(users, new PlacesRepository.PlacesChosenByUsersRetrievedListener() {
-            @Override
-            public void onPlacesChosenByUsersRetrieved(List<Place> places) {
-                _placesChosenByUsersMutableLiveData.postValue(places);
-            }
-        });
+        placesRepositoryImpl.retrievePlacesByUsers(users, _placesChosenByUsersMutableLiveData::postValue);
     }
 
-    public LiveData<List<Place>> getPlacesChosenByUsers() { return placesChosenByUsers; }
+    public LiveData<List<Place>> getPlacesChosenByUsers() { return _placesChosenByUsersMutableLiveData; }
 }

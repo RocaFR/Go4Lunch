@@ -1,5 +1,7 @@
 package fr.ferrerasroca.go4lunch.ui.notification;
 
+import static fr.ferrerasroca.go4lunch.ui.notification.DailyNotification.CHANNEL_ID;
+
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -16,8 +18,6 @@ import fr.ferrerasroca.go4lunch.R;
 import fr.ferrerasroca.go4lunch.data.injections.Injection;
 import fr.ferrerasroca.go4lunch.data.models.User;
 import fr.ferrerasroca.go4lunch.data.repositories.UserRepository;
-
-import static fr.ferrerasroca.go4lunch.ui.notification.DailyNotification.CHANNEL_ID;
 
 public class DailyWorker extends Worker {
 

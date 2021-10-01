@@ -17,17 +17,16 @@ import androidx.fragment.app.Fragment;
 
 import org.jetbrains.annotations.NotNull;
 
-
 import fr.ferrerasroca.go4lunch.R;
 import fr.ferrerasroca.go4lunch.data.injections.Injection;
-import fr.ferrerasroca.go4lunch.data.injections.ViewModelFactory;
 import fr.ferrerasroca.go4lunch.databinding.FragmentAuthenticationBinding;
+import fr.ferrerasroca.go4lunch.ui.home.viewmodel.AuthenticationViewModel;
 import fr.ferrerasroca.go4lunch.ui.home.viewmodel.UserViewModel;
 
 public class AuthenticationFragment extends Fragment {
 
     private FragmentAuthenticationBinding viewBinding;
-    private UserViewModel userViewModel;
+    private AuthenticationViewModel authenticationViewModel;
 
     // Necessary for Android system.
     public AuthenticationFragment() { }
@@ -44,8 +43,7 @@ public class AuthenticationFragment extends Fragment {
     }
 
     private void configureViewModel() {
-        ViewModelFactory viewModelFactory = Injection.provideUserViewModelFactory();
-        this.userViewModel = viewModelFactory.create(UserViewModel.class);
+        this.authenticationViewModel = Injection.provideAuthenticationViewModel(Injection.provideAuthenticationViewModelFactory());
     }
 
     @Override
@@ -65,7 +63,7 @@ public class AuthenticationFragment extends Fragment {
     private void configureListeners() {
         viewBinding.buttonSignInGoogle.setOnClickListener(view -> {
             if (isNetworkAvailable()) {
-                userViewModel.launchGoogleSignInActivity(this);
+                authenticationViewModel.launchGoogleSignInActivity(this);
             } else {
                 this.displayNetworkErrorMessage();
             }
@@ -73,7 +71,7 @@ public class AuthenticationFragment extends Fragment {
 
         viewBinding.buttonSignInFacebook.setOnClickListener(view -> {
             if (isNetworkAvailable()) {
-                userViewModel.launchFacebookSignInActivity(this);
+                authenticationViewModel.launchFacebookSignInActivity(this);
             } else {
                 this.displayNetworkErrorMessage();
             }
@@ -97,7 +95,7 @@ public class AuthenticationFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         this.configureProgressbar(resultCode);
-        userViewModel.createUserIfSuccess(requestCode, resultCode, data, this);
+        authenticationViewModel.createUserIfSuccess(requestCode, resultCode, data, this);
     }
 
     private void configureProgressbar(int resultCode) {

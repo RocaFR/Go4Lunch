@@ -42,7 +42,7 @@ public class HomeActivity extends AppCompatActivity {
         activityBinding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(activityBinding.getRoot());
 
-        userViewModel = Injection.provideUserViewModel(Injection.provideUserViewModelFactory());
+        userViewModel = Injection.provideUserViewModel(Injection.provideIUserViewModelFactory());
         this.configureNavigationHeaderViews();
         this.configureToolbar();
         this.configureDrawerLayout();

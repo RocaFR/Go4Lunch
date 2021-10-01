@@ -1,5 +1,7 @@
 package fr.ferrerasroca.go4lunch.ui.home.view;
 
+import static fr.ferrerasroca.go4lunch.ui.home.view.HomeActivity.EXTRA_PLACE_ID;
+
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -27,8 +29,6 @@ import fr.ferrerasroca.go4lunch.ui.home.viewmodel.PlacesViewModel;
 import fr.ferrerasroca.go4lunch.ui.home.viewmodel.UserViewModel;
 import fr.ferrerasroca.go4lunch.utils.PlaceUtils;
 
-import static fr.ferrerasroca.go4lunch.ui.home.view.HomeActivity.EXTRA_PLACE_ID;
-
 public class RestaurantActivity extends AppCompatActivity {
 
     private ActivityRestaurantBinding viewBinding;
@@ -50,7 +50,7 @@ public class RestaurantActivity extends AppCompatActivity {
         actualPlaceID = getIntent().getStringExtra(EXTRA_PLACE_ID);
 
         placesViewModel = Injection.providePlacesViewModel(Injection.providePlacesViewModelFactory());
-        userViewModel = Injection.provideUserViewModel(Injection.provideUserViewModelFactory());
+        userViewModel = Injection.provideUserViewModel(Injection.provideIUserViewModelFactory());
 
 
         this.configureViewModelCalls();

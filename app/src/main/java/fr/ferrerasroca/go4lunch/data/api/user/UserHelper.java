@@ -10,13 +10,13 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.List;
 
 import fr.ferrerasroca.go4lunch.data.models.User;
-import fr.ferrerasroca.go4lunch.data.repositories.UserRepository;
+import fr.ferrerasroca.go4lunch.data.repositories.UserRepositoryImpl;
 
 public class UserHelper {
 
     private static final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-
     private static final String COLLECTION_NAME = "users";
+
     private static CollectionReference getUserCollection() {
         return FirebaseFirestore.getInstance().collection(COLLECTION_NAME);
     }
@@ -29,8 +29,8 @@ public class UserHelper {
         return getUserCollection().document(userUid).get();
     }
 
-    public static Task<DocumentSnapshot> getUser(UserRepository.UserRetrievedListener listener) {
-        return getUserCollection().document(firebaseAuth.getCurrentUser().getUid()).get()
+    public static void getUser(UserRepositoryImpl.UserRetrievedListener listener) {
+         getUserCollection().document(firebaseAuth.getCurrentUser().getUid()).get()
                 .addOnCompleteListener(task -> listener.onUserRetrieved(task.getResult().toObject(User.class)));
     }
 

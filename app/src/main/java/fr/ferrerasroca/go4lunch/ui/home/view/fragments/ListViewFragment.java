@@ -1,5 +1,8 @@
 package fr.ferrerasroca.go4lunch.ui.home.view.fragments;
 
+import static fr.ferrerasroca.go4lunch.ui.home.view.GoogleMapsComponent.RC_LOCATION_PERM;
+import static fr.ferrerasroca.go4lunch.ui.home.view.HomeActivity.EXTRA_PLACE_ID;
+
 import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
@@ -40,9 +43,6 @@ import fr.ferrerasroca.go4lunch.utils.NetworkUtils;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-import static fr.ferrerasroca.go4lunch.ui.home.view.GoogleMapsComponent.RC_LOCATION_PERM;
-import static fr.ferrerasroca.go4lunch.ui.home.view.HomeActivity.EXTRA_PLACE_ID;
-
 public class ListViewFragment extends Fragment {
 
     private PlacesViewModel placesViewModel;
@@ -63,7 +63,7 @@ public class ListViewFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         placesViewModel = Injection.providePlacesViewModel(Injection.providePlacesViewModelFactory());
-        userViewModel = Injection.provideUserViewModel(Injection.provideUserViewModelFactory());
+        userViewModel = Injection.provideUserViewModel(Injection.provideIUserViewModelFactory());
     }
 
     @Override

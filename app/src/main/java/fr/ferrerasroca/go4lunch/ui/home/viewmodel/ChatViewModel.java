@@ -12,29 +12,30 @@ import java.util.Date;
 import fr.ferrerasroca.go4lunch.data.models.Message;
 import fr.ferrerasroca.go4lunch.data.models.User;
 import fr.ferrerasroca.go4lunch.data.repositories.ChatRepository;
+import fr.ferrerasroca.go4lunch.data.repositories.ChatRepositoryImpl;
 
 public class ChatViewModel extends ViewModel {
 
-    private final ChatRepository chatRepository;
+    private final ChatRepository chatRepositoryImpl;
     private final MutableLiveData<Boolean> _mutableLiveDataMessageState = new MutableLiveData<>(false);
     private final LiveData<Boolean> liveDataMessageState = _mutableLiveDataMessageState;
 
-    public ChatViewModel(ChatRepository chatRepository) {
-        this.chatRepository = chatRepository;
+    public ChatViewModel(ChatRepository chatRepositoryImpl) {
+        this.chatRepositoryImpl = chatRepositoryImpl;
     }
 
     public void createMessage(User sender, Date date, String stringMessage) {
         Message message = new Message(sender, date, stringMessage);
-        chatRepository.createMessage(message, onMessageCreated);
+        chatRepositoryImpl.createMessage(message, onMessageCreated);
     }
 
-    private final ChatRepository.MessageCreatedListener onMessageCreated = () -> this._mutableLiveDataMessageState.postValue(true);
+    private final ChatRepositoryImpl.MessageCreatedListener onMessageCreated = () -> this._mutableLiveDataMessageState.postValue(true);
 
     public LiveData<Boolean> getMessageState() {
         return this.liveDataMessageState;
     }
 
     public FirestoreRecyclerOptions<Message> generateOptionsForFirestore(LifecycleOwner lifecycleOwner) {
-        return chatRepository.generateOptionsForFirestore(lifecycleOwner);
+        return chatRepositoryImpl.generateOptionsForFirestore(lifecycleOwner);
     }
 }
