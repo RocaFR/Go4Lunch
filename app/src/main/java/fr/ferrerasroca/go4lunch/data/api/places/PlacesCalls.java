@@ -1,27 +1,22 @@
 package fr.ferrerasroca.go4lunch.data.api.places;
 
-import android.location.Location;
-
-import fr.ferrerasroca.go4lunch.BuildConfig;
 import fr.ferrerasroca.go4lunch.data.models.places.responses.PlaceDetailResponse;
 import fr.ferrerasroca.go4lunch.data.models.places.responses.NearbyPlacesResponse;
 import retrofit2.Call;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.GET;
+import retrofit2.http.Query;
 
-public class PlacesCalls {
+public interface PlacesService {
+    @GET("nearbysearch/json?radius=1000&type=restaurant")
+    Call<NearbyPlacesResponse> getNearbyPlaces(@Query(value = "location", encoded = true) String location, @Query("key") String api_key);
 
-    public static Call<NearbyPlacesResponse> getNearbyPlaces(Location location) {
-        PlacesService placesService = PlacesService.retrofit.create(PlacesService.class);
+    @GET("details/json?")
+    Call<PlaceDetailResponse> getPlaceDetails(@Query("place_id") String placeID , @Query("key") String apiKey);
 
-        String latitude = Double.toString(location.getLatitude());
-        String longitude = Double.toString(location.getLongitude());
-        String stringLocation = latitude + "," + longitude;
-
-        return placesService.getNearbyPlaces(stringLocation, BuildConfig.MAPS_API_KEY);
-    }
-
-    public static Call<PlaceDetailResponse> getPlaceDetails(String placeID) {
-        PlacesService placesService = PlacesService.retrofit.create(PlacesService.class);
-
-        return placesService.getPlaceDetails(placeID, BuildConfig.MAPS_API_KEY);
-    }
+    Retrofit retrofit = new Retrofit.Builder()
+            .baseUrl("https://maps.googleapis.com/maps/api/place/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build();
 }

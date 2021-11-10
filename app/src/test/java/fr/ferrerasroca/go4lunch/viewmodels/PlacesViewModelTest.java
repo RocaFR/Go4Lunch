@@ -1,8 +1,7 @@
-package fr.ferrerasroca.go4lunch;
+package fr.ferrerasroca.go4lunch.viewmodels;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import android.location.Location;
 
@@ -36,12 +35,9 @@ public class PlacesViewModelTest {
 
     @Test
     public void canIGetNearbyPlaces() {
-        PlacesViewModel placesViewModel = Mockito.mock(PlacesViewModel.class);
+        PlacesRepositoryImpl placesRepository = Mockito.mock(PlacesRepositoryImpl.class);
+        PlacesViewModel placesViewModel = new PlacesViewModel(placesRepository);
 
-        when(placesViewModel.getPlaces()).thenReturn(new MutableLiveData<>());
-        placesViewModel.getPlaces();
-
-        verify(placesViewModel).getPlaces();
         Assert.assertTrue(placesViewModel.getPlaces().getClass().isAssignableFrom(MutableLiveData.class));
     }
 
@@ -57,12 +53,9 @@ public class PlacesViewModelTest {
 
     @Test
     public void canIGetPlace() {
-        PlacesViewModel placesViewModel = Mockito.mock(PlacesViewModel.class);
+        PlacesRepositoryImpl placesRepository = Mockito.mock(PlacesRepositoryImpl.class);
+        PlacesViewModel placesViewModel = new PlacesViewModel(placesRepository);
 
-        when(placesViewModel.getPlace()).thenReturn(new MutableLiveData<>());
-        placesViewModel.getPlace();
-
-        verify(placesViewModel).getPlace();
         Assert.assertTrue(placesViewModel.getPlace().getClass().isAssignableFrom(MutableLiveData.class));
     }
 
@@ -78,12 +71,9 @@ public class PlacesViewModelTest {
 
     @Test
     public void canIGetPlacesChosenByUsers() {
-        PlacesViewModel placesViewModel = Mockito.mock(PlacesViewModel.class);
+        PlacesRepository placesRepository = Mockito.mock(PlacesRepositoryImpl.class);
+        PlacesViewModel placesViewModel = new PlacesViewModel(placesRepository);
 
-        when(placesViewModel.getPlacesChosenByUsers()).thenReturn(new MutableLiveData<>());
-        placesViewModel.getPlacesChosenByUsers();
-
-        verify(placesViewModel).getPlacesChosenByUsers();
         Assert.assertTrue(placesViewModel.getPlacesChosenByUsers().getClass().isAssignableFrom(MutableLiveData.class));
     }
 }

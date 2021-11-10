@@ -1,8 +1,7 @@
-package fr.ferrerasroca.go4lunch;
+package fr.ferrerasroca.go4lunch.viewmodels;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
@@ -35,14 +34,10 @@ public class ChatViewModelTest {
 
     @Test
     public void canIGetAMessageState() {
-        ChatViewModel chatViewModel = Mockito.mock(ChatViewModel.class);
+        ChatRepositoryImpl chatRepository = Mockito.mock(ChatRepositoryImpl.class);
+        ChatViewModel chatViewModel = new ChatViewModel(chatRepository);
 
-        when(chatViewModel.getMessageState()).thenReturn(new MutableLiveData<>(true));
-        chatViewModel.getMessageState();
-
-        verify(chatViewModel).getMessageState();
         Assert.assertTrue(chatViewModel.getMessageState().getClass().isAssignableFrom(MutableLiveData.class));
-        Assert.assertTrue(chatViewModel.getMessageState().getValue().getClass().isAssignableFrom(Boolean.class));
     }
 
     @Test

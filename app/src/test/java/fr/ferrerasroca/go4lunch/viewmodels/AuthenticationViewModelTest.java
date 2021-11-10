@@ -1,4 +1,4 @@
-package fr.ferrerasroca.go4lunch;
+package fr.ferrerasroca.go4lunch.viewmodels;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -12,7 +12,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import fr.ferrerasroca.go4lunch.data.api.authentication.FacebookLoginApi;
 import fr.ferrerasroca.go4lunch.data.repositories.AuthenticationRepository;
 import fr.ferrerasroca.go4lunch.data.repositories.AuthenticationRepositoryImpl;
 import fr.ferrerasroca.go4lunch.ui.home.viewmodel.AuthenticationViewModel;
@@ -24,13 +23,13 @@ public class AuthenticationViewModelTest {
     public void canILaunchFacebookSignInActivity() {
         AuthenticationRepository authenticationRepository = Mockito.mock(AuthenticationRepositoryImpl.class);
         AuthenticationViewModel authenticationViewModel = new AuthenticationViewModel(authenticationRepository);
-        FacebookLoginApi facebookLoginApi = Mockito.mock(FacebookLoginApi.class);
         Fragment fragment = Mockito.mock(Fragment.class);
 
         authenticationViewModel.launchFacebookSignInActivity(fragment);
 
         verify(authenticationRepository).launchFacebookSignInActivity(any());
     }
+
     @Test
     public void canILaunchGoogleSignInActivity() {
         AuthenticationRepository authenticationRepository = Mockito.mock(AuthenticationRepositoryImpl.class);

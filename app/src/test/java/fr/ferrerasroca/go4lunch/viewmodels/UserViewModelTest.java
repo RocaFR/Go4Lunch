@@ -1,8 +1,7 @@
-package fr.ferrerasroca.go4lunch;
+package fr.ferrerasroca.go4lunch.viewmodels;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import androidx.lifecycle.MutableLiveData;
 
@@ -33,12 +32,9 @@ public class UserViewModelTest {
 
     @Test
     public void canIGetUser() {
-        UserViewModel userViewModel = Mockito.mock(UserViewModel.class);
+        UserRepositoryImpl userRepository = Mockito.mock(UserRepositoryImpl.class);
+        UserViewModel userViewModel = new UserViewModel(userRepository);
 
-        when(userViewModel.getUser()).thenReturn(new MutableLiveData<>());
-        userViewModel.getUser();
-
-        verify(userViewModel).getUser();
         Assert.assertTrue(userViewModel.getUser().getClass().isAssignableFrom(MutableLiveData.class));
     }
 
@@ -54,12 +50,9 @@ public class UserViewModelTest {
 
     @Test
     public void canIGetUsers() {
-        UserViewModel userViewModel = Mockito.mock(UserViewModel.class);
+        UserRepositoryImpl userRepository = Mockito.mock(UserRepositoryImpl.class);
+        UserViewModel userViewModel = new UserViewModel(userRepository);
 
-        when(userViewModel.getUsers()).thenReturn(new MutableLiveData<>());
-        userViewModel.getUsers();
-
-        verify(userViewModel).getUsers();
         Assert.assertTrue(userViewModel.getUsers().getClass().isAssignableFrom(MutableLiveData.class));
     }
 
@@ -75,12 +68,9 @@ public class UserViewModelTest {
 
     @Test
     public void canIGetPlacesWithParticipants() {
-        UserViewModel userViewModel = Mockito.mock(UserViewModel.class);
+        UserRepositoryImpl userRepository = Mockito.mock(UserRepositoryImpl.class);
+        UserViewModel userViewModel =  new UserViewModel(userRepository);
 
-        when(userViewModel.getPlacesWithParticipants()).thenReturn(new MutableLiveData<>());
-        userViewModel.getPlacesWithParticipants();
-
-        verify(userViewModel).getPlacesWithParticipants();
         Assert.assertTrue(userViewModel.getPlacesWithParticipants().getClass().isAssignableFrom(MutableLiveData.class));
     }
 
@@ -112,5 +102,25 @@ public class UserViewModelTest {
         userViewModel.setSettingsDailyNotification("uid", true, null);
 
         verify(userRepository).setSettingsDailyNotification(any(), any(), any());
+    }
+
+    @Test
+    public void canISignOutUser() {
+        UserRepositoryImpl userRepository = Mockito.mock(UserRepositoryImpl.class);
+        UserViewModel userViewModel = new UserViewModel(userRepository);
+
+        userViewModel.signOutUser();
+
+        verify(userRepository).signOutCurrentUser();
+    }
+
+    @Test
+    public void canICheckIfCurrentUserIsLogged() {
+        UserRepositoryImpl userRepository = Mockito.mock(UserRepositoryImpl.class);
+        UserViewModel userViewModel = new UserViewModel(userRepository);
+
+        userViewModel.isCurrentUserLogged();
+
+        verify(userRepository).isCurrentUserLogged();
     }
 }
