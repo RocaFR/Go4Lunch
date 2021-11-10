@@ -14,9 +14,9 @@ public class AuthenticationRepositoryImpl implements AuthenticationRepository {
     private final FacebookLoginApi facebookLoginApi;
     private final GoogleIdentifiantApi googleIdentifiantApi;
 
-    public AuthenticationRepositoryImpl() {
-        this.googleIdentifiantApi = new GoogleIdentifiantApi();
-        this.facebookLoginApi = new FacebookLoginApi();
+    public AuthenticationRepositoryImpl(GoogleIdentifiantApi googleIdentifiantApi, FacebookLoginApi facebookLoginApi) {
+        this.googleIdentifiantApi = googleIdentifiantApi;
+        this.facebookLoginApi = facebookLoginApi;
     }
 
     @Override

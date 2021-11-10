@@ -21,6 +21,7 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -30,6 +31,13 @@ import fr.ferrerasroca.go4lunch.R;
 import fr.ferrerasroca.go4lunch.utils.LocationUtils;
 
 public class GoogleMapsComponent implements OnMapReadyCallback, GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener {
+
+    /**
+     * Useful to notify fragment's activity that location is retrieved.
+     */
+    public interface Callback {
+        void onLocationRetrieved(LatLngBounds latLngBounds);
+    }
 
     private MapView mapView;
     private LocationRequest locationRequest;
@@ -54,7 +62,6 @@ public class GoogleMapsComponent implements OnMapReadyCallback, GoogleMap.OnMyLo
         googleMap.getUiSettings().setTiltGesturesEnabled(true);
 
         googleMap.setOnMyLocationButtonClickListener(this);
-
         currentGoogleMap = googleMap;
 
         // Trigger when resuming activity/fragment

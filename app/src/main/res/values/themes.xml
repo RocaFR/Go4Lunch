@@ -8,16 +8,17 @@
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/secondaryColor</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="colorPrimaryDark" >@color/primaryColor</item>
         <item name="android:actionMenuTextColor">@color/primarytextColor</item>
         <item name="android:actionBarTabTextStyle">@color/white</item>
     </style>
     <!-- Fullscreen -->
-   <!--<style name="Fullscreen" parent="Go4Lunch">
+   <style name="Fullscreen" parent="Go4Lunch">
         <item name="windowNoTitle">true</item>
         <item name="android:windowFullscreen">true</item>
-        <item name="android:windowContentOverlay">@null</item>&ndash;&gt;
-    </style>-->
+        <item name="android:windowContentOverlay">@null</item>
+       <item name="windowActionBar">false</item>
+   </style>
     <!-- Classic paragraph -->
     <style name="Go4Lunch.Paragraph" parent="Go4Lunch">
         <item name="android:textSize">15sp</item>

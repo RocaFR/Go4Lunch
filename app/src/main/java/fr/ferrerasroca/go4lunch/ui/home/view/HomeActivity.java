@@ -9,13 +9,25 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.model.RectangularBounds;
+import com.google.android.libraries.places.api.model.TypeFilter;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 
+import java.util.Arrays;
+import java.util.List;
+
+import fr.ferrerasroca.go4lunch.BuildConfig;
 import fr.ferrerasroca.go4lunch.MainActivity;
 import fr.ferrerasroca.go4lunch.R;
 import fr.ferrerasroca.go4lunch.data.injections.Injection;
@@ -27,7 +39,7 @@ import fr.ferrerasroca.go4lunch.ui.home.view.fragments.MapViewFragment;
 import fr.ferrerasroca.go4lunch.ui.home.view.fragments.WorkmatesFragment;
 import fr.ferrerasroca.go4lunch.ui.home.viewmodel.UserViewModel;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements GoogleMapsComponent.Callback {
 
     private ActivityHomeBinding activityBinding;
     private UserViewModel userViewModel;
@@ -35,6 +47,8 @@ public class HomeActivity extends AppCompatActivity {
     private TextView textViewUserEmail;
     private ImageView imageViewUserProfilePicture;
     public static final String EXTRA_PLACE_ID = "EXTRA_PLACE_ID";
+    private static final int AUTOCOMPLETE_REQUEST_CODE = 1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,22 +80,10 @@ public class HomeActivity extends AppCompatActivity {
         this.configureNavigationViewListeners(user.getPlaceIDChoice());
     }
 
-    private void configureYourRestaurantButton(String placeIDChoice) {
-        if (placeIDChoice != null) {
-            if (!placeIDChoice.isEmpty()) {
-
-            }
-        }
-    }
-
     private void configureToolbar() {
         activityBinding.toolbar.setTitle(getString(R.string.app_name));
         activityBinding.toolbar.inflateMenu(R.menu.menu_toolbar);
         setSupportActionBar(activityBinding.toolbar);
-        activityBinding.toolbar.setOnMenuItemClickListener(item -> {
-            Toast.makeText(this, "Click on search", Toast.LENGTH_LONG).show();
-            return true;
-        });
     }
 
     @Override
@@ -170,6 +172,25 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        handleAutocompleteResponse(requestCode, resultCode, data);
+
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void handleAutocompleteResponse(int requestCode, int resultCode, Intent data) {
+        if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                String id = Autocomplete.getPlaceFromIntent(data).getId();
+                Intent intent = new Intent(this, RestaurantActivity.class);
+                intent.putExtra(EXTRA_PLACE_ID, id);
+                startActivity(intent);
+            }
+            return;
+        }
+    }
+
     private void loadFragment(Fragment fragment) {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_home_host, fragment)
@@ -193,5 +214,28 @@ public class HomeActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         Log.e("TAG", "onPause: ");
+    }
+
+    @Override
+    public void onLocationRetrieved(LatLngBounds latLngBounds) {
+        configurePlaceAutocomplete(latLngBounds);
+    }
+
+    private void configurePlaceAutocomplete(LatLngBounds latLngBounds) {
+        activityBinding.toolbar.setOnMenuItemClickListener(item -> {
+            if (!Places.isInitialized()) {
+                Places.initialize(getApplicationContext(), BuildConfig.MAPS_API_KEY);
+            }
+
+            List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME);
+            RectangularBounds rectangularBounds = RectangularBounds.newInstance(latLngBounds);
+
+            Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields)
+                    .setTypeFilter(TypeFilter.ESTABLISHMENT)
+                    .setLocationBias(rectangularBounds)
+                    .build(this);
+            startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
+            return true;
+        });
     }
 }

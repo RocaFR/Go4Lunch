@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel;
 
 import java.util.List;
 
+import fr.ferrerasroca.go4lunch.data.api.user.UserDatabase;
 import fr.ferrerasroca.go4lunch.data.models.User;
 import fr.ferrerasroca.go4lunch.data.models.places.Place;
 import fr.ferrerasroca.go4lunch.data.repositories.UserRepository;
@@ -40,7 +41,15 @@ public class UserViewModel extends ViewModel {
     }
 
     public void retrieveUser() {
-        userRepositoryImpl.retrieveUser(_userMutableLiveData::postValue);
+        userRepositoryImpl.retrieveUser(new UserDatabase.Callback<User>() {
+            @Override
+            public void onSuccess(User user) {
+                _userMutableLiveData.postValue(user);
+            }
+
+            @Override
+            public void onFailure(Exception e) { }
+        });
     }
 
     public LiveData<User> getUser() {

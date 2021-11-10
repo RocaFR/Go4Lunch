@@ -1,8 +1,12 @@
 package fr.ferrerasroca.go4lunch.ui.home.view.fragments;
 
+import static fr.ferrerasroca.go4lunch.ui.home.view.GoogleMapsComponent.RC_LOCATION_PERM;
+
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +21,7 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 
 import org.jetbrains.annotations.NotNull;
@@ -36,9 +41,9 @@ import fr.ferrerasroca.go4lunch.utils.NetworkUtils;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-import static fr.ferrerasroca.go4lunch.ui.home.view.GoogleMapsComponent.RC_LOCATION_PERM;
-
 public class MapViewFragment extends Fragment {
+
+    private GoogleMapsComponent.Callback callbackLocation;
 
     private GoogleMapsComponent googleMapsComponent;
     private PlacesViewModel placesViewModel;
@@ -71,30 +76,41 @@ public class MapViewFragment extends Fragment {
         this.configureViewModelCalls();
     }
 
-    private void configureViewModelCalls() {
-        userViewModel.getPlacesWithParticipants().observe(getViewLifecycleOwner(), new Observer<List<Place>>() {
-            @Override
-            public void onChanged(List<Place> places) {
-                for (Place place : places) {
-                    Double lat = place.getGeometry().getLocation().getLat();
-                    Double lng = place.getGeometry().getLocation().getLng();
-                    LatLng latLng = new LatLng(lat, lng);
-
-                    if (!place.getUsersParticipants().isEmpty()) {
-                        googleMapsComponent.addMarker(latLng, place.getName(), place.getVicinity(), place.getPlaceId(), true);
-                    } else {
-                        googleMapsComponent.addMarker(latLng, place.getName(), place.getVicinity(), place.getPlaceId(), false);
-                    }
-                }
-            }
-        });
-        placesViewModel.getPlaces().observe(getViewLifecycleOwner(), placesObserver);
-    }
-
     private void configureGoogleMaps(View view) {
         googleMapsComponent = new GoogleMapsComponent();
         googleMapsComponent.configureGoogleMaps(view);
     }
+
+    private void configureViewModelCalls() {
+        placesViewModel.getPlaces().observe(getViewLifecycleOwner(), placesObserver);
+        userViewModel.getPlacesWithParticipants().observe(getViewLifecycleOwner(), placesWithParticipantsObserver);
+    }
+
+    final Observer<List<Place>> placesObserver = new Observer<List<Place>>() {
+        @Override
+        public void onChanged(List<Place> places) {
+            userViewModel.retrieveParticipantsForPlaces(places);
+            googleMapsComponent.setOnInfoWindowListener(onInfoWindowClickListener);
+        }
+    };
+
+    final Observer<List<Place>> placesWithParticipantsObserver = new Observer<List<Place>>() {
+        @Override
+        public void onChanged(List<Place> places) {
+            for (Place place : places) {
+                Double lat = place.getGeometry().getLocation().getLat();
+                Double lng = place.getGeometry().getLocation().getLng();
+                LatLng latLng = new LatLng(lat, lng);
+
+                if (!place.getUsersParticipants().isEmpty()) {
+                    googleMapsComponent.addMarker(latLng, place.getName(), place.getVicinity(), place.getPlaceId(), true);
+                } else {
+                    googleMapsComponent.addMarker(latLng, place.getName(), place.getVicinity(), place.getPlaceId(), false);
+                }
+            }
+        }
+    };
+
 
     @AfterPermissionGranted(RC_LOCATION_PERM)
     private void requestLocationPermission() {
@@ -108,15 +124,19 @@ public class MapViewFragment extends Fragment {
             }
         }
     }
-
     private final LocationCallback callback = new LocationCallback() {
         @Override
         public void onLocationResult(@NonNull @NotNull LocationResult locationResult) {
             super.onLocationResult(locationResult);
 
             googleMapsComponent.setLastLocation(locationResult.getLastLocation());
+
             LatLng latLng = new LatLng(googleMapsComponent.getLastLocation().getLatitude(), googleMapsComponent.getLastLocation().getLongitude());
             googleMapsComponent.moveGoogleMapCamera(latLng);
+
+            LatLngBounds latLngBounds = googleMapsComponent.getCurrentGoogleMap().getProjection().getVisibleRegion().latLngBounds;
+            callbackLocation.onLocationRetrieved(latLngBounds);
+
             googleMapsComponent.getCurrentGoogleMap().setMyLocationEnabled(true);
 
             if (NetworkUtils.isNetworkAvailable(getContext())) {
@@ -125,13 +145,6 @@ public class MapViewFragment extends Fragment {
         }
     };
 
-    final Observer<List<Place>> placesObserver = new Observer<List<Place>>() {
-        @Override
-        public void onChanged(List<Place> places) {
-            userViewModel.retrieveParticipantsForPlaces(places);
-            googleMapsComponent.setOnInfoWindowListener(onInfoWindowClickListener);
-        }
-    };
 
     GoogleMap.OnInfoWindowClickListener onInfoWindowClickListener = new GoogleMap.OnInfoWindowClickListener() {
         @Override
@@ -170,6 +183,21 @@ public class MapViewFragment extends Fragment {
         super.onStart();
         this.requestLocationPermission();
         googleMapsComponent.getMapView().onStart();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        linkCallbackLocationToParentActivity();
+    }
+
+    private void linkCallbackLocationToParentActivity() {
+        try {
+            callbackLocation = (GoogleMapsComponent.Callback) getActivity();
+        } catch (Exception e) {
+            Log.e("TAG", "onAttach: " + e.getMessage());
+        }
     }
 
     @Override

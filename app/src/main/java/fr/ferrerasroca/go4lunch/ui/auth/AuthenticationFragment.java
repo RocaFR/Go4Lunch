@@ -21,7 +21,6 @@ import fr.ferrerasroca.go4lunch.R;
 import fr.ferrerasroca.go4lunch.data.injections.Injection;
 import fr.ferrerasroca.go4lunch.databinding.FragmentAuthenticationBinding;
 import fr.ferrerasroca.go4lunch.ui.home.viewmodel.AuthenticationViewModel;
-import fr.ferrerasroca.go4lunch.ui.home.viewmodel.UserViewModel;
 
 public class AuthenticationFragment extends Fragment {
 
@@ -30,10 +29,6 @@ public class AuthenticationFragment extends Fragment {
 
     // Necessary for Android system.
     public AuthenticationFragment() { }
-
-    public static AuthenticationFragment newInstance() {
-        return new AuthenticationFragment();
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

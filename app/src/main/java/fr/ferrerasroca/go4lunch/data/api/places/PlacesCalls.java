@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
-public interface PlacesService {
+public interface PlacesCalls {
     @GET("nearbysearch/json?radius=1000&type=restaurant")
     Call<NearbyPlacesResponse> getNearbyPlaces(@Query(value = "location", encoded = true) String location, @Query("key") String api_key);
 

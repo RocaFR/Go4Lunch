@@ -15,6 +15,7 @@ import androidx.work.WorkerParameters;
 import org.jetbrains.annotations.NotNull;
 
 import fr.ferrerasroca.go4lunch.R;
+import fr.ferrerasroca.go4lunch.data.api.user.UserDatabase;
 import fr.ferrerasroca.go4lunch.data.injections.Injection;
 import fr.ferrerasroca.go4lunch.data.models.User;
 import fr.ferrerasroca.go4lunch.data.repositories.UserRepository;
@@ -36,28 +37,34 @@ public class DailyWorker extends Worker {
 
         UserRepository userRepository = Injection.provideUserRepository();
 
-        userRepository.retrieveUser(user -> {
-            if (!user.getPlaceIDChoice().equals(User.PLACE_ID_INITIAL_VALUE)) {
-                userRepository.retrieveUsers(user.getPlaceIDChoice(), usersRetrieved -> {
-                    if (!usersRetrieved.isEmpty()) {
-                        StringBuilder description = new StringBuilder(context.getString(R.string.notification_description));
+        userRepository.retrieveUser(new UserDatabase.Callback<User>() {
+            @Override
+            public void onSuccess(User user) {
+                if (!user.getPlaceIDChoice().equals(User.PLACE_ID_INITIAL_VALUE)) {
+                    userRepository.retrieveUsers(user.getPlaceIDChoice(), usersRetrieved -> {
+                        if (!usersRetrieved.isEmpty()) {
+                            StringBuilder description = new StringBuilder(context.getString(R.string.notification_description));
 
-                        for (int i = 0; i < usersRetrieved.size(); i++) {
-                            User actualUser = usersRetrieved.get(i);
+                            for (int i = 0; i < usersRetrieved.size(); i++) {
+                                User actualUser = usersRetrieved.get(i);
 
-                            description.append(actualUser.getUsername());
-                            if (i < usersRetrieved.size() - 1) {
-                                description.append(", ");
+                                description.append(actualUser.getUsername());
+                                if (i < usersRetrieved.size() - 1) {
+                                    description.append(", ");
+                                }
                             }
+                            DailyNotification dailyNotification = new DailyNotification(context,
+                                    context.getString(R.string.daily_notification_begin_content) + user.getUsername() + context.getString(R.string.comma_space),
+                                    description);
+                            NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
+                            notificationManagerCompat.notify(1, dailyNotification.getBuilder().build());
                         }
-                        DailyNotification dailyNotification = new DailyNotification(context,
-                                context.getString(R.string.daily_notification_begin_content) + user.getUsername() + context.getString(R.string.comma_space),
-                                description);
-                        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
-                        notificationManagerCompat.notify(1, dailyNotification.getBuilder().build());
-                    }
-                });
+                    });
+                }
             }
+
+            @Override
+            public void onFailure(Exception e) { }
         });
         return Result.success();
     }

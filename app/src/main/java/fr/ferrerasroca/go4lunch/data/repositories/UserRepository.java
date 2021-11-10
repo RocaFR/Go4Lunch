@@ -4,12 +4,14 @@ import androidx.annotation.Nullable;
 
 import java.util.List;
 
+import fr.ferrerasroca.go4lunch.data.api.user.UserDatabase;
+import fr.ferrerasroca.go4lunch.data.models.User;
 import fr.ferrerasroca.go4lunch.data.models.places.Place;
 import fr.ferrerasroca.go4lunch.ui.home.viewmodel.UserViewModel;
 
 public interface UserRepository {
 
-    void retrieveUser(UserRepositoryImpl.UserRetrievedListener listener);
+    void retrieveUser(UserDatabase.Callback<User> callback);
 
     Boolean isCurrentUserLogged();
 

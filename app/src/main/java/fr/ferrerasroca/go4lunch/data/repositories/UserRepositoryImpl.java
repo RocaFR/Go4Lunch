@@ -6,14 +6,20 @@ import androidx.annotation.Nullable;
 
 import java.util.List;
 
-import fr.ferrerasroca.go4lunch.data.api.user.UserHelper;
+import fr.ferrerasroca.go4lunch.data.api.user.UserDatabase;
 import fr.ferrerasroca.go4lunch.data.models.User;
 import fr.ferrerasroca.go4lunch.data.models.places.Place;
 import fr.ferrerasroca.go4lunch.ui.home.viewmodel.UserViewModel;
 
 public class UserRepositoryImpl implements UserRepository {
 
-     public interface UsersForPlacesListener {
+    private final UserDatabase userDatabase;
+
+    public UserRepositoryImpl(UserDatabase userDatabase) {
+        this.userDatabase = userDatabase;
+    }
+
+    public interface UsersForPlacesListener {
         void onUsersForPlacesRetrieved(List<Place> placesWithParticipants);
     }
 
@@ -26,38 +32,51 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void retrieveUser(UserRetrievedListener listener) {
-        if (UserHelper.isCurrentUserLogged()) {
-            UserHelper.getUser(listener);
+    public void retrieveUser(UserDatabase.Callback<User> callback) {
+        if (this.userDatabase.isCurrentUserLogged()) {
+            this.userDatabase.getCurrentUser(callback);
         }
     }
 
     @Override
     public Boolean isCurrentUserLogged() {
-        return UserHelper.isCurrentUserLogged();
+        return this.userDatabase.isCurrentUserLogged();
     }
 
     @Override
     public void signOutCurrentUser() {
-        UserHelper.signOutCurrentUser();
+        this.userDatabase.signOutCurrentUser();
     }
 
     @Override
     public void retrieveUsers(@Nullable String placeID, UsersRetrievedListener listener) {
         if (placeID != null) {
-            UserHelper.retrieveUsersByPlaceID(placeID).addOnCompleteListener(task -> {
-                if (task.isSuccessful() && task.getResult() != null) {
-                    List<User> users = task.getResult().toObjects(User.class);
-                    listener.onUsersRetrieved(users);
+            userDatabase.getUsersByPlaceIDChoice(placeID, new UserDatabase.Callback<List<User>>() {
+                @Override
+                public void onSuccess(List<User> users) {
+                    if (users != null && !users.isEmpty()) {
+                        listener.onUsersRetrieved(users);
+                    }
                 }
-            }).addOnFailureListener(e -> Log.e("TAG", "onFailure: " + e.getMessage()));
+
+                @Override
+                public void onFailure(Exception e) {
+                    Log.e("TAG", "onFailure: " + e.getMessage());
+                }
+            });
         } else {
-            UserHelper.retrieveUsers().addOnCompleteListener(task -> {
-                if (task.isSuccessful() && task.getResult() != null) {
-                    List<User> users = task.getResult().toObjects(User.class);
-                    listener.onUsersRetrieved(users);
+            this.userDatabase.getUsers(new UserDatabase.Callback<List<User>>() {
+                @Override
+                public void onSuccess(List<User> users) {
+                    if (users != null && !users.isEmpty()) {
+                        listener.onUsersRetrieved(users);
+                    }
                 }
-            }).addOnFailureListener(e -> Log.e("TAG", "onFailure: " + e.getMessage()));
+
+                @Override
+                public void onFailure(Exception e) {
+                }
+            });
         }
     }
 
@@ -66,14 +85,20 @@ public class UserRepositoryImpl implements UserRepository {
         for (int i = 0; i < places.size(); i++) {
             int actualItem = i;
             String currentPlaceId = places.get(actualItem).getPlaceId();
-
-            UserHelper.retrieveUsersByPlaceID(currentPlaceId).addOnCompleteListener(task -> {
-                if (task.isSuccessful() && task.getResult() != null) {
-                    List<User> users = task.getResult().toObjects(User.class);
-                    places.get(actualItem).setUsersParticipants(users);
+            userDatabase.getUsersByPlaceIDChoice(currentPlaceId, new UserDatabase.Callback<List<User>>() {
+                @Override
+                public void onSuccess(List<User> users) {
+                    if (users != null && !users.isEmpty()) {
+                        places.get(actualItem).setUsersParticipants(users);
+                    }
                     if (actualItem == places.size() - 1) {
                         listener.onUsersForPlacesRetrieved(places);
                     }
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+
                 }
             });
         }
@@ -81,16 +106,46 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void setPlaceIDChoice(String userUid, String placeIDChoice, UserViewModel.PlaceIDChoiceSettedListener listener) {
-        UserHelper.setPlaceIDChoice(userUid, placeIDChoice).addOnCompleteListener(task -> listener.onPlaceIDChoiceSetted(placeIDChoice));
+        userDatabase.setPlaceIDChoice(userUid, placeIDChoice, new UserDatabase.Callback<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                listener.onPlaceIDChoiceSetted(placeIDChoice);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Log.e("TAG", "onFailure: " + e.getMessage());
+            }
+        });
     }
 
     @Override
     public void setLikedPlaces(String userUid, List<String> placesLiked, UserViewModel.LikedPlacesSettedListener listener) {
-        UserHelper.setLikedPlaces(userUid, placesLiked).addOnCompleteListener(task -> listener.onLikedPlacesSetted());
+        userDatabase.setLikedPlaces(userUid, placesLiked, new UserDatabase.Callback<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                listener.onLikedPlacesSetted();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Log.e("TAG", "onFailure: " + e.getMessage());
+            }
+        });
     }
 
     @Override
     public void setSettingsDailyNotification(String userUid, Boolean dailyNotificationChoice, UserViewModel.DailyNotificationChoiceListener listener) {
-        UserHelper.setSettingsDailyNotification(userUid, dailyNotificationChoice).addOnCompleteListener(task -> listener.onDailyNotificationChoiceSetted(dailyNotificationChoice));
+        userDatabase.setSettingsDailyNotification(userUid, dailyNotificationChoice, new UserDatabase.Callback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean aBoolean) {
+                listener.onDailyNotificationChoiceSetted(aBoolean);
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Log.e("TAG", "onFailure: " + e.getMessage());
+            }
+        });
     }
 }

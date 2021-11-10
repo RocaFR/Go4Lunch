@@ -40,7 +40,6 @@ public class SettingsActivity extends AppCompatActivity {
     private void configureLiveDataActions() {
         userViewModel.getUser().observe(this, user -> {
             progressIndicator.setVisibility(View.GONE);
-            switchMaterial.setChecked(user.getSettingsDailyNotification());
             switchMaterial.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -56,6 +55,7 @@ public class SettingsActivity extends AppCompatActivity {
                     });
                 }
             });
+            switchMaterial.setChecked(user.getSettingsDailyNotification());
         });
         userViewModel.retrieveUser();
     }

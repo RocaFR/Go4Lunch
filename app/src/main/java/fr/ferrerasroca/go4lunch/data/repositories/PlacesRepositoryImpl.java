@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.ferrerasroca.go4lunch.BuildConfig;
-import fr.ferrerasroca.go4lunch.data.api.places.PlacesCalls;
+import fr.ferrerasroca.go4lunch.data.api.places.PlacesService;
 import fr.ferrerasroca.go4lunch.data.models.User;
 import fr.ferrerasroca.go4lunch.data.models.places.Place;
 import fr.ferrerasroca.go4lunch.data.models.places.responses.NearbyPlacesResponse;
@@ -19,6 +19,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class PlacesRepositoryImpl implements PlacesRepository {
+
 
     public interface NearbyPlacesRetrievedListener {
         void onNearbyPlacesRetrieved(List<Place> places);
@@ -32,9 +33,15 @@ public class PlacesRepositoryImpl implements PlacesRepository {
         void onPlacesChosenByUsersRetrieved(List<Place> places);
     }
 
+    private final PlacesService placesService;
+
+    public PlacesRepositoryImpl(PlacesService placesService) {
+        this.placesService = placesService;
+    }
+
     @Override
     public void retrieveNearbyPlaces(Location location, PlacesRepositoryImpl.NearbyPlacesRetrievedListener listener) {
-        PlacesCalls.getNearbyPlaces(location).enqueue(new Callback<NearbyPlacesResponse>() {
+        placesService.getNearbyPlaces(location).enqueue(new Callback<NearbyPlacesResponse>() {
             @Override
             public void onResponse(@NotNull Call<NearbyPlacesResponse> call, @NotNull Response<NearbyPlacesResponse> response) {
                 NearbyPlacesResponse nearbyPlacesResponse = response.body();
@@ -75,7 +82,7 @@ public class PlacesRepositoryImpl implements PlacesRepository {
 
     @Override
     public void retrievePlaceDetails(String placeID, PlacesRepositoryImpl.PlaceDetailsRetrievedListener listener) {
-        PlacesCalls.getPlaceDetails(placeID).enqueue(new Callback<PlaceDetailResponse>() {
+        placesService.getPlaceDetails(placeID).enqueue(new Callback<PlaceDetailResponse>() {
             @Override
             public void onResponse(@NotNull Call<PlaceDetailResponse> call, @NotNull Response<PlaceDetailResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -104,7 +111,7 @@ public class PlacesRepositoryImpl implements PlacesRepository {
             String placeIDChoice = user.getPlaceIDChoice();
 
             if (placeIDChoice != null && !placeIDChoice.isEmpty()) {
-                PlacesCalls.getPlaceDetails(user.getPlaceIDChoice()).enqueue(new Callback<PlaceDetailResponse>() {
+                placesService.getPlaceDetails(user.getPlaceIDChoice()).enqueue(new Callback<PlaceDetailResponse>() {
                     @Override
                     public void onResponse(@NotNull Call<PlaceDetailResponse> call, @NotNull Response<PlaceDetailResponse> response) {
                         if (response.isSuccessful() && response.body() != null) {
