@@ -40,6 +40,7 @@ import fr.ferrerasroca.go4lunch.utils.LocationUtils;
 import fr.ferrerasroca.go4lunch.utils.NetworkUtils;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
+import pub.devrel.easypermissions.PermissionRequest;
 
 public class MapViewFragment extends Fragment {
 
@@ -74,6 +75,9 @@ public class MapViewFragment extends Fragment {
         userViewModel = Injection.provideUserViewModel(Injection.provideIUserViewModelFactory());
 
         this.configureViewModelCalls();
+        //this.handleLocationPermissions();
+       // this.requestLocationPermission();
+
     }
 
     private void configureGoogleMaps(View view) {
@@ -84,6 +88,21 @@ public class MapViewFragment extends Fragment {
     private void configureViewModelCalls() {
         placesViewModel.getPlaces().observe(getViewLifecycleOwner(), placesObserver);
         userViewModel.getPlacesWithParticipants().observe(getViewLifecycleOwner(), placesWithParticipantsObserver);
+    }
+
+    private void handleLocationPermissions() {
+        if (!EasyPermissions.hasPermissions(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)) {
+            //EasyPermissions.requestPermissions(this, getString(R.string.app_name) + getString(R.string.permission_location_request), RC_LOCATION_PERM, Manifest.permission.ACCESS_FINE_LOCATION);
+            EasyPermissions.requestPermissions(
+                    new PermissionRequest.Builder(this, RC_LOCATION_PERM, "Need location")
+                            .build());
+        } else {
+            if (LocationUtils.isLocationEnabled(getContext())) {
+                googleMapsComponent.getLocation(getContext(), callback);
+            } else {
+                Toast.makeText(getContext(), getString(R.string.location_disabled), Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     final Observer<List<Place>> placesObserver = new Observer<List<Place>>() {
@@ -124,6 +143,7 @@ public class MapViewFragment extends Fragment {
             }
         }
     }
+
     private final LocationCallback callback = new LocationCallback() {
         @Override
         public void onLocationResult(@NonNull @NotNull LocationResult locationResult) {
@@ -181,7 +201,6 @@ public class MapViewFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        this.requestLocationPermission();
         googleMapsComponent.getMapView().onStart();
     }
 
@@ -204,6 +223,7 @@ public class MapViewFragment extends Fragment {
     public void onResume() {
         super.onResume();
         googleMapsComponent.getMapView().onResume();
+        this.requestLocationPermission();
     }
 
     @Override

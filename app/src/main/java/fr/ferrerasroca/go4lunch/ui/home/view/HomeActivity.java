@@ -2,7 +2,6 @@ package fr.ferrerasroca.go4lunch.ui.home.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
@@ -198,22 +197,9 @@ public class HomeActivity extends AppCompatActivity implements GoogleMapsCompone
     }
 
     @Override
-    protected void onPostResume() {
-        super.onPostResume();
-        Log.e("TAG", "onPostResume: ");
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         this.configureListeners();
-        Log.e("TAG", "onResume: ");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.e("TAG", "onPause: ");
     }
 
     @Override
