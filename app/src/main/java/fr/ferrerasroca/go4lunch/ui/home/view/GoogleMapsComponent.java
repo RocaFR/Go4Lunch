@@ -136,7 +136,9 @@ public class GoogleMapsComponent implements OnMapReadyCallback, GoogleMap.OnMyLo
     }
 
     public void stopLocationUpdates(LocationCallback locationCallback) {
-        providerClient.removeLocationUpdates(locationCallback);
+        if (providerClient != null) {
+            providerClient.removeLocationUpdates(locationCallback);
+        }
     }
 
     public void setOnInfoWindowListener(GoogleMap.OnInfoWindowClickListener onInfoWindowListener) {
