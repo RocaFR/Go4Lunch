@@ -84,4 +84,5 @@
     <string name="daily_notification_begin_content">"Hey "</string>
     <string name="comma_space">", "</string>
     <string name="about_go4lunch">About Go4Lunch</string>
+    <string name="no_restaurant_choose">You have not choose any restaurant yet.</string>
 </resources>

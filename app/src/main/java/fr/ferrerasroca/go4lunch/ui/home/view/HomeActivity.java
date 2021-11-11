@@ -45,6 +45,8 @@ public class HomeActivity extends AppCompatActivity implements GoogleMapsCompone
     private TextView textViewUsername;
     private TextView textViewUserEmail;
     private ImageView imageViewUserProfilePicture;
+    private Fragment actualFragment;
+    private Menu menu;
     public static final String EXTRA_PLACE_ID = "EXTRA_PLACE_ID";
     private static final int AUTOCOMPLETE_REQUEST_CODE = 1;
 
@@ -66,7 +68,6 @@ public class HomeActivity extends AppCompatActivity implements GoogleMapsCompone
         this.textViewUsername = headerView.findViewById(R.id.textView_username);
         this.textViewUserEmail = headerView.findViewById(R.id.textView_email);
         this.imageViewUserProfilePicture = headerView.findViewById(R.id.imageView_profilePicture);
-
     }
 
     private void displayUserDetails(User user) {
@@ -87,7 +88,9 @@ public class HomeActivity extends AppCompatActivity implements GoogleMapsCompone
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
         getMenuInflater().inflate(R.menu.menu_toolbar, menu);
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -143,10 +146,10 @@ public class HomeActivity extends AppCompatActivity implements GoogleMapsCompone
                 intent.putExtra(HomeActivity.EXTRA_PLACE_ID, placeIDChoice);
                 startActivity(intent);
             } else {
-                Toast.makeText(getApplicationContext(), "T'a rien choisi ma gueule", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), R.string.no_restaurant_choose, Toast.LENGTH_LONG).show();
             }
         } else {
-            Toast.makeText(getApplicationContext(), "T'a rien choisi ma gueule", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.no_restaurant_choose, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -191,9 +194,19 @@ public class HomeActivity extends AppCompatActivity implements GoogleMapsCompone
     }
 
     private void loadFragment(Fragment fragment) {
+        this.actualFragment = fragment;
+
+        this.handleSearchButtonVisibility();
+
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_home_host, fragment)
+                .replace(R.id.fragment_home_host, this.actualFragment)
                 .commit();
+
+    }
+
+    private void handleSearchButtonVisibility() {
+        this.menu.findItem(R.id.menu_fragment_home_search)
+                .setVisible(!(this.actualFragment instanceof ChatFragment || this.actualFragment instanceof WorkmatesFragment));
     }
 
     @Override
