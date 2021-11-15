@@ -5,6 +5,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -28,7 +30,12 @@ public class ChatRepositoryTest {
         ChatRepositoryImpl chatRepository = new ChatRepositoryImpl(messageService);
         Message message = new Message(new User(), new Date(), "Message");
 
-        chatRepository.createMessage(message, null);
+        ChatRepositoryImpl.MessageCreatedListener listener = Mockito.mock(ChatRepositoryImpl.MessageCreatedListener.class);
+        Task<DocumentReference> task = Mockito.mock(Task.class);
+
+        when(messageService.createMessage(message)).thenReturn(task);
+
+        chatRepository.createMessage(message, listener);
 
         verify(messageService).createMessage(any());
     }
