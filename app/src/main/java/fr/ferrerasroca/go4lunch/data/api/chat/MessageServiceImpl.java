@@ -11,9 +11,10 @@ import fr.ferrerasroca.go4lunch.data.models.Message;
 public class MessageServiceImpl implements MessageService {
 
     public static final String COLLECTION_NAME = "chat";
+    private final FirebaseFirestore firebaseFirestore;
 
-    private CollectionReference getChatCollection() {
-        return FirebaseFirestore.getInstance().collection(COLLECTION_NAME);
+    public MessageServiceImpl(FirebaseFirestore firebaseFirestore) {
+        this.firebaseFirestore = firebaseFirestore;
     }
 
     @Override
@@ -24,5 +25,9 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public Task<DocumentReference> createMessage(Message message) {
         return getChatCollection().add(message);
+    }
+
+    private CollectionReference getChatCollection() {
+        return firebaseFirestore.collection(COLLECTION_NAME);
     }
 }

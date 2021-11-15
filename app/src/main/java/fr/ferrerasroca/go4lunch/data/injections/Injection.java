@@ -1,11 +1,13 @@
 package fr.ferrerasroca.go4lunch.data.injections;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import fr.ferrerasroca.go4lunch.data.api.authentication.FacebookLoginApi;
 import fr.ferrerasroca.go4lunch.data.api.authentication.GoogleIdentifiantApi;
 import fr.ferrerasroca.go4lunch.data.api.chat.MessageService;
 import fr.ferrerasroca.go4lunch.data.api.chat.MessageServiceImpl;
+import fr.ferrerasroca.go4lunch.data.api.places.PlacesCalls;
 import fr.ferrerasroca.go4lunch.data.api.places.PlacesService;
 import fr.ferrerasroca.go4lunch.data.api.places.PlacesServiceImpl;
 import fr.ferrerasroca.go4lunch.data.api.user.UserDatabase;
@@ -32,8 +34,8 @@ public class Injection {
     public static FirebaseAuth providerFirebaseAuth() { return FirebaseAuth.getInstance(); }
     public static GoogleIdentifiantApi providerGoogleIdentifiantApi() { return new GoogleIdentifiantApi(provideUserDatabase()); }
     public static FacebookLoginApi providerFacebookLoginApi() { return new FacebookLoginApi(provideUserDatabase()); }
-    public static PlacesService providePlacesService() { return new PlacesServiceImpl(); }
-    public static MessageService provideMessageService() { return new MessageServiceImpl(); }
+    public static PlacesService providePlacesService() { return new PlacesServiceImpl(PlacesCalls.retrofit.create(PlacesCalls.class)); }
+    public static MessageService provideMessageService() { return new MessageServiceImpl(FirebaseFirestore.getInstance()); }
 
     // ####################
     // PROVIDE REPOSITORIES

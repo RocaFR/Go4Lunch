@@ -1,5 +1,6 @@
 package fr.ferrerasroca.go4lunch.data.api.places;
 
+
 import android.location.Location;
 
 import fr.ferrerasroca.go4lunch.data.models.places.responses.NearbyPlacesResponse;

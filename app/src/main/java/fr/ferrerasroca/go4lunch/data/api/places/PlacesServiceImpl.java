@@ -1,5 +1,6 @@
 package fr.ferrerasroca.go4lunch.data.api.places;
 
+
 import android.location.Location;
 
 import fr.ferrerasroca.go4lunch.BuildConfig;
@@ -9,10 +10,14 @@ import retrofit2.Call;
 
 public class PlacesServiceImpl implements PlacesService {
 
+    private final PlacesCalls placesCalls;
+
+    public PlacesServiceImpl(PlacesCalls placesCalls) {
+        this.placesCalls = placesCalls;
+    }
+
     @Override
     public Call<NearbyPlacesResponse> getNearbyPlaces(Location location) {
-        PlacesCalls placesCalls = PlacesCalls.retrofit.create(PlacesCalls.class);
-
         String latitude = Double.toString(location.getLatitude());
         String longitude = Double.toString(location.getLongitude());
         String stringLocation = latitude + "," + longitude;
@@ -22,8 +27,6 @@ public class PlacesServiceImpl implements PlacesService {
 
     @Override
     public Call<PlaceDetailResponse> getPlaceDetails(String placeID) {
-        PlacesCalls placesCalls = PlacesCalls.retrofit.create(PlacesCalls.class);
-
         return placesCalls.getPlaceDetails(placeID, BuildConfig.MAPS_API_KEY);
     }
 }

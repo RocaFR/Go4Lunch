@@ -40,7 +40,7 @@ public class PlacesRepositoryImpl implements PlacesRepository {
     }
 
     @Override
-    public void retrieveNearbyPlaces(Location location, PlacesRepositoryImpl.NearbyPlacesRetrievedListener listener) {
+    public void retrieveNearbyPlaces(android.location.Location location, PlacesRepositoryImpl.NearbyPlacesRetrievedListener listener) {
         placesService.getNearbyPlaces(location).enqueue(new Callback<NearbyPlacesResponse>() {
             @Override
             public void onResponse(@NotNull Call<NearbyPlacesResponse> call, @NotNull Response<NearbyPlacesResponse> response) {

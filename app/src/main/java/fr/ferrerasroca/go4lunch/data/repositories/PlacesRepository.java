@@ -1,5 +1,6 @@
 package fr.ferrerasroca.go4lunch.data.repositories;
 
+
 import android.location.Location;
 
 import java.util.List;

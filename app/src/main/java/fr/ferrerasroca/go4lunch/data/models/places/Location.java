@@ -11,6 +11,13 @@ public class Location {
     @Expose
     private Double lng;
 
+    public Location() { }
+
+    public Location(Double lat, Double lng) {
+        this.lat = lat;
+        this.lng = lng;
+    }
+
     public Double getLat() {
         return lat;
     }
