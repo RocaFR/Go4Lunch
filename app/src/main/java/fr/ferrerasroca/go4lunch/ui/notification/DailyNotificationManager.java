@@ -30,8 +30,10 @@ public class DailyNotificationManager {
 
     private Calendar configureAndGetCalendar() {
         Calendar calendar = Calendar.getInstance();
+
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) + 1);
+        calendar.add(Calendar.DAY_OF_MONTH, 1);
+        calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH));
         calendar.set(Calendar.HOUR_OF_DAY, DAILY_NOTIFICATION_HOUR);
         calendar.set(Calendar.MINUTE, DAILY_NOTIFICATION_MINUTE);
 
