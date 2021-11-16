@@ -1,4 +1,4 @@
-package fr.ferrerasroca.go4lunch.repositories;
+package fr.ferrerasroca.go4lunch.data.repositories;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -19,7 +19,6 @@ import java.util.Date;
 import fr.ferrerasroca.go4lunch.data.api.chat.MessageServiceImpl;
 import fr.ferrerasroca.go4lunch.data.models.Message;
 import fr.ferrerasroca.go4lunch.data.models.User;
-import fr.ferrerasroca.go4lunch.data.repositories.ChatRepositoryImpl;
 
 @RunWith(JUnit4.class)
 public class ChatRepositoryTest {

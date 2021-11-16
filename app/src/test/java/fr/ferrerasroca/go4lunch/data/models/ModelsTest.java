@@ -1,4 +1,4 @@
-package fr.ferrerasroca.go4lunch;
+package fr.ferrerasroca.go4lunch.data.models;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import fr.ferrerasroca.go4lunch.data.models.Message;
-import fr.ferrerasroca.go4lunch.data.models.User;
 import fr.ferrerasroca.go4lunch.data.models.places.Geometry;
 import fr.ferrerasroca.go4lunch.data.models.places.Location;
 import fr.ferrerasroca.go4lunch.data.models.places.OpeningHours;

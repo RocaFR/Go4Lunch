@@ -1,4 +1,4 @@
-package fr.ferrerasroca.go4lunch.repositories;
+package fr.ferrerasroca.go4lunch.data.repositories;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -12,7 +12,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import fr.ferrerasroca.go4lunch.data.api.authentication.FacebookLoginApi;
 import fr.ferrerasroca.go4lunch.data.api.authentication.GoogleIdentifiantApi;
-import fr.ferrerasroca.go4lunch.data.repositories.AuthenticationRepositoryImpl;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AuthenticationRepositoryTest {

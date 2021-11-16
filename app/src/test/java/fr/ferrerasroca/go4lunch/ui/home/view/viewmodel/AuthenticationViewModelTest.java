@@ -1,4 +1,4 @@
-package fr.ferrerasroca.go4lunch.viewmodels;
+package fr.ferrerasroca.go4lunch.ui.home.view.viewmodel;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;

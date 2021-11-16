@@ -1,4 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Mot de passe</string>
+    <string name="action_sign_in">Connexion ou inscription</string>
+    <string name="action_sign_in_short">Connexion</string>
+    <string name="welcome">"Bienvenue !"</string>
+    <string name="invalid_username">Nom d\'utilisateur incorrect</string>
+    <string name="invalid_password">Le mot de passe doit contenir > 5 caractères</string>
+    <string name="login_failed">"Échec de connexion"</string>
+    <string name="app_description">Trouver le meilleur restaurant où déjeuner avec vos collègues !</string>
+    <string name="button_login_facebook">Se connecter avec Facebook</string>
+    <string name="button_login_google">Se connecter avec Google</string>
+    <string name="google_signin_error">Erreur de connexion avec Google</string>
+    <string name="welcome_signin">"Bienvenue "</string>
+    <string name="google_connexion_canceled">Connexion avec Google annulée</string>
+    <string name="facebook_sign_in_canceled">Facebook sign in canceled.</string>
+    <string name="facebook_sign_in_error">Erreur de connexion avec Facebook</string>
+    <string name="menu_fragment_home_search">Chercher</string>
+    <string name="navdrawer_menu_your_lunch">VOTRE REPAS</string>
+    <string name="navdrawer_menu_settings">RÉGLAGES</string>
+    <string name="navdrawer_menu_logout">DÉCONNEXION</string>
+    <string name="menu_bottomNavigationView_mapView">Carte</string>
+    <string name="menu_bottomNavigationView_listView">Liste</string>
+    <string name="menu_bottomNavigationView_workmates">Collègues</string>
+    <string name="permission_location_request">" nécessite votre localisation pour fonctionner."</string>
+    <string name="navigation_view_user_disconnected">Utilisateur déconnecté</string>
+    <string name="network_unavailable">Réseau indisponible, veuillez l\'activer</string>
+    <string name="location_disabled">Localisation désactivé, veuillez l\'activer</string>
+    <string name="listview_norestaurant">Aucun restaurant :(</string>
+    <string name="restaurant_name_tools">Le Zinc !</string>
+    <string name="restaurant_address_tools">12 rue du Faubourg Poissonnière</string>
+    <string name="restaurant_openinghours_not_specified">Non spécifié</string>
+    <string name="restaurant_distance_tools">120m</string>
+    <string name="restaurant_numberparticipants_tools">(2)</string>
+    <string name="distance_unit">m</string>
+    <string name="imageButon_call">APPELER</string>
+    <string name="imageButton_website">SITE WEB</string>
+    <string name="fab_userChoice">Choix de l\'utilisateur</string>
+    <string name="textView_noWorkmates">Aucun participant :(</string>
+    <string name="restaurant_setted">Régalez-vous !</string>
+    <string name="title_choice_confirmation">Confirmation de votre choix</string>
+    <string name="message_choice_confirmation">"Souhaitez-vous déjeuner à "</string>
+    <string name="interrogation">" ?"</string>
+    <string name="button_negative">Annuler</string>
+    <string name="button_positive">Oui</string>
+    <string name="title_choice_cancel">Annuler votre choix</string>
+    <string name="message_choice_cancel">Êtes-vous certain d\'annuler ?</string>
+    <string name="title_likeAPlace">Confirmation de votre like</string>
+    <string name="message_likeAPlace">"Souhaitez-vous liker "</string>
+    <string name="title_dislikeAPlace">Annulation de votre like</string>
+    <string name="message_disklikeAPlace">"Vous n'aimez plus "</string>
+    <string name="snackbar_dislikeAPlace">"Vous n\'aimez plus ce restaurant dorénavant."</string>
+    <string name="snackbar_placeLiked">Vous likez à présent !</string>
+    <string name="workmate_is_eating">" mange à "</string>
+    <string name="workmate_not_eating">" n'a pas encore choisi"</string>
+    <string name="restaurant_open">Ouvert</string>
+    <string name="restaurant_close">Fermé</string>
+
+    <!-- Sync Preferences -->
+    <string name="settings_category_notification">Notification</string>
+    <string name="settings_notification_switch_title">Activer la notification quotidienne</string>
+    <string name="settings_about">Conçu par vos collègues, Go4Lunch veut vous aider à déjeuner plus rapidement et facilement !</string>
+
+    <!-- Chat -->
+    <string name="menu_bottomNavigationView_chat">Chat</string>
+    <string name="chat_message">Message</string>
+    <string name="chat_messag_hint">Écrivez votre message…</string>
+    <string name="chat_contentDescription">Image dans un message.</string>
+
+    <!-- Notification -->
+    <string name="sendername_hour_separator">-</string>
+    <string name="daily_notification_channel_name">Rappel quotidien</string>
+    <string name="daily_notification_description">"Rappel quotidien, quand c\'est l'heure de manger !"</string>
+    <string name="notification_description">"Aujourd'hui vous mangez avec : "</string>
+    <string name="daily_notification_begin_content">"Hey "</string>
+    <string name="comma_space">", "</string>
+    <string name="about_go4lunch">About Go4Lunch</string>
+
     <string name="no_restaurant_choose">Vous n\'avez pour le moment choisi aucun restaurant.</string>
+    <string name="restaurant_no_phone_number">Ce restaurant n\'a pas de numéro de téléphone.</string>
+    <string name="restaurant_no_website">Ce restaurant n\'a pas de site web.</string>
+
 </resources>

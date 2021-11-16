@@ -1,4 +1,4 @@
-package fr.ferrerasroca.go4lunch.repositories;
+package fr.ferrerasroca.go4lunch.data.repositories;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -13,8 +13,6 @@ import java.util.ArrayList;
 
 import fr.ferrerasroca.go4lunch.data.api.user.UserDatabase;
 import fr.ferrerasroca.go4lunch.data.models.places.Place;
-import fr.ferrerasroca.go4lunch.data.repositories.UserRepository;
-import fr.ferrerasroca.go4lunch.data.repositories.UserRepositoryImpl;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserRepositoryTest {

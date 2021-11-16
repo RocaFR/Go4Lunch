@@ -85,4 +85,6 @@
     <string name="comma_space">", "</string>
     <string name="about_go4lunch">About Go4Lunch</string>
     <string name="no_restaurant_choose">You have not choose any restaurant yet.</string>
+    <string name="restaurant_no_phone_number">This restaurant has no phone number.</string>
+    <string name="restaurant_no_website">This restaurant has no website.</string>
 </resources>

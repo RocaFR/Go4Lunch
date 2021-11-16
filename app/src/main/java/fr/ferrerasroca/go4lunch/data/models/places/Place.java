@@ -58,6 +58,12 @@ public class Place {
     @SerializedName("permanently_closed")
     @Expose
     private Boolean permanentlyClosed;
+    @SerializedName("formatted_phone_number")
+    @Expose
+    private String phoneNumber;
+    @SerializedName("website")
+    @Expose
+    private String website;
     private String photoUrl = null;
     private String distanceFromUser = null;
     private List<User> usersParticipants = new ArrayList<>();
@@ -211,4 +217,12 @@ public class Place {
     public List<User> getUsersParticipants() { return usersParticipants; }
 
     public void setUsersParticipants(List<User> usersParticipants) { this.usersParticipants = usersParticipants; }
+
+    public String getPhoneNumber() { return phoneNumber; }
+
+    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
+
+    public String getWebsite() { return website; }
+
+    public void setWebsite(String website) { this.website = website; }
 }

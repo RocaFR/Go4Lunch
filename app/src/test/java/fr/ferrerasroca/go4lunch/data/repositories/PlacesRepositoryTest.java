@@ -1,4 +1,4 @@
-package fr.ferrerasroca.go4lunch.repositories;
+package fr.ferrerasroca.go4lunch.data.repositories;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -18,7 +18,6 @@ import fr.ferrerasroca.go4lunch.data.models.User;
 import fr.ferrerasroca.go4lunch.data.models.places.Photo;
 import fr.ferrerasroca.go4lunch.data.models.places.Place;
 import fr.ferrerasroca.go4lunch.data.models.places.responses.PlaceDetailResponse;
-import fr.ferrerasroca.go4lunch.data.repositories.PlacesRepositoryImpl;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.mock.Calls;

@@ -2,10 +2,13 @@ package fr.ferrerasroca.go4lunch.ui.home.view;
 
 import static fr.ferrerasroca.go4lunch.ui.home.view.HomeActivity.EXTRA_PLACE_ID;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,7 +40,6 @@ public class RestaurantActivity extends AppCompatActivity {
     private PlacesViewModel placesViewModel;
     private UserViewModel userViewModel;
 
-    //todo below need to be remove
     private User user;
     private String actualPlaceID;
 
@@ -52,14 +54,41 @@ public class RestaurantActivity extends AppCompatActivity {
         placesViewModel = Injection.providePlacesViewModel(Injection.providePlacesViewModelFactory());
         userViewModel = Injection.provideUserViewModel(Injection.provideIUserViewModelFactory());
 
-
         this.configureViewModelCalls();
 
         setContentView(viewBinding.getRoot());
     }
 
+    private void configureListeners(Place place) {
+        this.viewBinding.imageButtonPhone.setOnClickListener(v -> configureCallButton(place));
+        this.viewBinding.imageButtonWebsite.setOnClickListener(v -> configureWebsiteButton(place));
+    }
+
+    private void configureCallButton(Place place) {
+        Intent callIntent = new Intent(Intent.ACTION_DIAL);
+        if (place.getPhoneNumber() != null) {
+            callIntent.setData(Uri.parse("tel:" + place.getPhoneNumber()));
+            startActivity(callIntent);
+        } else {
+            Toast.makeText(this, R.string.restaurant_no_phone_number, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void configureWebsiteButton(Place place) {
+        if (place.getWebsite() != null) {
+            Uri uri = Uri.parse(place.getWebsite());
+            Intent websiteIntent = new Intent(Intent.ACTION_VIEW, uri);
+            startActivity(websiteIntent);
+        } else {
+            Toast.makeText(this, R.string.restaurant_no_website, Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void configureViewModelCalls() {
-        placesViewModel.getPlace().observe(this, this::configureViews);
+        placesViewModel.getPlace().observe(this, place -> {
+            configureViews(place);
+            configureListeners(place);
+        });
         placesViewModel.retrievePlaceByID(actualPlaceID);
         userViewModel.getUsers().observe(this, this::configureRecyclerView);
         userViewModel.retrieveUsers(actualPlaceID);
