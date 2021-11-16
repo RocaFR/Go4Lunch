@@ -3,6 +3,7 @@ package fr.ferrerasroca.go4lunch.ui.home.view.fragments;
 import static fr.ferrerasroca.go4lunch.ui.home.view.GoogleMapsComponent.RC_LOCATION_PERM;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,7 +23,6 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.Marker;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -40,7 +40,6 @@ import fr.ferrerasroca.go4lunch.utils.LocationUtils;
 import fr.ferrerasroca.go4lunch.utils.NetworkUtils;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
-import pub.devrel.easypermissions.PermissionRequest;
 
 public class MapViewFragment extends Fragment {
 
@@ -50,8 +49,7 @@ public class MapViewFragment extends Fragment {
     private PlacesViewModel placesViewModel;
     private UserViewModel userViewModel;
 
-    public MapViewFragment() {
-    }
+    public MapViewFragment() { }
 
     public static MapViewFragment newInstance() {
         return new MapViewFragment();
@@ -75,9 +73,6 @@ public class MapViewFragment extends Fragment {
         userViewModel = Injection.provideUserViewModel(Injection.provideIUserViewModelFactory());
 
         this.configureViewModelCalls();
-        //this.handleLocationPermissions();
-       // this.requestLocationPermission();
-
     }
 
     private void configureGoogleMaps(View view) {
@@ -90,21 +85,6 @@ public class MapViewFragment extends Fragment {
         userViewModel.getPlacesWithParticipants().observe(getViewLifecycleOwner(), placesWithParticipantsObserver);
     }
 
-    private void handleLocationPermissions() {
-        if (!EasyPermissions.hasPermissions(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)) {
-            //EasyPermissions.requestPermissions(this, getString(R.string.app_name) + getString(R.string.permission_location_request), RC_LOCATION_PERM, Manifest.permission.ACCESS_FINE_LOCATION);
-            EasyPermissions.requestPermissions(
-                    new PermissionRequest.Builder(this, RC_LOCATION_PERM, "Need location")
-                            .build());
-        } else {
-            if (LocationUtils.isLocationEnabled(getContext())) {
-                googleMapsComponent.getLocation(getContext(), callback);
-            } else {
-                Toast.makeText(getContext(), getString(R.string.location_disabled), Toast.LENGTH_LONG).show();
-            }
-        }
-    }
-
     final Observer<List<Place>> placesObserver = new Observer<List<Place>>() {
         @Override
         public void onChanged(List<Place> places) {
@@ -115,17 +95,13 @@ public class MapViewFragment extends Fragment {
 
     final Observer<List<Place>> placesWithParticipantsObserver = new Observer<List<Place>>() {
         @Override
-        public void onChanged(List<Place> places) {
+            public void onChanged(List<Place> places) {
             for (Place place : places) {
                 Double lat = place.getGeometry().getLocation().getLat();
                 Double lng = place.getGeometry().getLocation().getLng();
                 LatLng latLng = new LatLng(lat, lng);
 
-                if (!place.getUsersParticipants().isEmpty()) {
-                    googleMapsComponent.addMarker(latLng, place.getName(), place.getVicinity(), place.getPlaceId(), true);
-                } else {
-                    googleMapsComponent.addMarker(latLng, place.getName(), place.getVicinity(), place.getPlaceId(), false);
-                }
+                googleMapsComponent.addMarker(latLng, place.getName(), place.getVicinity(), place.getPlaceId(), !place.getUsersParticipants().isEmpty());
             }
         }
     };
@@ -145,6 +121,7 @@ public class MapViewFragment extends Fragment {
     }
 
     private final LocationCallback callback = new LocationCallback() {
+        @SuppressLint("MissingPermission")
         @Override
         public void onLocationResult(@NonNull @NotNull LocationResult locationResult) {
             super.onLocationResult(locationResult);
@@ -166,22 +143,12 @@ public class MapViewFragment extends Fragment {
     };
 
 
-    GoogleMap.OnInfoWindowClickListener onInfoWindowClickListener = new GoogleMap.OnInfoWindowClickListener() {
-        @Override
-        public void onInfoWindowClick(@NonNull @NotNull Marker marker) {
-            String placeID = (String) marker.getTag();
+    GoogleMap.OnInfoWindowClickListener onInfoWindowClickListener = marker -> {
+        String placeID = (String) marker.getTag();
 
-            Intent intent = new Intent(getContext(), RestaurantActivity.class);
-            intent.putExtra(HomeActivity.EXTRA_PLACE_ID, placeID);
-            startActivity(intent);
-        }
-    };
-
-    GoogleMap.OnMarkerClickListener onMarkerClickListener = new GoogleMap.OnMarkerClickListener() {
-        @Override
-        public boolean onMarkerClick(@NonNull @NotNull Marker marker) {
-            return false;
-        }
+        Intent intent = new Intent(getContext(), RestaurantActivity.class);
+        intent.putExtra(HomeActivity.EXTRA_PLACE_ID, placeID);
+        startActivity(intent);
     };
 
     @Override
