@@ -25,33 +25,6 @@ import retrofit2.mock.Calls;
 @RunWith(MockitoJUnitRunner.class)
 public class PlacesRepositoryTest {
 
-    /*@Test
-    public void canIRetrieveNearbyPlaces() {
-        PlacesServiceImpl placesService = Mockito.mock(PlacesServiceImpl.class);
-        PlacesRepositoryImpl placesRepository = new PlacesRepositoryImpl(placesService);
-
-        Location location = new Location(0.1, 1.0);
-        PlacesRepositoryImpl.NearbyPlacesRetrievedListener listener = Mockito.mock(PlacesRepositoryImpl.NearbyPlacesRetrievedListener.class);
-
-        when(placesService.getNearbyPlaces(location)).thenAnswer((Answer<Call<NearbyPlacesResponse>>) invocation -> Calls.response(Response.success(generateSuccessResponse())));
-
-        placesRepository.retrieveNearbyPlaces(location, listener);
-
-        verify(placesService).getNearbyPlaces(any());
-        verify(listener).onNearbyPlacesRetrieved(any());
-    }
-
-    private NearbyPlacesResponse generateSuccessResponse() {
-        NearbyPlacesResponse nearbyPlacesResponse = new NearbyPlacesResponse();
-
-        Place place = new Place();
-        List<Place> places = new ArrayList<>();
-        places.add(place);
-
-        nearbyPlacesResponse.setPlaces(places);
-        return nearbyPlacesResponse;
-    }*/
-
     @Test
     public void canIRetrievePlaceDetails() {
         PlacesServiceImpl placesService = Mockito.mock(PlacesServiceImpl.class);
